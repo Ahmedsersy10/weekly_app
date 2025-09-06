@@ -31,7 +31,7 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
 
     // فلترة على حسب الشاشة
     final filteredItems = drawerItems.where((item) {
-      if (screenWidth >= SizeConfig.desktop && item.title == 'State') {
+      if (screenWidth >= SizeConfig.desktop && item.title == 'app.stats') {
         return false; // متعرضش State في الديسكتوب
       }
       return true;
