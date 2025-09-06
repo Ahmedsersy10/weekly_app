@@ -26,14 +26,9 @@ class CustomContainerWeeklyOf extends StatelessWidget {
 
   BoxDecoration _buildContainerDecoration() {
     return const BoxDecoration(
-      color: AppColors.warm,
+      color: AppColors.white,
       boxShadow: [
-        BoxShadow(
-          color: Colors.black12,
-          blurRadius: 8,
-          offset: Offset(0, 4),
-          spreadRadius: 2,
-        ),
+        BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4), spreadRadius: 2),
       ],
     );
   }
@@ -55,9 +50,9 @@ class CustomContainerWeeklyOf extends StatelessWidget {
         Expanded(
           child: _buildInfoCard(
             context,
-            AppLocalizations.of(context).trWithParams('settings.weekOf', {
-              'weekNumber': weeklyState.weekNumber.toString(),
-            }),
+            AppLocalizations.of(
+              context,
+            ).trWithParams('settings.weekOf', {'weekNumber': weeklyState.weekNumber.toString()}),
           ),
         ),
         const SizedBox(width: 12),
@@ -80,10 +75,9 @@ class CustomContainerWeeklyOf extends StatelessWidget {
         Expanded(
           child: _buildInfoCard(
             context,
-            AppLocalizations.of(context).trWithParams(
-              'settings.completionPercentage',
-              {'percentage': percentage.toStringAsFixed(0)},
-            ),
+            AppLocalizations.of(context).trWithParams('settings.completionPercentage', {
+              'percentage': percentage.toStringAsFixed(0),
+            }),
           ),
         ),
         const SizedBox(width: 12),
@@ -91,25 +85,16 @@ class CustomContainerWeeklyOf extends StatelessWidget {
           child: _buildInfoCard(
             context,
             percentageLabel,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-              vertical: 18.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 18.0),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildInfoCard(
-    BuildContext context,
-    String title, {
-    EdgeInsets? padding,
-  }) {
+  Widget _buildInfoCard(BuildContext context, String title, {EdgeInsets? padding}) {
     return Container(
-      padding:
-          padding ??
-          const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
       decoration: _buildCardDecoration(),
       child: Center(child: CustomTextWeeklyOf(title: title)),
     );
@@ -119,9 +104,7 @@ class CustomContainerWeeklyOf extends StatelessWidget {
     return BoxDecoration(
       color: AppColors.maroon,
       borderRadius: BorderRadius.circular(12),
-      boxShadow: const [
-        BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
-      ],
+      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
     );
   }
 
@@ -130,23 +113,14 @@ class CustomContainerWeeklyOf extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomTextWeeklyOf(
-          title: AppLocalizations.of(context).trWithParams(
-            'settings.weeklyOf',
-            {
-              'weekNumber': AppLocalizations.of(
-                context,
-              ).tr('settings.zeroWeek'),
-            },
-          ),
+          title: AppLocalizations.of(context).trWithParams('settings.weeklyOf', {
+            'weekNumber': AppLocalizations.of(context).tr('settings.zeroWeek'),
+          }),
         ),
         const SizedBox(height: 12),
-        CustomTextWeeklyOf(
-          title: AppLocalizations.of(context).tr('settings.zeroProgress'),
-        ),
+        CustomTextWeeklyOf(title: AppLocalizations.of(context).tr('settings.zeroProgress')),
         const SizedBox(height: 12),
-        CustomTextWeeklyOf(
-          title: AppLocalizations.of(context).tr('settings.zeroPercentage'),
-        ),
+        CustomTextWeeklyOf(title: AppLocalizations.of(context).tr('settings.zeroPercentage')),
       ],
     );
   }

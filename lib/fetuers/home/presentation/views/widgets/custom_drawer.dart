@@ -6,6 +6,6 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Drawer(backgroundColor: AppColors.warm);
+    return const Drawer(backgroundColor: AppColors.white);
   }
 }

@@ -1,20 +1,15 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Project imports:
 import 'package:weekly_dash_board/models/drawer_item_model.dart';
 import 'package:weekly_dash_board/views/widgets/active_drawer_item.dart';
 import 'package:weekly_dash_board/views/widgets/in_active_drawer_item.dart';
 
 class DrawerItem extends StatefulWidget {
-  const DrawerItem({
-    super.key,
-    required this.drawerItemModel,
-    required this.isSelected,
-  });
+  const DrawerItem({super.key, required this.drawerItemModel, required this.isSelected,});
   final DrawerItemModel drawerItemModel;
   final bool isSelected;
-
+  
   @override
   State<DrawerItem> createState() => _DrawerItemState();
 }
@@ -42,11 +37,11 @@ class _DrawerItemState extends State<DrawerItem> {
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 600),
-      firstChild: inActiveDrawerItem(drawerItemModel: widget.drawerItemModel),
+      firstChild: GestureDetector(
+        child: inActiveDrawerItem(drawerItemModel: widget.drawerItemModel),
+      ),
       secondChild: ActiveDrawerItem(drawerItemModel: widget.drawerItemModel),
-      crossFadeState: _isVisible
-          ? CrossFadeState.showSecond
-          : CrossFadeState.showFirst,
+      crossFadeState: _isVisible ? CrossFadeState.showSecond : CrossFadeState.showFirst,
     );
   }
 }

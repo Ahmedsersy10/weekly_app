@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:weekly_dash_board/core/util/app_color.dart';
 
 // Project imports:
 import 'package:weekly_dash_board/models/drawer_item_model.dart';
@@ -14,16 +15,16 @@ class ActiveDrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: SvgPicture.asset(drawerItemModel.image),
+      leading: SvgPicture.asset(drawerItemModel.image, color: AppColors.maroon),
       title: FittedBox(
         fit: BoxFit.scaleDown,
         alignment: Alignment.centerLeft,
         child: Text(
           drawerItemModel.title,
-          style: AppStyles.styleBold16(context),
+          style: AppStyles.styleBold16(context).copyWith(color: AppColors.maroon),
         ),
       ),
-      trailing: Container(width: 3.27, color: const Color(0xFF4EB7F2)),
+      trailing: Container(width: 3.27, color: AppColors.maroon),
     );
   }
 }

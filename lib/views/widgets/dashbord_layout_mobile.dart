@@ -1,36 +1,33 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:weekly_dash_board/fetuers/home/presentation/views/root_view.dart';
+import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_contaner_weekly_of.dart';
+import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_view_days.dart';
 
-// Project imports:
-import 'package:weekly_dash_board/views/widgets/all_expensess_and_quick_invoice_section.dart';
-import 'package:weekly_dash_board/views/widgets/income_section.dart';
-import 'package:weekly_dash_board/views/widgets/my_card_and_transaction_section.dart';
-
-class DashbordLayoutMobile extends StatelessWidget {
+class DashbordLayoutMobile extends StatefulWidget {
   const DashbordLayoutMobile({super.key});
 
   @override
+  State<DashbordLayoutMobile> createState() => _DashbordLayoutMobileState();
+}
+
+class _DashbordLayoutMobileState extends State<DashbordLayoutMobile> {
+  final Map<int, GlobalKey> _dayKeys = {for (int i = 0; i < 6; i++) i: GlobalKey()};
+  @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
-      slivers: [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                AllExpensessAndQuickInvoiceSection(),
-                SizedBox(height: 24),
-                MyCardAndTransactionSection(),
-                SizedBox(height: 24),
-                Expanded(
-                  child: IncomeSection(),
-                ), // Uncomment if you want to include the IncomeSection in mobile layout
-              ],
-            ),
-          ),
-        ),
-      ],
+    return const RootView();
+  }
+
+  void scrollToDay(int dayIndex) {
+    final key = _dayKeys[dayIndex];
+    if (key == null) return;
+    final context = key.currentContext;
+    if (context == null) return;
+    Scrollable.ensureVisible(
+      context,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+      alignment: 0.1,
     );
   }
 }

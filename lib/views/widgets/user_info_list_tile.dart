@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:weekly_dash_board/core/util/app_color.dart';
 
 // Project imports:
 import 'package:weekly_dash_board/models/user_info_model.dart';
@@ -16,26 +17,20 @@ class UserInfoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color(0xFFF5F5F5),
+      color: AppColors.white,
       elevation: 0,
       child: Center(
         child: ListTile(
-          leading: SvgPicture.asset(userInfoModel.image),
+          leading: SvgPicture.asset(userInfoModel.image,color: AppColors.maroon,),
           title: FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
-            child: Text(
-              userInfoModel.title,
-              style: AppStyles.styleSemiBold16(context),
-            ),
+            child: Text(userInfoModel.title, style: AppStyles.styleSemiBold16(context)),
           ),
           subtitle: FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
-            child: Text(
-              userInfoModel.subTitle,
-              style: AppStyles.styleRegular12(context),
-            ),
+            child: Text(userInfoModel.subTitle, style: AppStyles.styleRegular12(context)),
           ),
         ),
       ),

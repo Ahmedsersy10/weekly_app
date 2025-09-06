@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:weekly_dash_board/core/util/app_color.dart';
 
 // Project imports:
 import 'package:weekly_dash_board/models/drawer_item_model.dart';
@@ -16,7 +17,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Colors.white,
+        color: AppColors.white,
         child: const CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -34,20 +35,14 @@ class CustomDrawer extends StatelessWidget {
               hasScrollBody: false,
               child: Column(
                 children: [
-                  Expanded(child: SizedBox(height: 20)),
-                  inActiveDrawerItem(
-                    drawerItemModel: DrawerItemModel(
-                      title: 'Setting system',
-                      image: Assets.imagesSettings,
-                    ),
-                  ),
+                  Expanded(child: SizedBox()),
                   inActiveDrawerItem(
                     drawerItemModel: DrawerItemModel(
                       title: 'Logout account',
                       image: Assets.imagesLogout,
                     ),
                   ),
-                  SizedBox(height: 48),
+                  SizedBox(height: 20),
                 ],
               ),
             ),

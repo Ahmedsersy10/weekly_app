@@ -19,8 +19,7 @@ class Assets {
 
   /// Assets for imagesCardBackground
   /// assets/images/card_background.png
-  static const String imagesCardBackground =
-      'assets/images/card_background.png';
+  static const String imagesCardBackground = 'assets/images/card_background.png';
 
   /// Assets for imagesDashboard
   /// assets/images/dashboard.svg
@@ -61,4 +60,7 @@ class Assets {
   /// Assets for imagesWalletAccount
   /// assets/images/wallet_account.svg
   static const String imagesWalletAccount = 'assets/images/wallet_account.svg';
+  static const String imagesmore = 'assets/images/more.svg';
+  static const String imagescalendar = 'assets/images/calendar.svg';
+  static const String imagescalendarSearch = 'assets/images/calendarSearch.svg';
 }

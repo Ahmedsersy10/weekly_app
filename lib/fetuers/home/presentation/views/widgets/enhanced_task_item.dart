@@ -10,12 +10,7 @@ class EnhancedTaskItem extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
-  const EnhancedTaskItem({
-    super.key,
-    required this.task,
-    this.onEdit,
-    this.onDelete,
-  });
+  const EnhancedTaskItem({super.key, required this.task, this.onEdit, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +78,7 @@ class EnhancedTaskItem extends StatelessWidget {
                               Text(
                                 '${AppLocalizations.of(context).tr('task.reminder')}: ${_formatTime(context, task.reminderTime!)}',
                                 style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface.withOpacity(0.7),
+                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -104,22 +97,16 @@ class EnhancedTaskItem extends StatelessWidget {
                                 : AppColors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            decoration: task.isCompleted
-                                ? TextDecoration.lineThrough
-                                : null,
+                            decoration: task.isCompleted ? TextDecoration.lineThrough : null,
                           ),
                         ),
 
                         // Task description (if available)
-                        if (task.description != null &&
-                            task.description!.isNotEmpty) ...[
+                        if (task.description != null && task.description!.isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
                             task.description!,
-                            style: TextStyle(
-                              color: AppColors.black.withOpacity(0.6),
-                              fontSize: 14,
-                            ),
+                            style: TextStyle(color: AppColors.black.withOpacity(0.6), fontSize: 14),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -133,10 +120,7 @@ class EnhancedTaskItem extends StatelessWidget {
                             runSpacing: 4,
                             children: task.tags.map((tag) {
                               return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: AppColors.maroon.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(8),
@@ -159,8 +143,7 @@ class EnhancedTaskItem extends StatelessWidget {
                         ],
 
                         // Due date and estimated time
-                        if (task.dueDate != null ||
-                            task.estimatedMinutes > 0) ...[
+                        if (task.dueDate != null || task.estimatedMinutes > 0) ...[
                           const SizedBox(height: 8),
                           Row(
                             children: [
@@ -180,8 +163,7 @@ class EnhancedTaskItem extends StatelessWidget {
                                 ),
                               ],
 
-                              if (task.dueDate != null &&
-                                  task.estimatedMinutes > 0) ...[
+                              if (task.dueDate != null && task.estimatedMinutes > 0) ...[
                                 const SizedBox(width: 16),
                               ],
 
@@ -214,9 +196,7 @@ class EnhancedTaskItem extends StatelessWidget {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: task.isCompleted
-                          ? AppColors.maroon
-                          : Colors.transparent,
+                      color: task.isCompleted ? AppColors.maroon : Colors.transparent,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: task.isCompleted
@@ -228,16 +208,12 @@ class EnhancedTaskItem extends StatelessWidget {
                     child: Checkbox(
                       value: task.isCompleted,
                       onChanged: (value) {
-                        context.read<WeeklyCubit>().toggleTaskCompletion(
-                          task.id,
-                        );
+                        context.read<WeeklyCubit>().toggleTaskCompletion(task.id);
                       },
                       activeColor: AppColors.maroon,
                       checkColor: AppColors.white,
                       side: BorderSide.none,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                     ),
                   ),
                 ],
@@ -268,10 +244,7 @@ class EnhancedTaskItem extends StatelessWidget {
 
   String _formatTime(BuildContext context, TimeOfDay time) {
     // Format time based on 12-hour or 24-hour format
-    final timeString = TimeOfDay(
-      hour: time.hour,
-      minute: time.minute,
-    ).format(context);
+    final timeString = TimeOfDay(hour: time.hour, minute: time.minute).format(context);
 
     return timeString;
   }
@@ -305,19 +278,15 @@ class EnhancedTaskItem extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppColors.warm,
+          backgroundColor: AppColors.white,
           title: Text(
             AppLocalizations.of(context).tr('settings.deleteTask'),
-            style: const TextStyle(
-              color: AppColors.black,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(color: AppColors.black, fontWeight: FontWeight.bold),
           ),
           content: Text(
-            AppLocalizations.of(context).trWithParams(
-              'settings.deleteTaskConfirmation',
-              {'taskTitle': task.title},
-            ),
+            AppLocalizations.of(
+              context,
+            ).trWithParams('settings.deleteTaskConfirmation', {'taskTitle': task.title}),
             style: const TextStyle(color: AppColors.black),
           ),
           actions: [
@@ -334,9 +303,7 @@ class EnhancedTaskItem extends StatelessWidget {
                 backgroundColor: AppColors.maroon,
                 foregroundColor: AppColors.white,
               ),
-              child: Text(
-                AppLocalizations.of(context).tr('settings.deleteTask'),
-              ),
+              child: Text(AppLocalizations.of(context).tr('settings.deleteTask')),
             ),
           ],
         );
@@ -347,7 +314,7 @@ class EnhancedTaskItem extends StatelessWidget {
   void _showTaskOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.warm,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -421,10 +388,7 @@ class EnhancedTaskItem extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: onTap,
-        icon: Icon(
-          icon,
-          color: isDestructive ? Colors.white : AppColors.maroon,
-        ),
+        icon: Icon(icon, color: isDestructive ? Colors.white : AppColors.maroon),
         label: Text(
           title,
           style: TextStyle(

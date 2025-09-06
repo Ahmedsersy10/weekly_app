@@ -22,9 +22,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
     return BlocBuilder<WeeklyCubit, WeeklyState>(
       builder: (context, state) {
         if (state is WeeklySuccess) {
-          final tasks = context.read<WeeklyCubit>().getTasksForDay(
-            widget.dayIndex,
-          );
+          final tasks = context.read<WeeklyCubit>().getTasksForDay(widget.dayIndex);
           if (tasks.isEmpty) {
             return Center(
               child: Text(
@@ -49,10 +47,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
 
           // Sort categories by priority (important categories first)
           final sortedCategories = tasksByCategory.keys.toList()
-            ..sort(
-              (a, b) =>
-                  _getCategoryPriority(a).compareTo(_getCategoryPriority(b)),
-            );
+            ..sort((a, b) => _getCategoryPriority(a).compareTo(_getCategoryPriority(b)));
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,12 +55,8 @@ class _CustomListTasksState extends State<CustomListTasks> {
               // Tasks by Category
               ...sortedCategories.map((category) {
                 final categoryTasks = tasksByCategory[category]!;
-                final importantTasks = categoryTasks
-                    .where((t) => t.isImportant)
-                    .toList();
-                final regularTasks = categoryTasks
-                    .where((t) => !t.isImportant)
-                    .toList();
+                final importantTasks = categoryTasks.where((t) => t.isImportant).toList();
+                final regularTasks = categoryTasks.where((t) => !t.isImportant).toList();
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,22 +64,13 @@ class _CustomListTasksState extends State<CustomListTasks> {
                     // Important Tasks
                     if (importantTasks.isNotEmpty) ...[
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                         child: Row(
                           children: [
-                            const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                              size: 16,
-                            ),
+                            const Icon(Icons.star, color: Colors.amber, size: 16),
                             const SizedBox(width: 6),
                             Text(
-                              AppLocalizations.of(
-                                context,
-                              ).tr('settings.Important'),
+                              AppLocalizations.of(context).tr('settings.Important'),
 
                               style: TextStyle(
                                 color: AppColors.black.withOpacity(0.7),
@@ -112,22 +94,13 @@ class _CustomListTasksState extends State<CustomListTasks> {
                     // Regular Tasks
                     if (regularTasks.isNotEmpty) ...[
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                         child: Row(
                           children: [
-                            const Icon(
-                              Icons.list,
-                              color: AppColors.maroon,
-                              size: 16,
-                            ),
+                            const Icon(Icons.list, color: AppColors.maroon, size: 16),
                             const SizedBox(width: 6),
                             Text(
-                              AppLocalizations.of(
-                                context,
-                              ).tr('settings.AsRegular'),
+                              AppLocalizations.of(context).tr('settings.AsRegular'),
                               style: TextStyle(
                                 color: AppColors.black.withOpacity(0.7),
                                 fontWeight: FontWeight.w600,
@@ -178,9 +151,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
   }
 
   void _showEditTaskDialog(BuildContext context, TaskModel task) {
-    final TextEditingController titleController = TextEditingController(
-      text: task.title,
-    );
+    final TextEditingController titleController = TextEditingController(text: task.title);
     bool isImportant = task.isImportant;
     TimeOfDay? reminderTime = task.reminderTime;
 
@@ -190,13 +161,10 @@ class _CustomListTasksState extends State<CustomListTasks> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: AppColors.warm,
+              backgroundColor: AppColors.white,
               title: Text(
                 AppLocalizations.of(context).tr('settings.editTask'),
-                style: const TextStyle(
-                  color: AppColors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(color: AppColors.black, fontWeight: FontWeight.bold),
               ),
               content: StatefulBuilder(
                 builder: (context, setState) {
@@ -209,9 +177,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                           style: const TextStyle(color: Colors.black),
                           cursorColor: Colors.black,
                           decoration: InputDecoration(
-                            hintText: AppLocalizations.of(
-                              context,
-                            ).tr('settings.enterTaskTitle'),
+                            hintText: AppLocalizations.of(context).tr('settings.enterTaskTitle'),
                             hintStyle: const TextStyle(color: Colors.black54),
                             border: customOutlineInputBorder(),
                             enabledBorder: customOutlineInputBorder(),
@@ -227,12 +193,9 @@ class _CustomListTasksState extends State<CustomListTasks> {
                           ),
                           child: CheckboxListTile(
                             value: isImportant,
-                            onChanged: (value) =>
-                                setState(() => isImportant = value ?? false),
+                            onChanged: (value) => setState(() => isImportant = value ?? false),
                             title: Text(
-                              AppLocalizations.of(
-                                context,
-                              ).tr('settings.markAsImportant'),
+                              AppLocalizations.of(context).tr('settings.markAsImportant'),
                               style: AppStyles.styleSemiBold20(context),
                             ),
                             activeColor: AppColors.white,
@@ -242,9 +205,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             controlAffinity: ListTileControlAffinity.leading,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -253,29 +214,19 @@ class _CustomListTasksState extends State<CustomListTasks> {
                           decoration: BoxDecoration(
                             color: AppColors.maroon.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: AppColors.maroon.withOpacity(0.3),
-                            ),
+                            border: Border.all(color: AppColors.maroon.withOpacity(0.3)),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   spacing: 10,
                                   children: [
-                                    const Icon(
-                                      Icons.notifications,
-                                      color: AppColors.maroon,
-                                    ),
+                                    const Icon(Icons.notifications, color: AppColors.maroon),
                                     Text(
-                                      AppLocalizations.of(
-                                        context,
-                                      ).tr('settings.reminderTime'),
+                                      AppLocalizations.of(context).tr('settings.reminderTime'),
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.w500,
@@ -283,41 +234,26 @@ class _CustomListTasksState extends State<CustomListTasks> {
                                       ),
                                     ),
                                     IconButton(
-                                      icon: const Icon(
-                                        Icons.access_time,
-                                        color: AppColors.maroon,
-                                      ),
+                                      icon: const Icon(Icons.access_time, color: AppColors.maroon),
                                       onPressed: () async {
-                                        final selectedTime =
-                                            await showTimePicker(
-                                              context: context,
-                                              initialTime:
-                                                  reminderTime ??
-                                                  const TimeOfDay(
-                                                    hour: 9,
-                                                    minute: 0,
-                                                  ),
-                                            );
+                                        final selectedTime = await showTimePicker(
+                                          context: context,
+                                          initialTime:
+                                              reminderTime ?? const TimeOfDay(hour: 9, minute: 0),
+                                        );
                                         if (selectedTime != null) {
-                                          setState(
-                                            () => reminderTime = selectedTime,
-                                          );
+                                          setState(() => reminderTime = selectedTime);
                                         }
                                       },
                                     ),
                                   ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 32,
-                                    bottom: 8,
-                                  ),
+                                  padding: const EdgeInsets.only(left: 32, bottom: 8),
                                   child: Text(
                                     reminderTime != null
                                         ? '${reminderTime!.hour.toString().padLeft(2, '0')}:${reminderTime!.minute.toString().padLeft(2, '0')}'
-                                        : AppLocalizations.of(
-                                            context,
-                                          ).tr('settings.noReminder'),
+                                        : AppLocalizations.of(context).tr('settings.noReminder'),
                                     style: TextStyle(
                                       color: Colors.black.withOpacity(0.7),
                                       fontSize: 14,

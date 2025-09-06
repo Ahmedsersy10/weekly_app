@@ -26,16 +26,13 @@ class CustomCardHomeView extends StatelessWidget {
         if (state is WeeklySuccess) {
           final dayStats = state.weeklyState.dayStats[dayIndex];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Container(
-              constraints: const BoxConstraints(
-                minHeight: 100,
-                minWidth: double.infinity,
-              ),
+              constraints: const BoxConstraints(minHeight: 100, minWidth: double.infinity),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: AppColors.warm,
-                borderRadius: BorderRadius.circular(16),
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(8),
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
@@ -64,28 +61,21 @@ class CustomCardHomeView extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: _isCurrentDay(dayStats.date)
                                     ? AppColors.maroon
-                                    : AppColors.warm,
+                                    : AppColors.white,
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.black38,
-                                  width: 1,
-                                ),
+                                border: Border.all(color: Colors.black38, width: 1),
                               ),
                               child: Text(
                                 dayStats.date,
-                                style: AppStyles.styleSemiBold16(context)
-                                    .copyWith(
-                                      color: _isCurrentDay(dayStats.date)
-                                          ? AppColors.white
-                                          : AppColors.black,
-                                    ),
+                                style: AppStyles.styleSemiBold16(context).copyWith(
+                                  color: _isCurrentDay(dayStats.date)
+                                      ? AppColors.white
+                                      : AppColors.black,
+                                ),
                               ),
                             ),
                           ],
@@ -99,11 +89,7 @@ class CustomCardHomeView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Divider(
-                    height: 20,
-                    thickness: 2,
-                    color: AppColors.black,
-                  ),
+                  const Divider(height: 20, thickness: 2, color: AppColors.black),
                   // Let content drive height; remove hard ListView
                   _DayContent(dayIndex: dayIndex),
                   const SizedBox(height: 10),
@@ -119,11 +105,7 @@ class CustomCardHomeView extends StatelessWidget {
                         ),
                         child: IconButton(
                           onPressed: () => _confirmClearDay(context, dayIndex),
-                          icon: const Icon(
-                            Icons.delete,
-                            color: AppColors.white,
-                            size: 20,
-                          ),
+                          icon: const Icon(Icons.delete, color: AppColors.white, size: 20),
                         ),
                       ),
                     ],
@@ -145,7 +127,7 @@ void _confirmClearDay(BuildContext context, int dayIndex) {
     context: context,
     builder: (ctx) {
       return AlertDialog(
-        backgroundColor: AppColors.warm,
+        backgroundColor: AppColors.white,
         title: Text(
           AppLocalizations.of(ctx).tr('settings.clearDayTasksTitle'),
           style: AppStyles.styleSemiBold24(ctx).copyWith(color: Colors.black),
@@ -187,10 +169,7 @@ class CustomButtonAddTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: AppColors.maroon,
-        borderRadius: BorderRadius.circular(32),
-      ),
+      decoration: BoxDecoration(color: AppColors.maroon, borderRadius: BorderRadius.circular(32)),
       child: IconButton(
         onPressed: () => _showAddTaskDialog(context),
         icon: const Icon(Icons.add, color: AppColors.white, size: 28),
@@ -209,11 +188,9 @@ class CustomButtonAddTasks extends StatelessWidget {
         return AlertDialog(
           title: Text(
             AppLocalizations.of(context).tr('settings.addNewTask'),
-            style: AppStyles.styleSemiBold24(
-              context,
-            ).copyWith(color: Colors.black),
+            style: AppStyles.styleSemiBold24(context).copyWith(color: Colors.black),
           ),
-          backgroundColor: AppColors.warm,
+          backgroundColor: AppColors.white,
           content: StatefulBuilder(
             builder: (context, setState) {
               return SingleChildScrollView(
@@ -225,9 +202,7 @@ class CustomButtonAddTasks extends StatelessWidget {
                       style: const TextStyle(color: Colors.black),
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
-                        hintText: AppLocalizations.of(
-                          context,
-                        ).tr('settings.enterTaskTitle'),
+                        hintText: AppLocalizations.of(context).tr('settings.enterTaskTitle'),
                         hintStyle: const TextStyle(color: Colors.black54),
                         border: customOutlineInputBorder(),
                         enabledBorder: customOutlineInputBorder(),
@@ -243,12 +218,9 @@ class CustomButtonAddTasks extends StatelessWidget {
                       ),
                       child: CheckboxListTile(
                         value: isImportant,
-                        onChanged: (value) =>
-                            setState(() => isImportant = value ?? false),
+                        onChanged: (value) => setState(() => isImportant = value ?? false),
                         title: Text(
-                          AppLocalizations.of(
-                            context,
-                          ).tr('settings.markAsImportant'),
+                          AppLocalizations.of(context).tr('settings.markAsImportant'),
                           style: AppStyles.styleSemiBold20(context),
                         ),
                         activeColor: AppColors.white,
@@ -258,9 +230,7 @@ class CustomButtonAddTasks extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         controlAffinity: ListTileControlAffinity.leading,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 4,
-                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -269,29 +239,19 @@ class CustomButtonAddTasks extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.maroon.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: AppColors.maroon.withOpacity(0.3),
-                        ),
+                        border: Border.all(color: AppColors.maroon.withOpacity(0.3)),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               spacing: 10,
                               children: [
-                                const Icon(
-                                  Icons.notifications,
-                                  color: AppColors.maroon,
-                                ),
+                                const Icon(Icons.notifications, color: AppColors.maroon),
                                 Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  ).tr('settings.reminderTime'),
+                                  AppLocalizations.of(context).tr('settings.reminderTime'),
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
@@ -299,37 +259,26 @@ class CustomButtonAddTasks extends StatelessWidget {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(
-                                    Icons.access_time,
-                                    color: AppColors.maroon,
-                                  ),
+                                  icon: const Icon(Icons.access_time, color: AppColors.maroon),
                                   onPressed: () async {
                                     final selectedTime = await showTimePicker(
                                       context: context,
                                       initialTime:
-                                          reminderTime ??
-                                          const TimeOfDay(hour: 9, minute: 0),
+                                          reminderTime ?? const TimeOfDay(hour: 9, minute: 0),
                                     );
                                     if (selectedTime != null) {
-                                      setState(
-                                        () => reminderTime = selectedTime,
-                                      );
+                                      setState(() => reminderTime = selectedTime);
                                     }
                                   },
                                 ),
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(
-                                left: 32,
-                                bottom: 8,
-                              ),
+                              padding: const EdgeInsets.only(left: 32, bottom: 8),
                               child: Text(
                                 reminderTime != null
                                     ? '${reminderTime!.hour.toString().padLeft(2, '0')}:${reminderTime!.minute.toString().padLeft(2, '0')}'
-                                    : AppLocalizations.of(
-                                        context,
-                                      ).tr('settings.noReminder'),
+                                    : AppLocalizations.of(context).tr('settings.noReminder'),
                                 style: TextStyle(
                                   color: Colors.black.withOpacity(0.7),
                                   fontSize: 14,
@@ -384,52 +333,6 @@ class CustomButtonAddTasks extends StatelessWidget {
     );
   }
 }
-
-// class _DayDoneBadge extends StatelessWidget {
-//   final int dayIndex;
-//   const _DayDoneBadge({required this.dayIndex});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<WeeklyCubit, WeeklyState>(
-//       buildWhen: (p, c) => p != c,
-//       builder: (context, state) {
-//         if (state is! WeeklySuccess) return const SizedBox.shrink();
-//         final cubit = context.read<WeeklyCubit>();
-//         final isAllDone = cubit.areAllTasksCompletedForDay(dayIndex);
-//         final isCollapsed = state.weeklyState.collapsedDays.contains(dayIndex);
-//         if (!isAllDone && !isCollapsed) return const SizedBox.shrink();
-//         return InkWell(
-//           onTap: () => cubit.toggleDayCollapsed(dayIndex),
-//           child: Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-//             decoration: BoxDecoration(
-//               color: AppColors.white.withOpacity(0.15),
-//               borderRadius: BorderRadius.circular(6),
-//               border: Border.all(color: AppColors.black.withOpacity(0.2)),
-//             ),
-//             child: Row(
-//               children: [
-//                 Icon(
-//                   isCollapsed ? Icons.check_circle : Icons.check_circle_outline,
-//                   color: AppColors.maroon,
-//                   size: 18,
-//                 ),
-//                 const SizedBox(width: 6),
-//                 Text(
-//                   isCollapsed
-//                       ? AppLocalizations.of(context).tr('settings.done')
-//                       : AppLocalizations.of(context).tr('settings.doneQuestion'),
-//                   style: const TextStyle(color: AppColors.black, fontWeight: FontWeight.bold),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
 
 class _DayContent extends StatelessWidget {
   final int dayIndex;

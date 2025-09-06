@@ -5,15 +5,14 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 
 class NotificationService {
-  static final FlutterLocalNotificationsPlugin _notifications =
-      FlutterLocalNotificationsPlugin();
+  static final FlutterLocalNotificationsPlugin _notifications = FlutterLocalNotificationsPlugin();
 
   static Future<void> initialize() async {
-    const AndroidInitializationSettings androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const AndroidInitializationSettings androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
 
-    const DarwinInitializationSettings iosSettings =
-        DarwinInitializationSettings();
+    const DarwinInitializationSettings iosSettings = DarwinInitializationSettings();
 
     const InitializationSettings settings = InitializationSettings(
       android: androidSettings,
@@ -37,9 +36,7 @@ class NotificationService {
     try {
       // Android permissions
       final androidPlugin = _notifications
-          .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >();
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
 
       if (androidPlugin != null) {
         // Request notification permission
@@ -56,9 +53,7 @@ class NotificationService {
 
       // iOS permissions
       final iosPlugin = _notifications
-          .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin
-          >();
+          .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
       await iosPlugin?.requestPermissions(
         alert: true,
         badge: true,
@@ -100,8 +95,7 @@ class NotificationService {
           iOS: DarwinNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
     }
@@ -129,24 +123,12 @@ class NotificationService {
       daysUntilNext += 7;
     }
 
-    return DateTime(
-      now.year,
-      now.month,
-      now.day + daysUntilNext,
-      time.hour,
-      time.minute,
-    );
+    return DateTime(now.year, now.month, now.day + daysUntilNext, time.hour, time.minute);
   }
 
   static tz.TZDateTime _getTZDateTime(DateTime dateTime, TimeOfDay time) {
     return tz.TZDateTime.from(
-      DateTime(
-        dateTime.year,
-        dateTime.month,
-        dateTime.day,
-        time.hour,
-        time.minute,
-      ),
+      DateTime(dateTime.year, dateTime.month, dateTime.day, time.hour, time.minute),
       tz.local,
     );
   }
@@ -159,9 +141,7 @@ class NotificationService {
     await _notifications.cancel(id);
   }
 
-  static Future<void> updateReminderTimes(
-    Map<int, TimeOfDay> reminderTimes,
-  ) async {
+  static Future<void> updateReminderTimes(Map<int, TimeOfDay> reminderTimes) async {
     // Cancel all existing notifications
     await cancelAllNotifications();
 
@@ -200,8 +180,7 @@ class NotificationService {
           iOS: DarwinNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
     }
@@ -284,8 +263,7 @@ class NotificationService {
             ),
           ),
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
           payload: taskId,
         );
@@ -352,10 +330,7 @@ class NotificationService {
   }
 
   // Method to get localized notification message
-  static String getLocalizedTaskReminderMessage(
-    String taskTitle,
-    BuildContext context,
-  ) {
+  static String getLocalizedTaskReminderMessage(String taskTitle, BuildContext context) {
     try {
       return AppLocalizations.of(
         context,
@@ -423,9 +398,7 @@ class NotificationService {
   static Future<bool> areNotificationsEnabled() async {
     try {
       final androidPlugin = _notifications
-          .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >();
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
 
       if (androidPlugin != null) {
         final result = await androidPlugin.areNotificationsEnabled();

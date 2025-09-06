@@ -1,11 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/statistics_dashboard_widget.dart';
+import 'package:weekly_dash_board/util/size_config.dart';
+import 'package:weekly_dash_board/views/widgets/custom_background_container.dart';
 
 // Project imports:
-import 'package:weekly_dash_board/views/widgets/all_expensess_and_quick_invoice_section.dart';
-import 'package:weekly_dash_board/views/widgets/custom_drawer.dart';
-import 'package:weekly_dash_board/views/widgets/income_section.dart';
-import 'package:weekly_dash_board/views/widgets/my_card_and_transaction_section.dart';
+import 'package:weekly_dash_board/views/widgets/dashbord_tablet_layout.dart';
 
 class DashboardDesktopLayout extends StatelessWidget {
   const DashboardDesktopLayout({super.key});
@@ -14,42 +14,11 @@ class DashboardDesktopLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Row(
       children: [
-        Expanded(child: CustomDrawer()),
-        SizedBox(width: 24),
+        Expanded(flex: 3, child: DashbordTabletLayout()),
         Expanded(
-          flex: 3,
-          child: CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 40),
-                        child: AllExpensessAndQuickInvoiceSection(),
-                      ),
-                    ),
-                    SizedBox(width: 24),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 0),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 40),
-                            Expanded(child: MyCardAndTransactionSection()),
-                            SizedBox(height: 24),
-                            Expanded(child: IncomeSection()),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          child: Padding(
+            padding: EdgeInsets.only(right: 0),
+            child: CustomBackgroundContainer(child: StatisticsDashboardWidget()),
           ),
         ),
       ],

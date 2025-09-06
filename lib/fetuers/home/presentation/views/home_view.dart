@@ -27,10 +27,7 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: AppColors.maroon,
         foregroundColor: AppColors.white,
         actions: [
-          IconButton(
-            onPressed: _openCalendar,
-            icon: const Icon(Icons.calendar_month_outlined),
-          ),
+          IconButton(onPressed: _openCalendar, icon: const Icon(Icons.calendar_month_outlined)),
           IconButton(
             onPressed: _showClearAllTasksDialog,
             icon: const Icon(Icons.clear_all),
@@ -38,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
-      backgroundColor: AppColors.warm,
+      backgroundColor: AppColors.white,
       body: HomeViewBody(key: _bodyKey),
     );
   }
@@ -50,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
         DateTime focusedDay = DateTime.now();
         DateTime? selectedDay = focusedDay;
         return AlertDialog(
-          backgroundColor: AppColors.warm,
+          backgroundColor: AppColors.white,
           content: StatefulBuilder(
             builder: (context, setState) {
               return SizedBox(
@@ -61,15 +58,10 @@ class _HomeViewState extends State<HomeView> {
                   lastDay: DateTime.utc(2100, 12, 31),
                   focusedDay: focusedDay,
                   calendarStyle: const CalendarStyle(
-                    defaultTextStyle: TextStyle(
-                      color: AppColors.black,
-                    ), // لون الأرقام
+                    defaultTextStyle: TextStyle(color: AppColors.black), // لون الأرقام
                     weekNumberTextStyle: TextStyle(color: AppColors.black),
                     todayTextStyle: TextStyle(color: AppColors.black),
-                    todayDecoration: BoxDecoration(
-                      color: AppColors.maroon,
-                      shape: BoxShape.circle,
-                    ),
+                    todayDecoration: BoxDecoration(color: AppColors.maroon, shape: BoxShape.circle),
                     selectedDecoration: BoxDecoration(
                       color: AppColors.maroon,
                       shape: BoxShape.circle,
@@ -78,9 +70,7 @@ class _HomeViewState extends State<HomeView> {
                   headerStyle: const HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
-                    titleTextStyle: TextStyle(
-                      color: AppColors.black,
-                    ), // لون الشهر
+                    titleTextStyle: TextStyle(color: AppColors.black), // لون الشهر
                     leftChevronIcon: Icon(
                       Icons.chevron_left,
                       color: AppColors.black, // لون السهم الأيسر
@@ -136,13 +126,9 @@ class _HomeViewState extends State<HomeView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppColors.warm,
-          title: Text(
-            AppLocalizations.of(context).tr('settings.clearAllTasksTitle'),
-          ),
-          content: Text(
-            AppLocalizations.of(context).tr('settings.clearAllTasksConfirm'),
-          ),
+          backgroundColor: AppColors.white,
+          title: Text(AppLocalizations.of(context).tr('settings.clearAllTasksTitle')),
+          content: Text(AppLocalizations.of(context).tr('settings.clearAllTasksConfirm')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
