@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:weekly_dash_board/core/util/app_color.dart';
+import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/fetuers/home/presentation/views/home_view.dart';
+import 'package:weekly_dash_board/fetuers/settings/presentation/views/settings_view.dart';
+import 'package:weekly_dash_board/fetuers/more/presentation/views/more_view.dart';
+
+class RootView extends StatefulWidget {
+  const RootView({super.key});
+
+  @override
+  State<RootView> createState() => _RootViewState();
+}
+
+class _RootViewState extends State<RootView> {
+  int _currentIndex = 0;
+
+  final List<Widget> _tabs = const [HomeView(), SettingsView(), MoreView()];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(index: _currentIndex, children: _tabs),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (i) => setState(() => _currentIndex = i),
+        backgroundColor: AppColors.maroon,
+        selectedItemColor: AppColors.white,
+        unselectedItemColor: const Color.fromARGB(255, 211, 211, 211),
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home),
+            label: AppLocalizations.of(context).tr('home'),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.settings),
+            label: AppLocalizations.of(context).tr('settings'),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.more_horiz),
+            label: AppLocalizations.of(context).tr('more'),
+          ),
+        ],
+      ),
+    );
+  }
+}

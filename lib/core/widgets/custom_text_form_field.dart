@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+import 'package:weekly_dash_board/core/util/app_style.dart';
+
+// ignore: must_be_immutable
+class CustomTextFormField extends StatelessWidget {
+  CustomTextFormField({
+    super.key,
+    required this.hintText,
+    this.controller,
+    this.obscureText = false,
+    required this.title,
+  });
+  final String hintText, title;
+  final bool? obscureText;
+  TextEditingController? controller;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: 12,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: AppStyles.styleMedium20(context)),
+        TextFormField(
+          obscureText: obscureText!,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'This field is required';
+            }
+            return null;
+          },
+          controller: controller,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(18),
+            // fillColor: secondaryColor,
+            filled: true,
+            enabledBorder: buildOutlineInputBorder(),
+            focusedBorder: buildOutlineInputBorder(),
+            focusedErrorBorder: buildOutlineInputBorder().copyWith(
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            errorBorder: buildOutlineInputBorder().copyWith(
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            hintText: hintText,
+            hintStyle: AppStyles.styleSemiBold20(context),
+          ),
+        ),
+      ],
+    );
+  }
+
+  OutlineInputBorder buildOutlineInputBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(13),
+      borderSide: const BorderSide(style: BorderStyle.none),
+    );
+  }
+}
