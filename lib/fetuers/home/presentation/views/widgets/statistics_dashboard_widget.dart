@@ -13,8 +13,7 @@ class StatisticsDashboardWidget extends StatefulWidget {
   const StatisticsDashboardWidget({super.key});
 
   @override
-  State<StatisticsDashboardWidget> createState() =>
-      _StatisticsDashboardWidgetState();
+  State<StatisticsDashboardWidget> createState() => _StatisticsDashboardWidgetState();
 }
 
 class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
@@ -62,7 +61,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
           Text(
             AppLocalizations.of(context).tr('more.productivity_dashboard'),
             style: const TextStyle(
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: AppColors.black,
             ),
@@ -119,11 +118,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                 gridData: const FlGridData(show: true),
                 titlesData: FlTitlesData(
                   leftTitles: const AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 40,
-                      interval: 25,
-                    ),
+                    sideTitles: SideTitles(showTitles: true, reservedSize: 40, interval: 25),
                   ),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
@@ -132,8 +127,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                       interval: 1,
                       getTitlesWidget: (value, meta) {
                         if (value.toInt() < _statistics!.weeklyTrends.length) {
-                          final trend =
-                              _statistics!.weeklyTrends[value.toInt()];
+                          final trend = _statistics!.weeklyTrends[value.toInt()];
                           return Text(
                             'W${trend.weekStart.day}',
                             style: const TextStyle(fontSize: 10),
@@ -143,23 +137,14 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                       },
                     ),
                   ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 ),
                 borderData: FlBorderData(show: true),
                 lineBarsData: [
                   LineChartBarData(
-                    spots: _statistics!.weeklyTrends.asMap().entries.map((
-                      entry,
-                    ) {
-                      return FlSpot(
-                        entry.key.toDouble(),
-                        entry.value.completionRate,
-                      );
+                    spots: _statistics!.weeklyTrends.asMap().entries.map((entry) {
+                      return FlSpot(entry.key.toDouble(), entry.value.completionRate);
                     }).toList(),
                     isCurved: true,
                     color: AppColors.maroon,
@@ -216,14 +201,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (value, meta) {
-                        final dayNames = [
-                          'Sat',
-                          'Sun',
-                          'Mon',
-                          'Tue',
-                          'Wed',
-                          'Thu',
-                        ];
+                        final dayNames = ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu'];
                         if (value.toInt() < dayNames.length) {
                           return Text(
                             dayNames[value.toInt()],
@@ -235,18 +213,10 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                     ),
                   ),
                   leftTitles: const AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 40,
-                      interval: 25,
-                    ),
+                    sideTitles: SideTitles(showTitles: true, reservedSize: 40, interval: 25),
                   ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 ),
                 borderData: FlBorderData(show: true),
                 barGroups: _statistics!.dayProductivity.entries.map((entry) {
@@ -257,9 +227,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                         toY: entry.value.completionRate,
                         color: AppColors.maroon,
                         width: 20,
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(4),
-                        ),
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                       ),
                     ],
                   );

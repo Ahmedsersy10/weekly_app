@@ -3,6 +3,7 @@ import 'package:gif/gif.dart';
 import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/root_view.dart';
 import 'package:weekly_dash_board/fetuers/splash/presentation/views/widgets/gif_image_splash_view.dart';
+import 'package:weekly_dash_board/views/dashboard_view.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
@@ -42,7 +43,7 @@ class _SplashViewBodyState extends State<SplashViewBody>
         // ignore: use_build_context_synchronously
         context,
       ).pushReplacement(
-        MaterialPageRoute(builder: (context) => const RootView()),
+        MaterialPageRoute(builder: (context) => const DashboardView()),
       );
     });
   }

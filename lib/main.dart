@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/view_model/settings_cubit.dart';
+import 'package:weekly_dash_board/fetuers/splash/presentation/views/splash_view.dart';
 import 'package:weekly_dash_board/views/dashboard_view.dart';
 
 // Package imports:
@@ -47,7 +48,7 @@ class ResponsiveDashboardApp extends StatelessWidget {
           // );
 
           return MaterialApp(
-            home: const DashboardView(),
+            home: const SplashView(),
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             // darkTheme: darkTheme,

@@ -29,7 +29,6 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    log(MediaQuery.of(context).size.width.toString());
     SizeConfig.init(context);
     return SafeArea(
       child: Scaffold(
