@@ -18,11 +18,11 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
   int selectedIndex = 0;
 
   final List<DrawerItemModel> drawerItems = [
-    const DrawerItemModel(title: 'Weekly', image: Assets.imagescalendar),
-    const DrawerItemModel(title: 'Sesrch', image: Assets.imagescalendarSearch),
-    const DrawerItemModel(title: 'State', image: Assets.imagesStatistics),
-    const DrawerItemModel(title: 'More', image: Assets.imagesmore),
-    const DrawerItemModel(title: 'Settings', image: Assets.imagesSettings,),
+    const DrawerItemModel(title: 'navigation.weekly', image: Assets.imagescalendar),
+    const DrawerItemModel(title: 'common.Search', image: Assets.imagescalendarSearch),
+    const DrawerItemModel(title: 'app.stats', image: Assets.imagesStatistics),
+    const DrawerItemModel(title: 'app.more', image: Assets.imagesmore),
+    const DrawerItemModel(title: 'app.settings', image: Assets.imagesSettings),
   ];
 
   @override
@@ -60,4 +60,3 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
     );
   }
 }
-

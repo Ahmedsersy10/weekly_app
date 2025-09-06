@@ -14,7 +14,7 @@ void main() {
   runApp(
     // const ResponsiveDashboardApp(),
     DevicePreview(
-      enabled: true, // Set to false to disable Device Preview
+      enabled: false, // Set to false to disable Device Preview
       builder: (context) => const ResponsiveDashboardApp(), // Wrap your app
     ),
   );

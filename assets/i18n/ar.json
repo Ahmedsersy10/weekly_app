@@ -339,6 +339,6 @@
   "edit.tasks": "تعديل المهمة",
   "delete.task": "حذف المهمة",
   "notifications.taskReminder": "لديك مهمة مجدولة: {taskTitle}",
-  "task.reminder": "تذكير"
-  
+  "task.reminder": "تذكير",
+  "logout.account": "تسجيل خروج"
 }

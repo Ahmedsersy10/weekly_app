@@ -1,8 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/root_view.dart';
-import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_contaner_weekly_of.dart';
-import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_view_days.dart';
 
 class DashbordLayoutMobile extends StatefulWidget {
   const DashbordLayoutMobile({super.key});

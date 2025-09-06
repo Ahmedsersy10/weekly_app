@@ -26,7 +26,7 @@ class SettingsModel extends Equatable {
     this.primaryColor = const Color(0xFF8E1616), // default maroon
     this.notificationsEnabled = true,
     Map<int, TimeOfDay>? reminderTimes,
-    this.weekStart = WeekStart.monday,
+    this.weekStart = WeekStart.saturday,
     List<int>? weekendDays,
     this.syncProvider = SyncProvider.none,
     this.autoSync = false,
@@ -51,7 +51,7 @@ class SettingsModel extends Equatable {
     primaryColor: const Color(0xFF8E1616),
     notificationsEnabled: true,
     reminderTimes: _defaultReminderTimes,
-    weekStart: WeekStart.monday,
+    weekStart: WeekStart.saturday,
     weekendDays: const [6, 7],
     syncProvider: SyncProvider.none,
     autoSync: false,

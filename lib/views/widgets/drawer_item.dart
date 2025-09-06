@@ -37,9 +37,7 @@ class _DrawerItemState extends State<DrawerItem> {
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 600),
-      firstChild: GestureDetector(
-        child: inActiveDrawerItem(drawerItemModel: widget.drawerItemModel),
-      ),
+      firstChild: inActiveDrawerItem(drawerItemModel: widget.drawerItemModel),
       secondChild: ActiveDrawerItem(drawerItemModel: widget.drawerItemModel),
       crossFadeState: _isVisible ? CrossFadeState.showSecond : CrossFadeState.showFirst,
     );
