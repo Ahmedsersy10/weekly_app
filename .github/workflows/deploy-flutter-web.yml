@@ -27,7 +27,7 @@ jobs:
         run: flutter pub get
 
       - name: Build web
-        run: flutter build web --release
+        run: flutter build web --release --base-href /weekly_app/
 
       - name: Copy index to 404 (for SPA refresh handling)
         run: |
