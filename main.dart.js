@@ -116101,7 +116101,7 @@ if(b>=50){s=A.F(a,B.i,s)
 s.toString
 return s.U("settings.average")}else{s=A.F(a,B.i,s)
 s.toString
-return s.U("settings.improve")}}}}
+return s.U("common.needs")}}}}
 A.ami.prototype={
 $2(a,b){var s,r,q,p,o,n,m=null,l=t.J,k=t.N,j=t.p
 if(b instanceof A.eq){s=this.a
