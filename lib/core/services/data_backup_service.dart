@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart' hide ThemeMode;
 import 'package:path_provider/path_provider.dart';
 import 'package:weekly_dash_board/core/models/settings_model.dart';
-import 'package:weekly_dash_board/core/services/notification_service.dart';
 import 'package:weekly_dash_board/core/services/settings_service.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/task_model.dart';
 import 'package:weekly_dash_board/fetuers/home/data/services/hive_service.dart';
@@ -77,13 +76,13 @@ class DataBackupService {
     await HiveService.saveTasks(tasks);
 
     // Reschedule notifications if enabled
-    if (restoredSettings.notificationsEnabled) {
-      await NotificationService.updateReminderTimes(
-        restoredSettings.reminderTimes,
-      );
-    } else {
-      await NotificationService.cancelAllNotifications();
-    }
+    // if (restoredSettings.notificationsEnabled) {
+    //   await NotificationService.updateReminderTimes(
+    //     restoredSettings.reminderTimes,
+    //   );
+    // } else {
+    //   await NotificationService.cancelAllNotifications();
+    // }
 
     return true;
   }

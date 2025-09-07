@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:weekly_dash_board/models/drawer_item_model.dart';
 import 'package:weekly_dash_board/util/app_images.dart';
+import 'package:weekly_dash_board/util/drawer_page.dart';
 import 'package:weekly_dash_board/util/size_config.dart';
 import 'package:weekly_dash_board/views/widgets/drawer_item.dart';
 
 class ListViewDrawerItem extends StatefulWidget {
-  const ListViewDrawerItem({super.key});
+  final Function(int index, DrawerPage page)? onItemSelected;
+  
+  const ListViewDrawerItem({super.key, this.onItemSelected});
 
   @override
   State<ListViewDrawerItem> createState() => _ListViewDrawerItemState();
@@ -25,17 +28,29 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
     const DrawerItemModel(title: 'app.settings', image: Assets.imagesSettings),
   ];
 
+  // ربط الفهارس بالصفحات
+  final List<DrawerPage> drawerPages = [
+    DrawerPage.weekly,
+    DrawerPage.search,
+    DrawerPage.stats,
+    DrawerPage.more,
+    DrawerPage.settings,
+  ];
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // فلترة على حسب الشاشة
-    final filteredItems = drawerItems.where((item) {
-      if (screenWidth >= SizeConfig.desktop && item.title == 'app.stats') {
-        return false; // متعرضش State في الديسكتوب
+    final filteredItems = <DrawerItemModel>[];
+    final filteredPages = <DrawerPage>[];
+    
+    for (int i = 0; i < drawerItems.length; i++) {
+      if (screenWidth >= SizeConfig.desktop && drawerItems[i].title == 'app.stats') {
+        continue; // متعرضش Stats في الديسكتوب
       }
-      return true;
-    }).toList();
+      filteredItems.add(drawerItems[i]);
+      filteredPages.add(drawerPages[i]);
+    }
 
     return SliverList.builder(
       itemCount: filteredItems.length,
@@ -46,6 +61,8 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
               setState(() {
                 selectedIndex = index;
               });
+              // استدعاء الـ callback مع تمرير المعلومات المطلوبة
+              widget.onItemSelected?.call(index, filteredPages[index]);
             }
           },
           child: Padding(
@@ -58,5 +75,13 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
         );
       },
     );
+  }
+
+  void updateSelectedIndex(int index) {
+    if (mounted) {
+      setState(() {
+        selectedIndex = index;
+      });
+    }
   }
 }

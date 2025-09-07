@@ -6,6 +6,8 @@ import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/home_view_body.dart';
+import 'package:weekly_dash_board/util/dashboard_controller.dart';
+import 'package:weekly_dash_board/util/drawer_page.dart';
 import 'package:weekly_dash_board/util/size_config.dart';
 import 'package:weekly_dash_board/views/widgets/adaptive_layout.dart';
 import 'package:weekly_dash_board/views/widgets/custom_drawer.dart' show CustomDrawer;
@@ -24,6 +26,22 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   final GlobalKey<HomeViewBodyState> _bodyKey = GlobalKey<HomeViewBodyState>();
+  final DashboardController _controller = DashboardController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onDrawerItemSelected(int index, DrawerPage page) {
+    _controller.changePage(page);
+
+    // إغلاق الـ drawer في المحمول
+    if (MediaQuery.of(context).size.width < SizeConfig.tablet) {
+      Navigator.of(context).pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,34 +50,92 @@ class _DashboardViewState extends State<DashboardView> {
       child: Scaffold(
         appBar: MediaQuery.of(context).size.width >= SizeConfig.tablet
             ? AppBar(
-                title: Text(
-                  AppLocalizations.of(context).tr('app.title'),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                title: ListenableBuilder(
+                  listenable: _controller,
+                  builder: (context, _) {
+                    return Text(
+                      _getPageTitle(),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    );
+                  },
                 ),
                 backgroundColor: AppColors.maroon,
                 foregroundColor: AppColors.white,
                 actions: [
-                  IconButton(
-                    onPressed: _openCalendar,
-                    icon: const Icon(Icons.calendar_month_outlined),
-                  ),
-                  IconButton(
-                    onPressed: _showClearAllTasksDialog,
-                    icon: const Icon(Icons.clear_all),
-                    tooltip: AppLocalizations.of(context).tr('settings.clearAllTasks'),
+                  ListenableBuilder(
+                    listenable: _controller,
+                    builder: (context, _) {
+                      return Row(mainAxisSize: MainAxisSize.min, children: _buildAppBarActions());
+                    },
                   ),
                 ],
               )
             : null,
-        drawer: MediaQuery.of(context).size.width < SizeConfig.tablet ? const CustomDrawer() : null,
+
+        drawer: MediaQuery.of(context).size.width < SizeConfig.tablet
+            ? CustomDrawer(onItemSelected: _onDrawerItemSelected)
+            : null,
         backgroundColor: const Color(0xffE5E5E5),
-        body: AdaptiveLayout(
-          mobileLayout: (context) => const DashbordLayoutMobile(),
-          tabletLayout: (context) => const DashbordTabletLayout(),
-          desktopLayout: (context) => const DashboardDesktopLayout(),
+        body: ListenableBuilder(
+          listenable: _controller,
+          builder: (context, _) {
+            return AdaptiveLayout(
+              mobileLayout: (context) => DashboardMobileLayout(
+                currentPage: _controller.currentPage,
+                onItemSelected: _onDrawerItemSelected,
+              ),
+              tabletLayout: (context) => DashboardTabletLayout(
+                currentPage: _controller.currentPage,
+                onItemSelected: _onDrawerItemSelected,
+              ),
+              desktopLayout: (context) => DashboardDesktopLayout(
+                currentPage: _controller.currentPage,
+                onItemSelected: _onDrawerItemSelected,
+              ),
+            );
+          },
         ),
       ),
     );
+  }
+
+  String _getPageTitle() {
+    switch (_controller.currentPage) {
+      case DrawerPage.weekly:
+        return AppLocalizations.of(context).tr('app.title');
+      case DrawerPage.search:
+        return AppLocalizations.of(context).tr('common.Search');
+      case DrawerPage.stats:
+        return AppLocalizations.of(context).tr('app.stats');
+      case DrawerPage.more:
+        return AppLocalizations.of(context).tr('app.more');
+      case DrawerPage.settings:
+        return AppLocalizations.of(context).tr('app.settings');
+    }
+  }
+
+  List<Widget> _buildAppBarActions() {
+    // عرض الأيقونات حسب الصفحة الحالية
+    if (_controller.currentPage == DrawerPage.weekly) {
+      return [
+        IconButton(onPressed: _openCalendar, icon: const Icon(Icons.calendar_month_outlined)),
+        IconButton(
+          onPressed: _showClearAllTasksDialog,
+          icon: const Icon(Icons.clear_all),
+          tooltip: AppLocalizations.of(context).tr('settings.clearAllTasks'),
+        ),
+      ];
+    } else if (_controller.currentPage == DrawerPage.search) {
+      return [
+        IconButton(
+          onPressed: () {
+            // Advanced search options
+          },
+          icon: const Icon(Icons.filter_list),
+        ),
+      ];
+    }
+    return [];
   }
 
   void _openCalendar() {

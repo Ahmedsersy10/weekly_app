@@ -13,12 +13,9 @@ class HomeViewBody extends StatefulWidget {
   State<HomeViewBody> createState() => HomeViewBodyState();
 }
 
-class HomeViewBodyState extends State<HomeViewBody>
-    with TickerProviderStateMixin {
+class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  final Map<int, GlobalKey> _dayKeys = {
-    for (int i = 0; i < 6; i++) i: GlobalKey(),
-  };
+  final Map<int, GlobalKey> _dayKeys = {for (int i = 0; i < 6; i++) i: GlobalKey()};
 
   late TabController _tabController;
   // ignore: unused_field
@@ -61,10 +58,7 @@ class HomeViewBodyState extends State<HomeViewBody>
             controller: _tabController,
             labelColor: AppColors.white,
             dividerColor: AppColors.maroon,
-            labelStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.black,
-            ),
+            labelStyle: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.black),
             unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
               color: AppColors.white,
@@ -79,8 +73,8 @@ class HomeViewBodyState extends State<HomeViewBody>
           ),
         ),
 
-        const SizedBox(height: 4),
-        const CustomContainerWeeklyOf(),
+        // const SizedBox(height: 4),
+        // const CustomContainerWeeklyOf(),
         // Tab Content
         Expanded(
           child: TabBarView(
@@ -113,12 +107,21 @@ class HomeViewBodyState extends State<HomeViewBody>
   }
 
   Widget _buildWeeklyView() {
-    return CustomScrollView(
-      controller: _scrollController,
-      slivers: [
-        const SliverToBoxAdapter(child: SizedBox(height: 2)),
-        const SliverToBoxAdapter(child: SizedBox(height: 20)),
-        CustomListViewDays(dayKeys: _dayKeys),
+    return Column(
+      children: [
+        const SizedBox(height: 4),
+        const CustomContainerWeeklyOf(),
+        Expanded(
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              // const SliverToBoxAdapter(child: SizedBox(height: 4)),
+              // const SliverToBoxAdapter(child: CustomContainerWeeklyOf()),
+              const SliverToBoxAdapter(child: SizedBox(height: 20)),
+              CustomListViewDays(dayKeys: _dayKeys),
+            ],
+          ),
+        ),
       ],
     );
   }

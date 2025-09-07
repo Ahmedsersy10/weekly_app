@@ -7,7 +7,6 @@ import '../../data/models/weekly_state_model.dart';
 import '../../data/services/hive_service.dart';
 import '../../../../core/models/settings_model.dart';
 import '../../../../core/services/settings_service.dart';
-import '../../../../core/services/notification_service.dart';
 
 part 'weekly_state.dart';
 
@@ -37,24 +36,24 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       _currentWeekStart = settings.weekStart;
 
       // Restore notifications after app restart if enabled
-      if (settings.notificationsEnabled) {
-        final tasksWithReminders = tasks
-            .where((task) => task.reminderTime != null)
-            .map(
-              (task) => {
-                'id': task.id,
-                'dayOfWeek': task.dayOfWeek,
-                'reminderTime': task.reminderTime!,
-                'title': task.title,
-              },
-            )
-            .toList();
+      // if (settings.notificationsEnabled) {
+      //   final tasksWithReminders = tasks
+      //       .where((task) => task.reminderTime != null)
+      //       .map(
+      //         (task) => {
+      //           'id': task.id,
+      //           'dayOfWeek': task.dayOfWeek,
+      //           'reminderTime': task.reminderTime!,
+      //           'title': task.title,
+      //         },
+      //       )
+      //       .toList();
 
-        await NotificationService.restoreNotificationsAfterRestart(
-          reminderTimes: settings.reminderTimes,
-          tasksWithReminders: tasksWithReminders,
-        );
-      }
+      //   await NotificationService.restoreNotificationsAfterRestart(
+      //     reminderTimes: settings.reminderTimes,
+      //     tasksWithReminders: tasksWithReminders,
+      //   );
+      // }
     } catch (e) {
       // Use default if settings loading fails
       _currentWeekStart = WeekStart.saturday;
@@ -93,14 +92,14 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       _updateState(updatedTasks);
 
       // Schedule notification if reminder time is set
-      if (reminderTime != null) {
-        NotificationService.scheduleTaskNotification(
-          taskId: newTask.id,
-          dayOfWeek: dayOfWeek,
-          time: reminderTime,
-          taskTitle: title,
-        );
-      }
+      // if (reminderTime != null) {
+      //   NotificationService.scheduleTaskNotification(
+      //     taskId: newTask.id,
+      //     dayOfWeek: dayOfWeek,
+      //     time: reminderTime,
+      //     taskTitle: title,
+      //   );
+      // }
     }
   }
 
@@ -523,15 +522,15 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       _updateState(updatedTasks);
 
       // Update notification if reminder time changed
-      if (originalTask != null) {
-        final newReminderTime = reminderTime ?? originalTask!.reminderTime;
-        NotificationService.updateTaskNotification(
-          taskId: taskId,
-          dayOfWeek: originalTask!.dayOfWeek,
-          time: newReminderTime,
-          taskTitle: newTitle,
-        );
-      }
+      // if (originalTask != null) {
+      //   final newReminderTime = reminderTime ?? originalTask!.reminderTime;
+      //   // NotificationService.updateTaskNotification(
+      //   //   taskId: taskId,
+      //   //   dayOfWeek: originalTask!.dayOfWeek,
+      //   //   time: newReminderTime,
+      //   //   taskTitle: newTitle,
+      //   // );
+      // }
     }
   }
 
@@ -545,7 +544,7 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       _updateState(updatedTasks);
 
       // Cancel notification for deleted task
-      NotificationService.cancelTaskNotification(taskId);
+      // NotificationService.cancelTaskNotification(taskId);
     }
   }
 
@@ -557,9 +556,9 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       final tasksToClear = currentState.weeklyState.tasks.where(
         (task) => task.dayOfWeek == dayOfWeek,
       );
-      for (final task in tasksToClear) {
-        NotificationService.cancelTaskNotification(task.id);
-      }
+      // for (final task in tasksToClear) {
+      //   NotificationService.cancelTaskNotification(task.id);
+      // }
 
       final updatedTasks = currentState.weeklyState.tasks
           .where((task) => task.dayOfWeek != dayOfWeek)
@@ -574,9 +573,9 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       final currentState = state as WeeklySuccess;
 
       // Cancel all task notifications
-      for (final task in currentState.weeklyState.tasks) {
-        NotificationService.cancelTaskNotification(task.id);
-      }
+      // for (final task in currentState.weeklyState.tasks) {
+      //   NotificationService.cancelTaskNotification(task.id);
+      // }
 
       _updateState([]);
     }
