@@ -159,7 +159,7 @@ class CustomContainerWeeklyOf extends StatelessWidget {
     } else if (percentage >= 50) {
       return AppLocalizations.of(context).tr('settings.average');
     } else {
-      return AppLocalizations.of(context).tr('settings.improve');
+      return AppLocalizations.of(context).tr('common.needs');
     }
   }
 }
