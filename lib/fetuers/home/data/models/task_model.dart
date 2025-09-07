@@ -76,7 +76,6 @@ class TaskModel extends Equatable {
     );
   }
 
-  // Helper methods
   bool get isOverdue {
     if (dueDate == null || isCompleted) return false;
     return DateTime.now().isAfter(dueDate!);

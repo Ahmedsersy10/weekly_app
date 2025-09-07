@@ -1,16 +1,12 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 
-// Project imports:
 import 'package:weekly_dash_board/models/drawer_item_model.dart';
-// import 'package:weekly_dash_board/models/user_info_model.dart';
 import 'package:weekly_dash_board/util/app_images.dart';
 import 'package:weekly_dash_board/util/drawer_page.dart';
 import 'package:weekly_dash_board/views/widgets/in_active_drawer_item.dart';
 import 'package:weekly_dash_board/views/widgets/list_view_drawer_item.dart';
-// import 'package:weekly_dash_board/views/widgets/user_info_list_tile.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Function(int index, DrawerPage page)? onItemSelected;
@@ -24,8 +20,9 @@ class CustomDrawer extends StatelessWidget {
       color: Colors.white,
       child: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: Divider(color: Colors.white, height: 1, thickness: 1)),
-          // Header
+          const SliverToBoxAdapter(
+            child: Divider(color: Colors.white, height: 1, thickness: 1),
+          ),
           SliverToBoxAdapter(
             child: Container(
               height: 120,
@@ -53,7 +50,6 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
 
-          // Navigation Items
           ListViewDrawerItem(onItemSelected: onItemSelected),
 
           SliverFillRemaining(

@@ -6,14 +6,12 @@ class FirebaseService {
   factory FirebaseService() => _instance;
   FirebaseService._internal();
 
-  // Placeholder for Firebase authentication
   bool _isSignedIn = false;
   String? _userId;
 
   bool get isSignedIn => _isSignedIn;
   String? get currentUserId => _userId;
 
-  // Authentication methods (placeholder)
   Future<bool> signInWithGoogle() async {
     await Future.delayed(const Duration(seconds: 1));
     _isSignedIn = true;
@@ -27,7 +25,6 @@ class FirebaseService {
     _userId = null;
   }
 
-  // Task synchronization methods (placeholder)
   Future<void> syncTasksToCloud(List<TaskModel> tasks) async {
     if (!isSignedIn) return;
 
@@ -58,7 +55,6 @@ class FirebaseService {
     return null;
   }
 
-  // Backup and restore methods (placeholder)
   Future<void> createBackup() async {
     if (!isSignedIn) return;
 
@@ -81,8 +77,6 @@ class FirebaseService {
     print('Backup restored successfully (placeholder)');
   }
 
-  // Helper methods for data conversion
-  // ignore: unused_element
   Map<String, dynamic> _taskModelToMap(TaskModel task) {
     return {
       'id': task.id,
@@ -102,7 +96,6 @@ class FirebaseService {
     };
   }
 
-  // ignore: unused_element
   TaskModel _mapToTaskModel(Map<String, dynamic> map, String id) {
     return TaskModel(
       id: id.isNotEmpty ? id : map['id'] ?? '',
@@ -132,9 +125,7 @@ class FirebaseService {
     );
   }
 
-  // ignore: unused_element
   Map<String, dynamic> _statisticsModelToMap(StatisticsModel statistics) {
-    // Convert statistics model to map (simplified for now)
     return {
       'overallCompletionRate': statistics.overallCompletionRate,
       'totalTasksCompleted': statistics.totalTasksCompleted,
@@ -146,9 +137,7 @@ class FirebaseService {
     };
   }
 
-  // ignore: unused_element
   StatisticsModel _mapToStatisticsModel(Map<String, dynamic> map) {
-    // Create a basic statistics model from map (simplified for now)
     return StatisticsModel(
       overallCompletionRate: map['overallCompletionRate'] ?? 0.0,
       totalTasksCompleted: map['totalTasksCompleted'] ?? 0,

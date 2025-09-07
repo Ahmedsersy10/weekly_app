@@ -27,8 +27,8 @@ class _AboutSectionState extends State<AboutSection> {
         _appVersion = packageInfo.version;
         _buildNumber = packageInfo.buildNumber;
       });
+    // ignore: empty_catches
     } catch (e) {
-      // Keep default values if package info fails to load
     }
   }
 
@@ -66,7 +66,6 @@ class _AboutSectionState extends State<AboutSection> {
           ),
           const SizedBox(height: 16),
 
-          // App Icon and Name
           Center(
             child: Column(
               children: [
@@ -110,7 +109,6 @@ class _AboutSectionState extends State<AboutSection> {
 
           const SizedBox(height: 24),
 
-          // App Description
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -141,7 +139,6 @@ class _AboutSectionState extends State<AboutSection> {
 
           const SizedBox(height: 16),
 
-          // Version Information
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -180,7 +177,6 @@ class _AboutSectionState extends State<AboutSection> {
 
           const SizedBox(height: 16),
 
-          // Features List
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -231,7 +227,6 @@ class _AboutSectionState extends State<AboutSection> {
 
           const SizedBox(height: 16),
 
-          // Copyright
           Center(
             child: Text(
               AppLocalizations.of(

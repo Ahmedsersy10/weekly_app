@@ -47,7 +47,6 @@ class StatisticsDashboardWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Key Metrics Row
                 Row(
                   children: [
                     Expanded(
@@ -74,7 +73,6 @@ class StatisticsDashboardWidget extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // Task Counts Row
                 Row(
                   children: [
                     Expanded(
@@ -103,7 +101,6 @@ class StatisticsDashboardWidget extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // Productivity Insights
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16.0),

@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/util/drawer_page.dart';
 

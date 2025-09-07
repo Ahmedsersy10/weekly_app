@@ -6,29 +6,23 @@ class StatisticsService {
   factory StatisticsService() => _instance;
   StatisticsService._internal();
 
-  // Cache for statistics to avoid recalculation
   StatisticsModel? _cachedStatistics;
   List<TaskModel>? _cachedTasks;
   DateTime? _lastCalculationTime;
 
-  // Cache duration (5 minutes)
   static const Duration _cacheDuration = Duration(minutes: 5);
 
   StatisticsModel calculateStatistics(List<TaskModel> tasks) {
-    // Check if we can use cached statistics
     if (_canUseCache(tasks)) {
       return _cachedStatistics!;
     }
 
-    // Calculate basic statistics synchronously for immediate response
     final basicStats = _calculateBasicStatistics(tasks);
 
-    // Cache the result
     _cachedStatistics = basicStats;
     _cachedTasks = List.from(tasks);
     _lastCalculationTime = DateTime.now();
 
-    // Calculate detailed statistics asynchronously
     _calculateDetailedStatisticsAsync(tasks);
 
     return basicStats;
@@ -41,10 +35,8 @@ class StatisticsService {
       return false;
     }
 
-    // Check if tasks have changed
     if (_cachedTasks!.length != tasks.length) return false;
 
-    // Check if cache is still valid
     if (DateTime.now().difference(_lastCalculationTime!) > _cacheDuration) {
       return false;
     }
@@ -59,7 +51,6 @@ class StatisticsService {
         ? (completedTasks / totalTasks) * 100
         : 0.0;
 
-    // Calculate only essential statistics synchronously
     final dayProductivity = _calculateDayProductivity(tasks);
     final averageTasksPerDay = _calculateAverageTasksPerDay(tasks);
 
@@ -80,12 +71,10 @@ class StatisticsService {
   }
 
   Future<void> _calculateDetailedStatisticsAsync(List<TaskModel> tasks) async {
-    // Use compute for heavy calculations
     try {
       final result = await _calculateFullStatisticsAsync(tasks);
       _cachedStatistics = result;
     } catch (e) {
-      // Fallback to synchronous calculation if compute fails
       _cachedStatistics = _calculateFullStatistics(tasks);
     }
   }
@@ -93,7 +82,6 @@ class StatisticsService {
   Future<StatisticsModel> _calculateFullStatisticsAsync(
     List<TaskModel> tasks,
   ) async {
-    // For now, use synchronous calculation but in a microtask to avoid blocking
     return Future.microtask(() => _calculateFullStatistics(tasks));
   }
 
@@ -151,7 +139,6 @@ class StatisticsService {
           ? (completedTasks / totalTasks) * 100
           : 0.0;
 
-      // Calculate average completion time
       double averageCompletionTime = 0.0;
       if (completedTasks > 0) {
         final completedTaskTimes = dayTasks
@@ -168,7 +155,6 @@ class StatisticsService {
         }
       }
 
-      // Find most productive hour for this day
       final mostProductiveHour = _findMostProductiveHour(dayTasks);
 
       dayStats[i] = DayProductivityStats(
@@ -202,7 +188,6 @@ class StatisticsService {
           ? (completedTasks / totalTasks) * 100
           : 0.0;
 
-      // Calculate average completion time for this category
       double averageCompletionTime = 0.0;
       if (completedTasks > 0) {
         final completedTaskTimes = categoryTasks
@@ -234,7 +219,6 @@ class StatisticsService {
   List<WeeklyTrend> _calculateWeeklyTrends(List<TaskModel> tasks) {
     final weeklyTrends = <WeeklyTrend>[];
 
-    // Group tasks by week
     final weekGroups = <String, List<TaskModel>>{};
 
     for (final task in tasks) {
@@ -247,7 +231,6 @@ class StatisticsService {
       weekGroups[weekKey]!.add(task);
     }
 
-    // Calculate trends for each week
     for (final entry in weekGroups.entries) {
       final weekTasks = entry.value;
       final totalTasks = weekTasks.length;
@@ -256,7 +239,6 @@ class StatisticsService {
           ? (completedTasks / totalTasks) * 100
           : 0.0;
 
-      // Calculate productivity score based on completion rate and task complexity
       double productivityScore = completionRate;
       if (totalTasks > 0) {
         final averagePriority =
@@ -284,7 +266,6 @@ class StatisticsService {
       );
     }
 
-    // Sort by week start date
     weeklyTrends.sort((a, b) => a.weekStart.compareTo(b.weekStart));
 
     return weeklyTrends;
@@ -301,7 +282,6 @@ class StatisticsService {
       return aScore > bScore ? a : b;
     });
 
-    // Convert day index to actual date
     final today = DateTime.now();
     final daysSinceWeekStart = today.weekday - 6; // Saturday = 0
     final mostProductiveDayIndex = mostProductive.key;
@@ -321,7 +301,6 @@ class StatisticsService {
       return aScore < bScore ? a : b;
     });
 
-    // Convert day index to actual date
     final today = DateTime.now();
     final daysSinceWeekStart = today.weekday - 6; // Saturday = 0
     final leastProductiveDayIndex = leastProductive.key;
@@ -350,9 +329,7 @@ class StatisticsService {
     final today = DateTime.now();
     int streak = 0;
 
-    // Check consecutive days backwards from today
     for (int i = 0; i < 30; i++) {
-      // Check up to 30 days back
       final checkDate = today.subtract(Duration(days: i));
       final dayIndex = _getDayIndex(checkDate);
 
@@ -377,7 +354,6 @@ class StatisticsService {
     int longestStreak = 0;
     int currentStreak = 0;
 
-    // Group tasks by date and check for consecutive completion days
     final completionDates = <DateTime>{};
     for (final task in tasks) {
       if (task.isCompleted && task.completedAt != null) {
@@ -441,7 +417,6 @@ class StatisticsService {
   }
 
   int? _getDayIndex(DateTime date) {
-    // App indices: 0=Saturday ... 5=Thursday, Friday off
     final weekday = date.weekday;
     switch (weekday) {
       case DateTime.saturday: // 6
@@ -475,7 +450,6 @@ class StatisticsService {
     }
   }
 
-  // Additional statistics methods
   Map<TaskPriority, int> getPriorityDistribution(List<TaskModel> tasks) {
     final distribution = <TaskPriority, int>{};
     for (final priority in TaskPriority.values) {

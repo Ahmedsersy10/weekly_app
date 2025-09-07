@@ -25,7 +25,6 @@ class SettingsService {
     final notificationsEnabled =
         prefs.getBool(_notificationsEnabledKey) ?? true;
 
-    // Load reminder times
     final reminderTimesJson = prefs.getString(_reminderTimesKey);
     Map<int, TimeOfDay> reminderTimes = {};
     if (reminderTimesJson != null) {
@@ -75,14 +74,12 @@ class SettingsService {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setInt(_themeModeKey, settings.themeMode.index);
-    // ignore: deprecated_member_use
     await prefs.setInt(_primaryColorKey, settings.primaryColor.value);
     await prefs.setBool(
       _notificationsEnabledKey,
       settings.notificationsEnabled,
     );
 
-    // Save reminder times
     final Map<String, String> timesMap = {};
     settings.reminderTimes.forEach((key, value) {
       timesMap[key.toString()] = '${value.hour}:${value.minute}';

@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -10,12 +9,12 @@ import 'package:weekly_dash_board/util/dashboard_controller.dart';
 import 'package:weekly_dash_board/util/drawer_page.dart';
 import 'package:weekly_dash_board/util/size_config.dart';
 import 'package:weekly_dash_board/views/widgets/adaptive_layout.dart';
-import 'package:weekly_dash_board/views/widgets/custom_drawer.dart' show CustomDrawer;
+import 'package:weekly_dash_board/views/widgets/custom_drawer.dart'
+    show CustomDrawer;
 import 'package:weekly_dash_board/views/widgets/dashboard_desktop_layout.dart';
 import 'package:weekly_dash_board/views/widgets/dashbord_layout_mobile.dart';
 import 'package:weekly_dash_board/views/widgets/dashbord_tablet_layout.dart';
 
-// Project imports:
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -37,7 +36,6 @@ class _DashboardViewState extends State<DashboardView> {
   void _onDrawerItemSelected(int index, DrawerPage page) {
     _controller.changePage(page);
 
-    // إغلاق الـ drawer في المحمول
     if (MediaQuery.of(context).size.width < SizeConfig.tablet) {
       Navigator.of(context).pop();
     }
@@ -65,7 +63,10 @@ class _DashboardViewState extends State<DashboardView> {
                   ListenableBuilder(
                     listenable: _controller,
                     builder: (context, _) {
-                      return Row(mainAxisSize: MainAxisSize.min, children: _buildAppBarActions());
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: _buildAppBarActions(),
+                      );
                     },
                   ),
                 ],
@@ -115,10 +116,12 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   List<Widget> _buildAppBarActions() {
-    // عرض الأيقونات حسب الصفحة الحالية
     if (_controller.currentPage == DrawerPage.weekly) {
       return [
-        IconButton(onPressed: _openCalendar, icon: const Icon(Icons.calendar_month_outlined)),
+        IconButton(
+          onPressed: _openCalendar,
+          icon: const Icon(Icons.calendar_month_outlined),
+        ),
         IconButton(
           onPressed: _showClearAllTasksDialog,
           icon: const Icon(Icons.clear_all),
@@ -129,7 +132,6 @@ class _DashboardViewState extends State<DashboardView> {
       return [
         IconButton(
           onPressed: () {
-            // Advanced search options
           },
           icon: const Icon(Icons.filter_list),
         ),
@@ -156,10 +158,15 @@ class _DashboardViewState extends State<DashboardView> {
                   lastDay: DateTime.utc(2100, 12, 31),
                   focusedDay: focusedDay,
                   calendarStyle: const CalendarStyle(
-                    defaultTextStyle: TextStyle(color: AppColors.black), // لون الأرقام
+                    defaultTextStyle: TextStyle(
+                      color: AppColors.black,
+                    ), // لون الأرقام
                     weekNumberTextStyle: TextStyle(color: AppColors.black),
                     todayTextStyle: TextStyle(color: AppColors.black),
-                    todayDecoration: BoxDecoration(color: AppColors.maroon, shape: BoxShape.circle),
+                    todayDecoration: BoxDecoration(
+                      color: AppColors.maroon,
+                      shape: BoxShape.circle,
+                    ),
                     selectedDecoration: BoxDecoration(
                       color: AppColors.maroon,
                       shape: BoxShape.circle,
@@ -168,7 +175,9 @@ class _DashboardViewState extends State<DashboardView> {
                   headerStyle: const HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
-                    titleTextStyle: TextStyle(color: AppColors.black), // لون الشهر
+                    titleTextStyle: TextStyle(
+                      color: AppColors.black,
+                    ), // لون الشهر
                     leftChevronIcon: Icon(
                       Icons.chevron_left,
                       color: AppColors.black, // لون السهم الأيسر
@@ -225,8 +234,12 @@ class _DashboardViewState extends State<DashboardView> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.white,
-          title: Text(AppLocalizations.of(context).tr('settings.clearAllTasksTitle')),
-          content: Text(AppLocalizations.of(context).tr('settings.clearAllTasksConfirm')),
+          title: Text(
+            AppLocalizations.of(context).tr('settings.clearAllTasksTitle'),
+          ),
+          content: Text(
+            AppLocalizations.of(context).tr('settings.clearAllTasksConfirm'),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -253,9 +266,6 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   int? _mapDateToAppDayIndex(DateTime date) {
-    // App indices: 0=Saturday ... 5=Thursday, Friday off
-    // Dart weekday: Monday=1 ... Sunday=7
-    // Map: Saturday(6)->0, Sunday(7)->1, Monday(1)->2, Tuesday(2)->3, Wednesday(3)->4, Thursday(4)->5, Friday(5)->off
     final weekday = date.weekday; // 1..7
     switch (weekday) {
       case DateTime.saturday: // 6

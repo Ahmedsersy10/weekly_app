@@ -30,7 +30,6 @@ class RateShareSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Rate the App
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -96,7 +95,6 @@ class RateShareSection extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // Share the App
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -151,7 +149,6 @@ class RateShareSection extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // Benefits of Sharing
           Container(
             padding: const EdgeInsets.all(12.0),
             decoration: BoxDecoration(
@@ -180,10 +177,8 @@ class RateShareSection extends StatelessWidget {
   }
 
   Future<void> _rateApp() async {
-    // Try to open the app store for rating
     String url;
 
-    // You can customize these URLs based on your app's actual store listings
     if (Platform.isAndroid) {
       url = 'https://play.google.com/store/apps/details?id=com.example.weekly';
     } else if (Platform.isIOS) {

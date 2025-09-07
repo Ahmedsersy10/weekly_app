@@ -46,7 +46,6 @@ class AchievementSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Weekly Chart
                 _buildChartSection(
                   context,
                   AppLocalizations.of(context).tr('more.weeklyProgress'),
@@ -54,7 +53,6 @@ class AchievementSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Monthly Chart
                 _buildChartSection(
                   context,
                   AppLocalizations.of(context).tr('more.monthlyOverview'),
@@ -62,7 +60,6 @@ class AchievementSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Stats Row
                 Row(
                   children: [
                     Expanded(
@@ -89,7 +86,6 @@ class AchievementSection extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // Task Counts Row
                 Row(
                   children: [
                     Expanded(
@@ -146,7 +142,6 @@ class AchievementSection extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final dayProductivity = stats.dayProductivity;
 
-    // Prepare data for the chart
     final spots = <FlSpot>[];
     for (int i = 0; i < 6; i++) {
       final dayStats = dayProductivity[i];
@@ -207,7 +202,6 @@ class AchievementSection extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final weeklyTrends = stats.weeklyTrends;
 
-    // Prepare data for the chart (last 4 weeks)
     final barGroups = <BarChartGroupData>[];
     final months = ['Jan', 'Feb', 'Mar', 'Apr'];
 

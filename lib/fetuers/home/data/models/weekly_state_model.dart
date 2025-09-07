@@ -20,7 +20,6 @@ class WeeklyStateModel extends Equatable {
     this.collapsedDays = const {},
   });
 
-  /// Factory constructor يحسب كل القيم تلقائيًا
   factory WeeklyStateModel.withTasks(
     List<TaskModel> tasks,
     List<DayStats> dayStats, {
@@ -76,37 +75,25 @@ class WeeklyStateModel extends Equatable {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    // بداية السنة
     final startOfYear = DateTime(today.year, 1, 1);
 
-    // حساب يوم الأسبوع: السبت = 6, الأحد = 0, الاثنين = 1, ... الجمعة = 5
     final startOfYearWeekday = startOfYear.weekday == 7
         ? 0
         : startOfYear.weekday;
 
-    // نحسب كام يوم نرجع عشان نوصل لأقرب سبت قبل أو عند 1 يناير
-    // لو 1 يناير = سبت (0) → ما نرجعش حاجة (0 أيام)
-    // لو 1 يناير = أحد (1) → نرجع يوم واحد
-    // لو 1 يناير = أربعاء (3) → نرجع 4 أيام
     final daysToSubtract = startOfYearWeekday == 0 ? 0 : 7 - startOfYearWeekday;
 
-    // أول سبت في السنة أو قبلها
     final firstWeekStart = startOfYear.subtract(Duration(days: daysToSubtract));
 
-    // بداية الأسبوع الحالي (السبت)
     final todayWeekday = today.weekday == 7 ? 0 : today.weekday;
     final startOfCurrentWeek = today.subtract(Duration(days: todayWeekday));
 
-    // الفرق بالأيام
     final daysSinceStart = startOfCurrentWeek.difference(firstWeekStart).inDays;
 
-    // رقم الأسبوع
     return (daysSinceStart ~/ 7) + 1;
   }
 
-  // دالة للاختبار
   void testWeekCalculation() {
-    // اختبار على تواريخ مختلفة
     final testDates = [
       DateTime(2025, 1, 1), // 1 يناير 2025 (الأربعاء)
       DateTime(2025, 1, 4), // 4 يناير 2025 (السبت)
@@ -121,7 +108,6 @@ class WeeklyStateModel extends Equatable {
     }
   }
 
-  // دالة مساعدة لحساب رقم الأسبوع لتاريخ معين
   static int _getWeekNumberForDate(DateTime targetDate) {
     final today = DateTime(targetDate.year, targetDate.month, targetDate.day);
 

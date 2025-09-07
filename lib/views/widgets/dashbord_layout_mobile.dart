@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/root_view.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/statistics_dashboard_widget.dart';
@@ -11,14 +10,20 @@ class DashboardMobileLayout extends StatefulWidget {
   final DrawerPage currentPage;
   final Function(int index, DrawerPage page) onItemSelected;
 
-  const DashboardMobileLayout({super.key, required this.currentPage, required this.onItemSelected});
+  const DashboardMobileLayout({
+    super.key,
+    required this.currentPage,
+    required this.onItemSelected,
+  });
 
   @override
   State<DashboardMobileLayout> createState() => _DashboardMobileLayoutState();
 }
 
 class _DashboardMobileLayoutState extends State<DashboardMobileLayout> {
-  final Map<int, GlobalKey> _dayKeys = {for (int i = 0; i < 6; i++) i: GlobalKey()};
+  final Map<int, GlobalKey> _dayKeys = {
+    for (int i = 0; i < 6; i++) i: GlobalKey(),
+  };
 
   @override
   Widget build(BuildContext context) {

@@ -31,7 +31,6 @@ class CustomTextFormField extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(18),
-            // fillColor: secondaryColor,
             filled: true,
             enabledBorder: buildOutlineInputBorder(),
             focusedBorder: buildOutlineInputBorder(),

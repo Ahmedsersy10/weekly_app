@@ -51,7 +51,6 @@ class MotivationalService {
     AppLocalizations.of(context).tr('more.streak_quotes[4]'),
   ];
 
-  /// Progress-based quotes
   static String getQuoteByProgress(
     BuildContext context,
     double progressPercentage,
@@ -69,7 +68,6 @@ class MotivationalService {
     }
   }
 
-  /// Streak-based quotes
   static String getQuoteByStreak(BuildContext context, int currentStreak) {
     if (currentStreak >= 7) {
       return AppLocalizations.of(context).tr('more.streak_strong');
@@ -80,7 +78,6 @@ class MotivationalService {
     }
   }
 
-  /// Overdue tasks quotes
   static String getQuoteByOverdueTasks(BuildContext context, int overdueCount) {
     if (overdueCount > 0) {
       return AppLocalizations.of(context).tr('more.overdue_tasks');
@@ -88,7 +85,6 @@ class MotivationalService {
     return getQuoteByProgress(context, 100); // No overdue tasks
   }
 
-  /// Time-of-day quotes
   static String getQuoteByTimeOfDay(BuildContext context) {
     final hour = DateTime.now().hour;
     if (hour >= 5 && hour < 12) {
@@ -102,7 +98,6 @@ class MotivationalService {
     }
   }
 
-  /// Category-based quotes
   static String getQuoteByCategory(BuildContext context, String category) {
     switch (category.toLowerCase()) {
       case 'work':
@@ -122,13 +117,11 @@ class MotivationalService {
     }
   }
 
-  /// Random picker
   static String getRandomQuote(List<String> quotes) {
     final random = Random();
     return quotes[random.nextInt(quotes.length)];
   }
 
-  /// Personalized quote based on multiple factors
   static String getPersonalizedQuote(
     BuildContext context, {
     double? progressPercentage,

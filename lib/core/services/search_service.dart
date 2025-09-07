@@ -10,7 +10,6 @@ class SearchService {
 
     final lowercaseQuery = query.toLowerCase();
 
-    // Use more efficient search with early termination
     final results = <TaskModel>[];
     for (final task in tasks) {
       if (task.title.toLowerCase().contains(lowercaseQuery)) {
@@ -28,7 +27,6 @@ class SearchService {
         continue;
       }
 
-      // Check tags more efficiently
       bool tagMatch = false;
       for (final tag in task.tags) {
         if (tag.toLowerCase().contains(lowercaseQuery)) {
@@ -132,7 +130,6 @@ class SearchService {
     }).toList();
   }
 
-  // Advanced search with multiple criteria
   List<TaskModel> advancedSearch({
     String? query,
     TaskCategory? category,
@@ -151,51 +148,42 @@ class SearchService {
 
     List<TaskModel> results = List.from(tasks);
 
-    // Apply text search if query is provided
     if (query != null && query.trim().isNotEmpty) {
       results = searchTasks(query, results);
     }
 
-    // Apply category filter
     if (category != null) {
       results = results.where((task) => task.category == category).toList();
     }
 
-    // Apply priority filter
     if (priority != null) {
       results = results.where((task) => task.priority == priority).toList();
     }
 
-    // Apply completion filter
     if (isCompleted != null) {
       results = results
           .where((task) => task.isCompleted == isCompleted)
           .toList();
     }
 
-    // Apply importance filter
     if (isImportant != null) {
       results = results
           .where((task) => task.isImportant == isImportant)
           .toList();
     }
 
-    // Apply day filter
     if (dayOfWeek != null) {
       results = results.where((task) => task.dayOfWeek == dayOfWeek).toList();
     }
 
-    // Apply date range filter
     if (startDate != null && endDate != null) {
       results = searchTasksByDateRange(startDate, endDate, results);
     }
 
-    // Apply tags filter
     if (tags != null && tags.isNotEmpty) {
       results = searchTasksByTags(tags, results);
     }
 
-    // Apply estimated time filter
     if (minEstimatedMinutes != null || maxEstimatedMinutes != null) {
       final min = minEstimatedMinutes ?? 0;
       final max = maxEstimatedMinutes ?? 999999;
@@ -205,7 +193,6 @@ class SearchService {
     return results;
   }
 
-  // Get search suggestions based on task titles and categories
   List<String> getSearchSuggestions(
     List<TaskModel> tasks,
     String partialQuery,
@@ -235,7 +222,6 @@ class SearchService {
     return suggestions.take(10).toList();
   }
 
-  // Get trending search terms based on task frequency
   List<String> getTrendingSearchTerms(List<TaskModel> tasks) {
     final categoryCount = <String, int>{};
     final tagCount = <String, int>{};
@@ -251,7 +237,6 @@ class SearchService {
 
     final trending = <String>[];
 
-    // Add top categories
     final sortedCategories = categoryCount.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
@@ -259,7 +244,6 @@ class SearchService {
       trending.add(entry.key);
     }
 
-    // Add top tags
     final sortedTags = tagCount.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
@@ -270,7 +254,6 @@ class SearchService {
     return trending;
   }
 
-  // Fuzzy search implementation
   List<TaskModel> fuzzySearch(String query, List<TaskModel> tasks) {
     if (query.trim().isEmpty) return tasks;
 
@@ -288,7 +271,6 @@ class SearchService {
           score += 1.0;
         }
 
-        // Partial word matching
         if (word.length > 2) {
           for (int i = 0; i <= taskText.length - word.length; i++) {
             final substring = taskText.substring(i, i + word.length);
@@ -305,7 +287,6 @@ class SearchService {
       }
     }
 
-    // Sort by relevance score
     results.sort((a, b) {
       final scoreA = _calculateRelevanceScore(query, a);
       final scoreB = _calculateRelevanceScore(query, b);
@@ -364,29 +345,24 @@ class SearchService {
     double score = 0.0;
     final queryLower = query.toLowerCase();
 
-    // Title match (highest weight)
     if (task.title.toLowerCase().contains(queryLower)) {
       score += 10.0;
     }
 
-    // Description match
     if (task.description?.toLowerCase().contains(queryLower) ?? false) {
       score += 5.0;
     }
 
-    // Category match
     if (task.category.name.toLowerCase().contains(queryLower)) {
       score += 3.0;
     }
 
-    // Tags match
     for (final tag in task.tags) {
       if (tag.toLowerCase().contains(queryLower)) {
         score += 2.0;
       }
     }
 
-    // Notes match
     if (task.notes?.toLowerCase().contains(queryLower) ?? false) {
       score += 1.0;
     }

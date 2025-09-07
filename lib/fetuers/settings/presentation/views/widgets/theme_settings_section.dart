@@ -88,7 +88,6 @@ class ThemeSettingsSection extends StatelessWidget {
         return AppLocalizations.of(context).tr('settings.dark');
       case ThemeMode.system:
         return AppLocalizations.of(context).tr('settings.system');
-      // ignore: unreachable_switch_default
       default:
         return AppLocalizations.of(context).tr('settings.system');
     }
@@ -198,8 +197,6 @@ class ThemeSettingsSection extends StatelessWidget {
   }
 
   void _showCustomColorPicker(BuildContext context) {
-    // For now, we'll use a simple color picker
-    // In a production app, you might want to use a more sophisticated color picker
     final colorScheme = Theme.of(context).colorScheme;
 
     showDialog(
@@ -215,7 +212,6 @@ class ThemeSettingsSection extends StatelessWidget {
                 style: TextStyle(color: colorScheme.onSurface),
               ),
               const SizedBox(height: 16),
-              // Simple color picker with predefined options
               Wrap(
                 spacing: 8,
                 runSpacing: 8,

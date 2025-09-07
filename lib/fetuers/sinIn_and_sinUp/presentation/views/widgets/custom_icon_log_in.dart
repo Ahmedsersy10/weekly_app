@@ -10,7 +10,6 @@ class CustomIconLogIn extends StatelessWidget {
       height: 50,
       width: 50,
       decoration: const BoxDecoration(
-        // color: secondaryColor,
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
       child: FittedBox(fit: BoxFit.scaleDown, child: SvgPicture.asset(image)),

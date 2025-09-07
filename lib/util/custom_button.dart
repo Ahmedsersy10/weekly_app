@@ -1,8 +1,6 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
 
-// Project imports:
 
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key, this.buttonColor, this.textColor, this.text});

@@ -1,7 +1,5 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
 import 'package:weekly_dash_board/models/drawer_item_model.dart';
 import 'package:weekly_dash_board/util/app_images.dart';
 import 'package:weekly_dash_board/util/drawer_page.dart';
@@ -10,7 +8,7 @@ import 'package:weekly_dash_board/views/widgets/drawer_item.dart';
 
 class ListViewDrawerItem extends StatefulWidget {
   final Function(int index, DrawerPage page)? onItemSelected;
-  
+
   const ListViewDrawerItem({super.key, this.onItemSelected});
 
   @override
@@ -21,14 +19,19 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
   int selectedIndex = 0;
 
   final List<DrawerItemModel> drawerItems = [
-    const DrawerItemModel(title: 'navigation.weekly', image: Assets.imagescalendar),
-    const DrawerItemModel(title: 'common.Search', image: Assets.imagescalendarSearch),
+    const DrawerItemModel(
+      title: 'navigation.weekly',
+      image: Assets.imagescalendar,
+    ),
+    const DrawerItemModel(
+      title: 'common.Search',
+      image: Assets.imagescalendarSearch,
+    ),
     const DrawerItemModel(title: 'app.stats', image: Assets.imagesStatistics),
     const DrawerItemModel(title: 'app.more', image: Assets.imagesmore),
     const DrawerItemModel(title: 'app.settings', image: Assets.imagesSettings),
   ];
 
-  // ربط الفهارس بالصفحات
   final List<DrawerPage> drawerPages = [
     DrawerPage.weekly,
     DrawerPage.search,
@@ -43,9 +46,10 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
 
     final filteredItems = <DrawerItemModel>[];
     final filteredPages = <DrawerPage>[];
-    
+
     for (int i = 0; i < drawerItems.length; i++) {
-      if (screenWidth >= SizeConfig.desktop && drawerItems[i].title == 'app.stats') {
+      if (screenWidth >= SizeConfig.desktop &&
+          drawerItems[i].title == 'app.stats') {
         continue; // متعرضش Stats في الديسكتوب
       }
       filteredItems.add(drawerItems[i]);
@@ -61,7 +65,6 @@ class _ListViewDrawerItemState extends State<ListViewDrawerItem> {
               setState(() {
                 selectedIndex = index;
               });
-              // استدعاء الـ callback مع تمرير المعلومات المطلوبة
               widget.onItemSelected?.call(index, filteredPages[index]);
             }
           },

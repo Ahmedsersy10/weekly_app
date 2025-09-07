@@ -27,7 +27,10 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: AppColors.maroon,
         foregroundColor: AppColors.white,
         actions: [
-          IconButton(onPressed: _openCalendar, icon: const Icon(Icons.calendar_month_outlined)),
+          IconButton(
+            onPressed: _openCalendar,
+            icon: const Icon(Icons.calendar_month_outlined),
+          ),
           IconButton(
             onPressed: _showClearAllTasksDialog,
             icon: const Icon(Icons.clear_all),
@@ -58,10 +61,15 @@ class _HomeViewState extends State<HomeView> {
                   lastDay: DateTime.utc(2100, 12, 31),
                   focusedDay: focusedDay,
                   calendarStyle: const CalendarStyle(
-                    defaultTextStyle: TextStyle(color: AppColors.black), // لون الأرقام
+                    defaultTextStyle: TextStyle(
+                      color: AppColors.black,
+                    ), // لون الأرقام
                     weekNumberTextStyle: TextStyle(color: AppColors.black),
                     todayTextStyle: TextStyle(color: AppColors.black),
-                    todayDecoration: BoxDecoration(color: AppColors.maroon, shape: BoxShape.circle),
+                    todayDecoration: BoxDecoration(
+                      color: AppColors.maroon,
+                      shape: BoxShape.circle,
+                    ),
                     selectedDecoration: BoxDecoration(
                       color: AppColors.maroon,
                       shape: BoxShape.circle,
@@ -70,7 +78,9 @@ class _HomeViewState extends State<HomeView> {
                   headerStyle: const HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
-                    titleTextStyle: TextStyle(color: AppColors.black), // لون الشهر
+                    titleTextStyle: TextStyle(
+                      color: AppColors.black,
+                    ), // لون الشهر
                     leftChevronIcon: Icon(
                       Icons.chevron_left,
                       color: AppColors.black, // لون السهم الأيسر
@@ -127,8 +137,12 @@ class _HomeViewState extends State<HomeView> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.white,
-          title: Text(AppLocalizations.of(context).tr('settings.clearAllTasksTitle')),
-          content: Text(AppLocalizations.of(context).tr('settings.clearAllTasksConfirm')),
+          title: Text(
+            AppLocalizations.of(context).tr('settings.clearAllTasksTitle'),
+          ),
+          content: Text(
+            AppLocalizations.of(context).tr('settings.clearAllTasksConfirm'),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -155,9 +169,6 @@ class _HomeViewState extends State<HomeView> {
   }
 
   int? _mapDateToAppDayIndex(DateTime date) {
-    // App indices: 0=Saturday ... 5=Thursday, Friday off
-    // Dart weekday: Monday=1 ... Sunday=7
-    // Map: Saturday(6)->0, Sunday(7)->1, Monday(1)->2, Tuesday(2)->3, Wednesday(3)->4, Thursday(4)->5, Friday(5)->off
     final weekday = date.weekday; // 1..7
     switch (weekday) {
       case DateTime.saturday: // 6

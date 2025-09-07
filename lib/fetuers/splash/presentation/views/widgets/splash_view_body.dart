@@ -37,9 +37,7 @@ class _SplashViewBodyState extends State<SplashViewBody>
 
   void navigateToHome() {
     Future.delayed(const Duration(seconds: 3), () {
-      // ignore: use_build_context_synchronously
       Navigator.of(
-        // ignore: use_build_context_synchronously
         context,
       ).pushReplacement(
         MaterialPageRoute(builder: (context) => const DashboardView()),

@@ -29,7 +29,6 @@ class DataBackupService {
         .replaceAll('T', '_');
     final file = File('${backupDir.path}/weekly_backup_$timestamp.json');
 
-    // Collect data
     final tasks = HiveService.loadTasks();
     var settings = await SettingsService.loadSettings();
 
@@ -42,7 +41,6 @@ class DataBackupService {
 
     await file.writeAsString(const JsonEncoder.withIndent('  ').convert(data));
 
-    // Update last backup timestamp in settings
     settings = settings.copyWith(lastBackup: DateTime.now());
     await SettingsService.saveSettings(settings);
     return file;
@@ -65,24 +63,14 @@ class DataBackupService {
     final raw = await latest.readAsString();
     final decoded = json.decode(raw) as Map<String, dynamic>;
 
-    // Restore settings
     final settingsMap = decoded['settings'] as Map<String, dynamic>;
     final restoredSettings = _deserializeSettings(settingsMap);
     await SettingsService.saveSettings(restoredSettings);
 
-    // Restore tasks
     final tasksList = (decoded['tasks'] as List).cast<Map<String, dynamic>>();
     final tasks = tasksList.map(_deserializeTask).toList();
     await HiveService.saveTasks(tasks);
 
-    // Reschedule notifications if enabled
-    // if (restoredSettings.notificationsEnabled) {
-    //   await NotificationService.updateReminderTimes(
-    //     restoredSettings.reminderTimes,
-    //   );
-    // } else {
-    //   await NotificationService.cancelAllNotifications();
-    // }
 
     return true;
   }

@@ -49,13 +49,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       );
       await SettingsService.saveSettings(newSettings);
 
-      // if (!enabled) {
-      //   await NotificationService.cancelAllNotifications();
-      // } else {
-      //   await NotificationService.updateReminderTimes(
-      //     newSettings.reminderTimes,
-      //   );
-      // }
 
       emit(state.copyWith(settings: newSettings));
     } catch (e) {
@@ -76,9 +69,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       );
       await SettingsService.saveSettings(newSettings);
 
-      // if (newSettings.notificationsEnabled) {
-      //   await NotificationService.updateReminderTimes(newReminderTimes);
-      // }
 
       emit(state.copyWith(settings: newSettings));
     } catch (e) {
@@ -136,12 +126,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       final newSettings = state.settings!.copyWith(language: language);
       await SettingsService.saveSettings(newSettings);
 
-      // Refresh notifications with new language
-      // if (newSettings.notificationsEnabled) {
-      //   await NotificationService.handleTimezoneChange();
-      //   // Note: Individual task notifications will be refreshed when the app restarts
-      //   // or when tasks are modified, as we can't access the current task list from here
-      // }
 
       emit(state.copyWith(settings: newSettings));
     } catch (e) {
@@ -153,15 +137,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     try {
       emit(state.copyWith(isLoading: true));
       await SettingsService.resetToDefaults();
-      // await NotificationService.cancelAllNotifications();
 
       final defaultSettings = SettingsModel.defaultSettings;
       await SettingsService.saveSettings(defaultSettings);
-      // if (defaultSettings.notificationsEnabled) {
-      //   await NotificationService.updateReminderTimes(
-      //     defaultSettings.reminderTimes,
-      //   );
-      // }
 
       emit(state.copyWith(settings: defaultSettings, isLoading: false));
     } catch (e) {

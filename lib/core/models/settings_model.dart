@@ -5,7 +5,15 @@ enum ThemeMode { light, dark, system }
 
 enum Language { english, arabic }
 
-enum WeekStart { saturday, sunday, monday, thursday, wednesday, tuesday, friday }
+enum WeekStart {
+  saturday,
+  sunday,
+  monday,
+  thursday,
+  wednesday,
+  tuesday,
+  friday,
+}
 
 enum SyncProvider { googleDrive, iCloud, none }
 

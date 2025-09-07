@@ -83,9 +83,6 @@ abstract class AppStyles {
   }
 }
 
-// sacleFactor
-// responsive font size
-// (min , max) fontsize
 double getResponsiveFontSize(context, {required double fontSize}) {
   double scaleFactor = getScaleFactor(context);
   double responsiveFontSize = fontSize * scaleFactor;
@@ -97,12 +94,7 @@ double getResponsiveFontSize(context, {required double fontSize}) {
 }
 
 double getScaleFactor(context) {
-  // طريقة مفضلة للهاتف والتابلت
 
-  //   // var dispatcher = PlatformDispatcher.instance;
-  //   // var physicalWidth = dispatcher.views.first.physicalSize.width;
-  //   // var devicePixelRatio = dispatcher.views.first.devicePixelRatio;
-  //   // double width = physicalWidth / devicePixelRatio;
 
   double width = MediaQuery.sizeOf(context).width;
   if (width < 700) {

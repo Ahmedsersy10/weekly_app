@@ -68,33 +68,6 @@ class _SettingsViewState extends State<SettingsView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (state.settings != null) ...[
-                  // LoginAndSgininSettingsSection(),
-                  // const SizedBox(height: 24),
-                  // ThemeSettingsSection(
-                  //   themeMode: state.settings!.themeMode,
-                  //   primaryColor: state.settings!.primaryColor,
-                  //   onThemeModeChanged: (mode) {
-                  //     context.read<SettingsCubit>().updateThemeMode(mode);
-                  //   },
-                  //   onPrimaryColorChanged: (color) {
-                  //     context.read<SettingsCubit>().updatePrimaryColor(color);
-                  //   },
-                  // ),
-                  // const SizedBox(height: 24),
-                  // NotificationSettingsSection(
-                  //   notificationsEnabled: state.settings!.notificationsEnabled,
-                  //   reminderTimes: state.settings!.reminderTimes,
-                  //   onNotificationsChanged: (enabled) {
-                  //     context.read<SettingsCubit>().updateNotificationsEnabled(enabled);
-                  //   },
-                  //   onReminderTimesChanged: (reminderTimes) {
-                  //     // Update all reminder times at once
-                  //     for (final entry in reminderTimes.entries) {
-                  //       context.read<SettingsCubit>().updateReminderTime(entry.key, entry.value);
-                  //     }
-                  //   },
-                  // ),
-                  // const SizedBox(height: 24),
                   WeekSettingsSection(
                     weekStart: state.settings!.weekStart,
                     weekendDays: state.settings!.weekendDays,
@@ -150,7 +123,6 @@ class _SettingsViewState extends State<SettingsView> {
                       leading: Icon(Icons.backup, color: colorScheme.primary),
                       onTap: () async {
                         await _backupData(context);
-                        // ignore: use_build_context_synchronously
                         context.read<SettingsCubit>().loadSettings();
                       },
                     ),
@@ -169,7 +141,6 @@ class _SettingsViewState extends State<SettingsView> {
                       onTap: () async {
                         await _restoreData(context);
                         if (context.mounted) {
-                          // Reload tasks and settings
                           context.read<WeeklyCubit>().reloadTasksFromStorage();
                           context.read<SettingsCubit>().loadSettings();
                         }

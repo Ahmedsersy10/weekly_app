@@ -24,7 +24,6 @@ class ProgressOverviewWidget extends StatelessWidget {
               ? (completedTasks / totalTasks) * 100
               : 0.0;
 
-          // Get motivational quote based on progress
           final motivationalQuote = MotivationalService.getPersonalizedQuote(
             context,
             progressPercentage: progressPercentage,
@@ -37,14 +36,6 @@ class ProgressOverviewWidget extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              // gradient: LinearGradient(
-              //   begin: Alignment.topLeft,
-              //   end: Alignment.bottomRight,
-              //   colors: [
-              //     colorScheme.primary.withOpacity(0.9),
-              //     colorScheme.primary.withOpacity(0.7),
-              //   ],
-              // ),
               color: AppColors.maroon,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
@@ -58,7 +49,6 @@ class ProgressOverviewWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header with today's date
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -99,10 +89,8 @@ class ProgressOverviewWidget extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Progress circle and stats
                 Row(
                   children: [
-                    // Circular progress indicator
                     SizedBox(
                       width: 80,
                       height: 80,
@@ -149,7 +137,6 @@ class ProgressOverviewWidget extends StatelessWidget {
 
                     const SizedBox(width: 20),
 
-                    // Task statistics
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,7 +169,6 @@ class ProgressOverviewWidget extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Motivational quote
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
@@ -260,7 +246,6 @@ class ProgressOverviewWidget extends StatelessWidget {
     final today = DateTime.now();
     final weekday = today.weekday;
 
-    // Map weekday to app day index
     switch (weekday) {
       case DateTime.saturday: // 6
         return 0;

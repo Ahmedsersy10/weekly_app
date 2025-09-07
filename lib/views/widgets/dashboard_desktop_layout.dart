@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/statistics_dashboard_widget.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/task_search_widget.dart';
@@ -7,7 +6,6 @@ import 'package:weekly_dash_board/fetuers/settings/presentation/views/settings_v
 import 'package:weekly_dash_board/util/drawer_page.dart';
 import 'package:weekly_dash_board/views/widgets/custom_background_container.dart';
 
-// Project imports:
 import 'package:weekly_dash_board/views/widgets/dashbord_tablet_layout.dart';
 
 class DashboardDesktopLayout extends StatefulWidget {
@@ -37,17 +35,20 @@ class _DashboardDesktopLayoutState extends State<DashboardDesktopLayout> {
           ),
         ),
 
-        // الـ Sidebar الأيمن يظهر فقط في صفحة Weekly
         if (widget.currentPage == DrawerPage.weekly)
           const Expanded(
             child: Padding(
               padding: EdgeInsets.only(right: 0),
-              child: CustomBackgroundContainer(child: StatisticsDashboardWidget()),
+              child: CustomBackgroundContainer(
+                child: StatisticsDashboardWidget(),
+              ),
             ),
           ),
-        // إذا كانت صفحة أخرى، عرض المحتوى بدون sidebar
         if (widget.currentPage != DrawerPage.weekly)
-          const Expanded(flex: 0, child: Padding(padding: EdgeInsets.only(right: 16), child: null)),
+          const Expanded(
+            flex: 0,
+            child: Padding(padding: EdgeInsets.only(right: 16), child: null),
+          ),
       ],
     );
   }

@@ -15,7 +15,6 @@ class HiveService {
 
   static Future<void> saveTasks(List<TaskModel> tasks) async {
     if (_tasksBox != null) {
-      // Convert tasks to a serializable format
       final serializedTasks = tasks
           .map(
             (task) => {
@@ -41,7 +40,6 @@ class HiveService {
         return serializedTasks.whereType<Map>().map((raw) {
           final data = Map<String, dynamic>.from(raw);
 
-          // Parse reminder time if it exists
           TimeOfDay? reminderTime;
           if (data['reminderTime'] != null) {
             final timeParts = (data['reminderTime'] as String).split(':');

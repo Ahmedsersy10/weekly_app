@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
@@ -13,12 +15,14 @@ class HomeViewBody extends StatefulWidget {
   State<HomeViewBody> createState() => HomeViewBodyState();
 }
 
-class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixin {
+class HomeViewBodyState extends State<HomeViewBody>
+    with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  final Map<int, GlobalKey> _dayKeys = {for (int i = 0; i < 6; i++) i: GlobalKey()};
+  final Map<int, GlobalKey> _dayKeys = {
+    for (int i = 0; i < 6; i++) i: GlobalKey(),
+  };
 
   late TabController _tabController;
-  // ignore: unused_field
   int _currentTabIndex = 0;
 
   @override
@@ -42,7 +46,6 @@ class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixi
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Tab Bar
         Container(
           decoration: BoxDecoration(
             color: AppColors.maroon,
@@ -58,7 +61,10 @@ class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixi
             controller: _tabController,
             labelColor: AppColors.white,
             dividerColor: AppColors.maroon,
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.black),
+            labelStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AppColors.black,
+            ),
             unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
               color: AppColors.white,
@@ -68,24 +74,17 @@ class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixi
               Tab(text: AppLocalizations.of(context).tr('app.title')),
               Tab(text: AppLocalizations.of(context).tr('common.Search')),
               Tab(text: AppLocalizations.of(context).tr('app.stats')),
-              // Tab(text: 'Stats'),
             ],
           ),
         ),
 
-        // const SizedBox(height: 4),
-        // const CustomContainerWeeklyOf(),
-        // Tab Content
         Expanded(
           child: TabBarView(
             controller: _tabController,
             children: [
-              // Weekly View Tab
               _buildWeeklyView(),
-              // Search Tab - Lazy loaded
               _buildLazyWidget(() => const TaskSearchWidget()),
 
-              // Statistics Tab - Lazy loaded
               _buildLazyWidget(() => const StatisticsDashboardWidget()),
             ],
           ),
@@ -115,8 +114,6 @@ class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixi
           child: CustomScrollView(
             controller: _scrollController,
             slivers: [
-              // const SliverToBoxAdapter(child: SizedBox(height: 4)),
-              // const SliverToBoxAdapter(child: CustomContainerWeeklyOf()),
               const SliverToBoxAdapter(child: SizedBox(height: 20)),
               CustomListViewDays(dayKeys: _dayKeys),
             ],

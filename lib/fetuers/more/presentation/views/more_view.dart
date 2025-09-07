@@ -32,27 +32,21 @@ class MoreView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Statistics Dashboard
             StatisticsDashboardWidget(),
             SizedBox(height: 24),
 
-            // Achievement Statistics Section
             AchievementSection(),
             SizedBox(height: 24),
 
-            // User Guide Section
             UserGuideSection(),
             SizedBox(height: 24),
 
-            // Contact Us Section
             ContactSection(),
             SizedBox(height: 24),
 
-            // Rate & Share Section
             RateShareSection(),
             SizedBox(height: 24),
 
-            // About App Section
             AboutSection(),
             SizedBox(height: 24),
           ],

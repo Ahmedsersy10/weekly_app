@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_contaner_weekly_of.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_view_days.dart';
@@ -9,21 +8,26 @@ import 'package:weekly_dash_board/fetuers/settings/presentation/views/settings_v
 import 'package:weekly_dash_board/util/drawer_page.dart';
 import 'package:weekly_dash_board/util/size_config.dart';
 
-// Project imports:
 import 'package:weekly_dash_board/views/widgets/custom_drawer.dart';
 
 class DashboardTabletLayout extends StatefulWidget {
   final DrawerPage currentPage;
   final Function(int index, DrawerPage page) onItemSelected;
 
-  const DashboardTabletLayout({super.key, required this.currentPage, required this.onItemSelected});
+  const DashboardTabletLayout({
+    super.key,
+    required this.currentPage,
+    required this.onItemSelected,
+  });
 
   @override
   State<DashboardTabletLayout> createState() => _DashboardTabletLayoutState();
 }
 
 class _DashboardTabletLayoutState extends State<DashboardTabletLayout> {
-  final Map<int, GlobalKey> _dayKeys = {for (int i = 0; i < 6; i++) i: GlobalKey()};
+  final Map<int, GlobalKey> _dayKeys = {
+    for (int i = 0; i < 6; i++) i: GlobalKey(),
+  };
 
   @override
   Widget build(BuildContext context) {

@@ -28,7 +28,6 @@ class ContactSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Contact Information
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -90,7 +89,6 @@ class ContactSection extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // Social Media
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -188,8 +186,6 @@ class ContactSection extends StatelessWidget {
       if (await canLaunchUrl(emailUri)) {
         await launchUrl(emailUri);
       } else {
-        // Fallback: copy email to clipboard
-        // You can implement clipboard functionality here if needed
         print('Could not launch email client');
       }
     } catch (e) {

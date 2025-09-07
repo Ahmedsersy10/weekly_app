@@ -4,7 +4,10 @@ import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom
 
 class CustomListViewDays extends StatelessWidget {
   final Map<int, GlobalKey> dayKeys;
-  const CustomListViewDays({super.key, this.dayKeys = const <int, GlobalKey>{}});
+  const CustomListViewDays({
+    super.key,
+    this.dayKeys = const <int, GlobalKey>{},
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,10 @@ class CustomListViewDays extends StatelessWidget {
 class CustomGridViewDays extends StatelessWidget {
   final Map<int, GlobalKey> dayKeys;
 
-  const CustomGridViewDays({super.key, this.dayKeys = const <int, GlobalKey>{}});
+  const CustomGridViewDays({
+    super.key,
+    this.dayKeys = const <int, GlobalKey>{},
+  });
 
   @override
   Widget build(BuildContext context) {

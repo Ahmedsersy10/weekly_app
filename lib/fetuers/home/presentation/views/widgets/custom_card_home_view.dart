@@ -1,4 +1,3 @@
-// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weekly_dash_board/core/util/app_color.dart';
@@ -28,7 +27,10 @@ class CustomCardHomeView extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Container(
-              constraints: const BoxConstraints(minHeight: 100, minWidth: double.infinity),
+              constraints: const BoxConstraints(
+                minHeight: 100,
+                minWidth: double.infinity,
+              ),
               width: double.infinity,
               decoration: BoxDecoration(
                 color: AppColors.white,
@@ -61,21 +63,28 @@ class CustomCardHomeView extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: _isCurrentDay(dayStats.date)
                                     ? AppColors.maroon
                                     : AppColors.white,
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.black38, width: 1),
+                                border: Border.all(
+                                  color: Colors.black38,
+                                  width: 1,
+                                ),
                               ),
                               child: Text(
                                 dayStats.date,
-                                style: AppStyles.styleSemiBold16(context).copyWith(
-                                  color: _isCurrentDay(dayStats.date)
-                                      ? AppColors.white
-                                      : AppColors.black,
-                                ),
+                                style: AppStyles.styleSemiBold16(context)
+                                    .copyWith(
+                                      color: _isCurrentDay(dayStats.date)
+                                          ? AppColors.white
+                                          : AppColors.black,
+                                    ),
                               ),
                             ),
                           ],
@@ -89,8 +98,11 @@ class CustomCardHomeView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Divider(height: 20, thickness: 2, color: AppColors.black),
-                  // Let content drive height; remove hard ListView
+                  const Divider(
+                    height: 20,
+                    thickness: 2,
+                    color: AppColors.black,
+                  ),
                   _DayContent(dayIndex: dayIndex),
                   const SizedBox(height: 10),
                   Row(
@@ -105,7 +117,11 @@ class CustomCardHomeView extends StatelessWidget {
                         ),
                         child: IconButton(
                           onPressed: () => _confirmClearDay(context, dayIndex),
-                          icon: const Icon(Icons.delete, color: AppColors.white, size: 20),
+                          icon: const Icon(
+                            Icons.delete,
+                            color: AppColors.white,
+                            size: 20,
+                          ),
                         ),
                       ),
                     ],
@@ -169,7 +185,10 @@ class CustomButtonAddTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: AppColors.maroon, borderRadius: BorderRadius.circular(32)),
+      decoration: BoxDecoration(
+        color: AppColors.maroon,
+        borderRadius: BorderRadius.circular(32),
+      ),
       child: IconButton(
         onPressed: () => _showAddTaskDialog(context),
         icon: const Icon(Icons.add, color: AppColors.white, size: 28),
@@ -188,7 +207,9 @@ class CustomButtonAddTasks extends StatelessWidget {
         return AlertDialog(
           title: Text(
             AppLocalizations.of(context).tr('settings.addNewTask'),
-            style: AppStyles.styleSemiBold24(context).copyWith(color: Colors.black),
+            style: AppStyles.styleSemiBold24(
+              context,
+            ).copyWith(color: Colors.black),
           ),
           backgroundColor: AppColors.white,
           content: StatefulBuilder(
@@ -202,7 +223,9 @@ class CustomButtonAddTasks extends StatelessWidget {
                       style: const TextStyle(color: Colors.black),
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context).tr('settings.enterTaskTitle'),
+                        hintText: AppLocalizations.of(
+                          context,
+                        ).tr('settings.enterTaskTitle'),
                         hintStyle: const TextStyle(color: Colors.black54),
                         border: customOutlineInputBorder(),
                         enabledBorder: customOutlineInputBorder(),
@@ -218,9 +241,12 @@ class CustomButtonAddTasks extends StatelessWidget {
                       ),
                       child: CheckboxListTile(
                         value: isImportant,
-                        onChanged: (value) => setState(() => isImportant = value ?? false),
+                        onChanged: (value) =>
+                            setState(() => isImportant = value ?? false),
                         title: Text(
-                          AppLocalizations.of(context).tr('settings.markAsImportant'),
+                          AppLocalizations.of(
+                            context,
+                          ).tr('settings.markAsImportant'),
                           style: AppStyles.styleSemiBold20(context),
                         ),
                         activeColor: AppColors.white,
@@ -230,28 +256,39 @@ class CustomButtonAddTasks extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         controlAffinity: ListTileControlAffinity.leading,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
-                    // Reminder time selection
                     Container(
                       decoration: BoxDecoration(
                         color: AppColors.maroon.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.maroon.withOpacity(0.3)),
+                        border: Border.all(
+                          color: AppColors.maroon.withOpacity(0.3),
+                        ),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               spacing: 10,
                               children: [
-                                const Icon(Icons.notifications, color: AppColors.maroon),
+                                const Icon(
+                                  Icons.notifications,
+                                  color: AppColors.maroon,
+                                ),
                                 Text(
-                                  AppLocalizations.of(context).tr('settings.reminderTime'),
+                                  AppLocalizations.of(
+                                    context,
+                                  ).tr('settings.reminderTime'),
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
@@ -259,26 +296,37 @@ class CustomButtonAddTasks extends StatelessWidget {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.access_time, color: AppColors.maroon),
+                                  icon: const Icon(
+                                    Icons.access_time,
+                                    color: AppColors.maroon,
+                                  ),
                                   onPressed: () async {
                                     final selectedTime = await showTimePicker(
                                       context: context,
                                       initialTime:
-                                          reminderTime ?? const TimeOfDay(hour: 9, minute: 0),
+                                          reminderTime ??
+                                          const TimeOfDay(hour: 9, minute: 0),
                                     );
                                     if (selectedTime != null) {
-                                      setState(() => reminderTime = selectedTime);
+                                      setState(
+                                        () => reminderTime = selectedTime,
+                                      );
                                     }
                                   },
                                 ),
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 32, bottom: 8),
+                              padding: const EdgeInsets.only(
+                                left: 32,
+                                bottom: 8,
+                              ),
                               child: Text(
                                 reminderTime != null
                                     ? '${reminderTime!.hour.toString().padLeft(2, '0')}:${reminderTime!.minute.toString().padLeft(2, '0')}'
-                                    : AppLocalizations.of(context).tr('settings.noReminder'),
+                                    : AppLocalizations.of(
+                                        context,
+                                      ).tr('settings.noReminder'),
                                 style: TextStyle(
                                   color: Colors.black.withOpacity(0.7),
                                   fontSize: 14,
