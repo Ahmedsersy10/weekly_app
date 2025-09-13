@@ -36,7 +36,7 @@ class ProgressOverviewWidget extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.maroon,
+              color: AppColors.primary,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(

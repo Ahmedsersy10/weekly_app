@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
+import 'package:weekly_dash_board/core/util/app_color.dart';
 
 class AboutSection extends StatefulWidget {
   const AboutSection({super.key});
@@ -27,9 +28,8 @@ class _AboutSectionState extends State<AboutSection> {
         _appVersion = packageInfo.version;
         _buildNumber = packageInfo.buildNumber;
       });
-    // ignore: empty_catches
-    } catch (e) {
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   @override
@@ -43,7 +43,7 @@ class _AboutSectionState extends State<AboutSection> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.textPrimary.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -58,9 +58,7 @@ class _AboutSectionState extends State<AboutSection> {
               const SizedBox(width: 8),
               Text(
                 AppLocalizations.of(context).tr('more.aboutTheApp'),
-                style: AppStyles.styleSemiBold18(
-                  context,
-                ).copyWith(color: colorScheme.onSurface),
+                style: AppStyles.styleSemiBold18(context).copyWith(color: colorScheme.onSurface),
               ),
             ],
           ),
@@ -83,18 +81,12 @@ class _AboutSectionState extends State<AboutSection> {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.calendar_today,
-                    color: Colors.white,
-                    size: 40,
-                  ),
+                  child: const Icon(Icons.calendar_today, color: AppColors.textOnPrimary, size: 40),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context).tr('more.title'),
-                  style: AppStyles.styleSemiBold24(
-                    context,
-                  ).copyWith(color: colorScheme.onSurface),
+                  style: AppStyles.styleSemiBold24(context).copyWith(color: colorScheme.onSurface),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -122,9 +114,7 @@ class _AboutSectionState extends State<AboutSection> {
               children: [
                 Text(
                   AppLocalizations.of(context).tr('more.description_title'),
-                  style: AppStyles.styleSemiBold16(
-                    context,
-                  ).copyWith(color: colorScheme.onSurface),
+                  style: AppStyles.styleSemiBold16(context).copyWith(color: colorScheme.onSurface),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -152,25 +142,14 @@ class _AboutSectionState extends State<AboutSection> {
               children: [
                 Text(
                   AppLocalizations.of(context).tr('more.version_info'),
-                  style: AppStyles.styleSemiBold16(
-                    context,
-                  ).copyWith(color: colorScheme.primary),
+                  style: AppStyles.styleSemiBold16(context).copyWith(color: colorScheme.primary),
                 ),
                 const SizedBox(height: 12),
-                _buildVersionRow(
-                  AppLocalizations.of(context).tr('more.version'),
-                  _appVersion,
-                ),
+                _buildVersionRow(AppLocalizations.of(context).tr('more.version'), _appVersion),
                 const SizedBox(height: 8),
-                _buildVersionRow(
-                  AppLocalizations.of(context).tr('more.build'),
-                  _buildNumber,
-                ),
+                _buildVersionRow(AppLocalizations.of(context).tr('more.build'), _buildNumber),
                 const SizedBox(height: 8),
-                _buildVersionRow(
-                  AppLocalizations.of(context).tr('more.platform'),
-                  'Flutter',
-                ),
+                _buildVersionRow(AppLocalizations.of(context).tr('more.platform'), 'Flutter'),
               ],
             ),
           ),
@@ -181,46 +160,28 @@ class _AboutSectionState extends State<AboutSection> {
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.1),
+              color: AppColors.success.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.green.withOpacity(0.3)),
+              border: Border.all(color: AppColors.success.withOpacity(0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   AppLocalizations.of(context).tr('more.key_features'),
-                  style: AppStyles.styleSemiBold16(
-                    context,
-                  ).copyWith(color: Colors.green[600]),
+                  style: AppStyles.styleSemiBold16(context).copyWith(color: AppColors.success),
                 ),
                 const SizedBox(height: 12),
+                _buildFeatureItem(AppLocalizations.of(context).tr('more.feature_weekly_planning')),
                 _buildFeatureItem(
-                  AppLocalizations.of(
-                    context,
-                  ).tr('more.feature_weekly_planning'),
+                  AppLocalizations.of(context).tr('more.feature_priority_management'),
                 ),
                 _buildFeatureItem(
-                  AppLocalizations.of(
-                    context,
-                  ).tr('more.feature_priority_management'),
+                  AppLocalizations.of(context).tr('more.feature_progress_tracking'),
                 ),
-                _buildFeatureItem(
-                  AppLocalizations.of(
-                    context,
-                  ).tr('more.feature_progress_tracking'),
-                ),
-                _buildFeatureItem(
-                  AppLocalizations.of(context).tr('more.feature_notifications'),
-                ),
-                _buildFeatureItem(
-                  AppLocalizations.of(context).tr('more.feature_uiux'),
-                ),
-                _buildFeatureItem(
-                  AppLocalizations.of(
-                    context,
-                  ).tr('more.feature_cross_platform'),
-                ),
+                _buildFeatureItem(AppLocalizations.of(context).tr('more.feature_notifications')),
+                _buildFeatureItem(AppLocalizations.of(context).tr('more.feature_uiux')),
+                _buildFeatureItem(AppLocalizations.of(context).tr('more.feature_cross_platform')),
               ],
             ),
           ),
@@ -229,9 +190,7 @@ class _AboutSectionState extends State<AboutSection> {
 
           Center(
             child: Text(
-              AppLocalizations.of(
-                context,
-              ).tr('©.2024.Weekly.App.All.rights.reserved.'),
+              AppLocalizations.of(context).tr('©.2024.Weekly.App.All.rights.reserved.'),
               style: AppStyles.styleRegular12(
                 context,
               ).copyWith(color: colorScheme.onSurface.withOpacity(0.5)),

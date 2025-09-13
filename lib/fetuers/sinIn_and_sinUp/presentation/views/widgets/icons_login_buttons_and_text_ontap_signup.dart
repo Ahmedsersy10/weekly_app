@@ -25,8 +25,8 @@ class IconsLoginAndSignupButtonsAndTextOntapLoginAndSignup
             title: titleButton ?? 'Log In',
             customButtonModel: CustomButtonModel(
               text: titleButton ?? 'Log In',
-              buttonColor: AppColors.maroon,
-              textColor: AppColors.white,
+              buttonColor: AppColors.primary,
+              textColor: AppColors.textOnPrimary,
               onPressed: () {},
             ),
           ),

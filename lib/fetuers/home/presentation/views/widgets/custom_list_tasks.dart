@@ -30,7 +30,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
               child: Text(
                 AppLocalizations.of(context).tr('more.no_tasks_for_this_day'),
                 style: const TextStyle(
-                  color: AppColors.black,
+                  color: AppColors.textPrimary,
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
                 ),
@@ -77,7 +77,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                           children: [
                             const Icon(
                               Icons.star,
-                              color: Colors.amber,
+                              color: AppColors.warning,
                               size: 16,
                             ),
                             const SizedBox(width: 6),
@@ -87,7 +87,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                               ).tr('settings.Important'),
 
                               style: TextStyle(
-                                color: AppColors.black.withOpacity(0.7),
+                                color: AppColors.textPrimary.withOpacity(0.7),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
                               ),
@@ -115,7 +115,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                           children: [
                             const Icon(
                               Icons.list,
-                              color: AppColors.maroon,
+                              color: AppColors.primary,
                               size: 16,
                             ),
                             const SizedBox(width: 6),
@@ -124,7 +124,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                                 context,
                               ).tr('settings.AsRegular'),
                               style: TextStyle(
-                                color: AppColors.black.withOpacity(0.7),
+                                color: AppColors.textPrimary.withOpacity(0.7),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
                               ),
@@ -185,11 +185,11 @@ class _CustomListTasksState extends State<CustomListTasks> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: AppColors.white,
+              backgroundColor: AppColors.surface,
               title: Text(
                 AppLocalizations.of(context).tr('settings.editTask'),
                 style: const TextStyle(
-                  color: AppColors.black,
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -201,13 +201,13 @@ class _CustomListTasksState extends State<CustomListTasks> {
                       children: [
                         TextField(
                           controller: titleController,
-                          style: const TextStyle(color: Colors.black),
-                          cursorColor: Colors.black,
+                          style: const TextStyle(color: AppColors.textPrimary),
+                          cursorColor: AppColors.textPrimary,
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(
                               context,
                             ).tr('settings.enterTaskTitle'),
-                            hintStyle: const TextStyle(color: Colors.black54),
+                            hintStyle: const TextStyle(color: AppColors.textTertiary),
                             border: customOutlineInputBorder(),
                             enabledBorder: customOutlineInputBorder(),
                             focusedBorder: customOutlineInputBorder(),
@@ -217,7 +217,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                         const SizedBox(height: 12),
                         Container(
                           decoration: BoxDecoration(
-                            color: AppColors.maroon,
+                            color: AppColors.primary,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: CheckboxListTile(
@@ -231,7 +231,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                               style: AppStyles.styleSemiBold20(context),
                             ),
                             activeColor: AppColors.white,
-                            checkColor: AppColors.maroon,
+                            checkColor: AppColors.primary,
                             side: const BorderSide(color: AppColors.white),
                             checkboxShape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
@@ -245,10 +245,10 @@ class _CustomListTasksState extends State<CustomListTasks> {
                         const SizedBox(height: 12),
                         Container(
                           decoration: BoxDecoration(
-                            color: AppColors.maroon.withOpacity(0.1),
+                            color: AppColors.primary.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: AppColors.maroon.withOpacity(0.3),
+                              color: AppColors.primary.withOpacity(0.3),
                             ),
                           ),
                           child: Padding(
@@ -264,7 +264,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                                   children: [
                                     const Icon(
                                       Icons.notifications,
-                                      color: AppColors.maroon,
+                                      color: AppColors.primary,
                                     ),
                                     Text(
                                       AppLocalizations.of(
@@ -279,7 +279,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                                     IconButton(
                                       icon: const Icon(
                                         Icons.access_time,
-                                        color: AppColors.maroon,
+                                        color: AppColors.primary,
                                       ),
                                       onPressed: () async {
                                         final selectedTime =
@@ -332,7 +332,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(
                     AppLocalizations.of(context).tr('settings.cancel'),
-                    style: const TextStyle(color: AppColors.maroon),
+                    style: const TextStyle(color: AppColors.primary),
                   ),
                 ),
                 ElevatedButton(
@@ -349,7 +349,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.maroon,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.white,
                   ),
                   child: Text(AppLocalizations.of(context).tr('settings.save')),

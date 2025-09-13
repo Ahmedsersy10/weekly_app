@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
+import 'package:weekly_dash_board/core/util/app_color.dart';
 
 enum ThemeMode { light, dark, system }
 
 enum Language { english, arabic }
 
-enum WeekStart {
-  saturday,
-  sunday,
-  monday,
-  thursday,
-  wednesday,
-  tuesday,
-  friday,
-}
+enum WeekStart { saturday, sunday, monday, thursday, wednesday, tuesday, friday }
 
 enum SyncProvider { googleDrive, iCloud, none }
 
@@ -31,7 +24,7 @@ class SettingsModel extends Equatable {
 
   SettingsModel({
     this.themeMode = ThemeMode.system,
-    this.primaryColor = const Color(0xFF8E1616), // default maroon
+    this.primaryColor = AppColors.primary, // default primary color
     this.notificationsEnabled = true,
     Map<int, TimeOfDay>? reminderTimes,
     this.weekStart = WeekStart.saturday,
@@ -56,7 +49,7 @@ class SettingsModel extends Equatable {
 
   static SettingsModel get defaultSettings => SettingsModel._(
     themeMode: ThemeMode.system,
-    primaryColor: const Color(0xFF8E1616),
+    primaryColor: AppColors.primary,
     notificationsEnabled: true,
     reminderTimes: _defaultReminderTimes,
     weekStart: WeekStart.saturday,

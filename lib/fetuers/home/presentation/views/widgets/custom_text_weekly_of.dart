@@ -8,11 +8,7 @@ class CustomTextWeeklyOf extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-        color: AppColors.white,
-      ),
+      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.surface),
     );
   }
 }

@@ -15,7 +15,7 @@ class inActiveDrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: SvgPicture.asset(drawerItemModel.image, color: AppColors.maroon),
+      leading: SvgPicture.asset(drawerItemModel.image, color: AppColors.primary),
       title: FittedBox(
         fit: BoxFit.scaleDown,
         alignment: Alignment.centerLeft,

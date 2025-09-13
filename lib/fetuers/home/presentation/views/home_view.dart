@@ -24,13 +24,10 @@ class _HomeViewState extends State<HomeView> {
           AppLocalizations.of(context).tr('app.title'),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppColors.maroon,
-        foregroundColor: AppColors.white,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.textOnPrimary,
         actions: [
-          IconButton(
-            onPressed: _openCalendar,
-            icon: const Icon(Icons.calendar_month_outlined),
-          ),
+          IconButton(onPressed: _openCalendar, icon: const Icon(Icons.calendar_month_outlined)),
           IconButton(
             onPressed: _showClearAllTasksDialog,
             icon: const Icon(Icons.clear_all),
@@ -38,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.background,
       body: HomeViewBody(key: _bodyKey),
     );
   }
@@ -50,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
         DateTime focusedDay = DateTime.now();
         DateTime? selectedDay = focusedDay;
         return AlertDialog(
-          backgroundColor: AppColors.white,
+          backgroundColor: AppColors.surface,
           content: StatefulBuilder(
             builder: (context, setState) {
               return SizedBox(
@@ -61,26 +58,19 @@ class _HomeViewState extends State<HomeView> {
                   lastDay: DateTime.utc(2100, 12, 31),
                   focusedDay: focusedDay,
                   calendarStyle: const CalendarStyle(
-                    defaultTextStyle: TextStyle(
-                      color: AppColors.black,
-                    ), // لون الأرقام
+                    defaultTextStyle: TextStyle(color: AppColors.black), // لون الأرقام
                     weekNumberTextStyle: TextStyle(color: AppColors.black),
                     todayTextStyle: TextStyle(color: AppColors.black),
-                    todayDecoration: BoxDecoration(
-                      color: AppColors.maroon,
-                      shape: BoxShape.circle,
-                    ),
+                    todayDecoration: BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
                     selectedDecoration: BoxDecoration(
-                      color: AppColors.maroon,
+                      color: AppColors.primary,
                       shape: BoxShape.circle,
                     ),
                   ),
                   headerStyle: const HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
-                    titleTextStyle: TextStyle(
-                      color: AppColors.black,
-                    ), // لون الشهر
+                    titleTextStyle: TextStyle(color: AppColors.black), // لون الشهر
                     leftChevronIcon: Icon(
                       Icons.chevron_left,
                       color: AppColors.black, // لون السهم الأيسر
@@ -106,7 +96,7 @@ class _HomeViewState extends State<HomeView> {
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 AppLocalizations.of(context).tr('settings.cancel'),
-                style: const TextStyle(color: AppColors.maroon),
+                style: const TextStyle(color: AppColors.primary),
               ),
             ),
             ElevatedButton(
@@ -120,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.maroon,
+                backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
               ),
               child: Text(AppLocalizations.of(context).tr('common.go')),
@@ -136,19 +126,15 @@ class _HomeViewState extends State<HomeView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppColors.white,
-          title: Text(
-            AppLocalizations.of(context).tr('settings.clearAllTasksTitle'),
-          ),
-          content: Text(
-            AppLocalizations.of(context).tr('settings.clearAllTasksConfirm'),
-          ),
+          backgroundColor: AppColors.surface,
+          title: Text(AppLocalizations.of(context).tr('settings.clearAllTasksTitle')),
+          content: Text(AppLocalizations.of(context).tr('settings.clearAllTasksConfirm')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 AppLocalizations.of(context).tr('settings.cancel'),
-                style: const TextStyle(color: AppColors.maroon),
+                style: const TextStyle(color: AppColors.primary),
               ),
             ),
             ElevatedButton(
@@ -157,7 +143,7 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.maroon,
+                backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
               ),
               child: Text(AppLocalizations.of(context).tr('common.confirm')),

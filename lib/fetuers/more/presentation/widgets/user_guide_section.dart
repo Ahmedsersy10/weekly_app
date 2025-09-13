@@ -16,7 +16,7 @@ class UserGuideSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.textPrimary.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -125,10 +125,10 @@ class UserGuideSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            color: AppColors.maroon.withOpacity(0.1),
+            color: AppColors.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: AppColors.maroon, size: 20),
+          child: Icon(icon, color: AppColors.primary, size: 20),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -139,14 +139,14 @@ class UserGuideSection extends StatelessWidget {
                 title,
                 style: AppStyles.styleSemiBold16(
                   context,
-                ).copyWith(color: AppColors.black),
+                ).copyWith(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 4),
               Text(
                 description,
                 style: AppStyles.styleRegular14(
                   context,
-                ).copyWith(color: AppColors.black.withOpacity(0.7)),
+                ).copyWith(color: AppColors.textPrimary.withOpacity(0.7)),
               ),
             ],
           ),

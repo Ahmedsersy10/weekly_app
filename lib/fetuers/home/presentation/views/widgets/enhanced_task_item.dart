@@ -10,12 +10,7 @@ class EnhancedTaskItem extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
-  const EnhancedTaskItem({
-    super.key,
-    required this.task,
-    this.onEdit,
-    this.onDelete,
-  });
+  const EnhancedTaskItem({super.key, required this.task, this.onEdit, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +29,7 @@ class EnhancedTaskItem extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -57,7 +52,7 @@ class EnhancedTaskItem extends StatelessWidget {
                     width: 4,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.maroon,
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -80,9 +75,7 @@ class EnhancedTaskItem extends StatelessWidget {
                               Text(
                                 '${AppLocalizations.of(context).tr('task.reminder')}: ${_formatTime(context, task.reminderTime!)}',
                                 style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface.withOpacity(0.7),
+                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -100,21 +93,15 @@ class EnhancedTaskItem extends StatelessWidget {
                                 : AppColors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            decoration: task.isCompleted
-                                ? TextDecoration.lineThrough
-                                : null,
+                            decoration: task.isCompleted ? TextDecoration.lineThrough : null,
                           ),
                         ),
 
-                        if (task.description != null &&
-                            task.description!.isNotEmpty) ...[
+                        if (task.description != null && task.description!.isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
                             task.description!,
-                            style: TextStyle(
-                              color: AppColors.black.withOpacity(0.6),
-                              fontSize: 14,
-                            ),
+                            style: TextStyle(color: AppColors.black.withOpacity(0.6), fontSize: 14),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -127,22 +114,19 @@ class EnhancedTaskItem extends StatelessWidget {
                             runSpacing: 4,
                             children: task.tags.map((tag) {
                               return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: AppColors.maroon.withOpacity(0.1),
+                                  color: AppColors.primary.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: AppColors.maroon.withOpacity(0.3),
+                                    color: AppColors.primary.withOpacity(0.3),
                                     width: 1,
                                   ),
                                 ),
                                 child: Text(
                                   '#$tag',
                                   style: const TextStyle(
-                                    color: AppColors.maroon,
+                                    color: AppColors.primary,
                                     fontSize: 10,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -152,8 +136,7 @@ class EnhancedTaskItem extends StatelessWidget {
                           ),
                         ],
 
-                        if (task.dueDate != null ||
-                            task.estimatedMinutes > 0) ...[
+                        if (task.dueDate != null || task.estimatedMinutes > 0) ...[
                           const SizedBox(height: 8),
                           Row(
                             children: [
@@ -173,8 +156,7 @@ class EnhancedTaskItem extends StatelessWidget {
                                 ),
                               ],
 
-                              if (task.dueDate != null &&
-                                  task.estimatedMinutes > 0) ...[
+                              if (task.dueDate != null && task.estimatedMinutes > 0) ...[
                                 const SizedBox(width: 16),
                               ],
 
@@ -206,13 +188,11 @@ class EnhancedTaskItem extends StatelessWidget {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: task.isCompleted
-                          ? AppColors.maroon
-                          : Colors.transparent,
+                      color: task.isCompleted ? AppColors.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: task.isCompleted
-                            ? AppColors.maroon
+                            ? AppColors.primary
                             : AppColors.black.withOpacity(0.3),
                         width: 2,
                       ),
@@ -220,16 +200,12 @@ class EnhancedTaskItem extends StatelessWidget {
                     child: Checkbox(
                       value: task.isCompleted,
                       onChanged: (value) {
-                        context.read<WeeklyCubit>().toggleTaskCompletion(
-                          task.id,
-                        );
+                        context.read<WeeklyCubit>().toggleTaskCompletion(task.id);
                       },
-                      activeColor: AppColors.maroon,
+                      activeColor: AppColors.primary,
                       checkColor: AppColors.white,
                       side: BorderSide.none,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                     ),
                   ),
                 ],
@@ -244,25 +220,19 @@ class EnhancedTaskItem extends StatelessWidget {
   Widget _buildDismissBackground() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: const Color(0xFFD20F01),
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: AppColors.error, borderRadius: BorderRadius.circular(12)),
       child: const Align(
         alignment: Alignment.centerRight,
         child: Padding(
           padding: EdgeInsets.only(right: 20),
-          child: Icon(Icons.delete, color: Colors.white, size: 24),
+          child: Icon(Icons.delete, color: AppColors.textOnPrimary, size: 24),
         ),
       ),
     );
   }
 
   String _formatTime(BuildContext context, TimeOfDay time) {
-    final timeString = TimeOfDay(
-      hour: time.hour,
-      minute: time.minute,
-    ).format(context);
+    final timeString = TimeOfDay(hour: time.hour, minute: time.minute).format(context);
 
     return timeString;
   }
@@ -296,19 +266,15 @@ class EnhancedTaskItem extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppColors.white,
+          backgroundColor: AppColors.surface,
           title: Text(
             AppLocalizations.of(context).tr('settings.deleteTask'),
-            style: const TextStyle(
-              color: AppColors.black,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(color: AppColors.black, fontWeight: FontWeight.bold),
           ),
           content: Text(
-            AppLocalizations.of(context).trWithParams(
-              'settings.deleteTaskConfirmation',
-              {'taskTitle': task.title},
-            ),
+            AppLocalizations.of(
+              context,
+            ).trWithParams('settings.deleteTaskConfirmation', {'taskTitle': task.title}),
             style: const TextStyle(color: AppColors.black),
           ),
           actions: [
@@ -316,18 +282,16 @@ class EnhancedTaskItem extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(
                 AppLocalizations.of(context).tr('settings.cancel'),
-                style: const TextStyle(color: AppColors.maroon),
+                style: const TextStyle(color: AppColors.primary),
               ),
             ),
             ElevatedButton(
               onPressed: () => Navigator.of(context).pop(true),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.maroon,
-                foregroundColor: AppColors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.textOnPrimary,
               ),
-              child: Text(
-                AppLocalizations.of(context).tr('settings.deleteTask'),
-              ),
+              child: Text(AppLocalizations.of(context).tr('settings.deleteTask')),
             ),
           ],
         );
@@ -411,20 +375,17 @@ class EnhancedTaskItem extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: onTap,
-        icon: Icon(
-          icon,
-          color: isDestructive ? Colors.white : AppColors.maroon,
-        ),
+        icon: Icon(icon, color: isDestructive ? AppColors.textOnPrimary : AppColors.primary),
         label: Text(
           title,
           style: TextStyle(
-            color: isDestructive ? Colors.white : AppColors.maroon,
+            color: isDestructive ? AppColors.textOnPrimary : AppColors.primary,
             fontWeight: FontWeight.bold,
           ),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: isDestructive ? AppColors.maroon : AppColors.white,
-          foregroundColor: isDestructive ? Colors.white : AppColors.maroon,
+          backgroundColor: isDestructive ? AppColors.primary : AppColors.surface,
+          foregroundColor: isDestructive ? AppColors.textOnPrimary : AppColors.primary,
           elevation: 2,
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

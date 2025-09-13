@@ -63,7 +63,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: AppColors.black,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 20),
@@ -85,11 +85,11 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.textPrimary.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -103,7 +103,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.black,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 20),
@@ -157,7 +157,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                       );
                     }).toList(),
                     isCurved: true,
-                    color: AppColors.maroon,
+                    color: AppColors.primary,
                     barWidth: 3,
                     dotData: const FlDotData(show: true),
                   ),
@@ -176,11 +176,11 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.textPrimary.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -194,7 +194,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.black,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 20),
@@ -250,7 +250,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                     barRods: [
                       BarChartRodData(
                         toY: entry.value.completionRate,
-                        color: AppColors.maroon,
+                        color: AppColors.primary,
                         width: 20,
                         borderRadius: const BorderRadius.vertical(
                           top: Radius.circular(4),

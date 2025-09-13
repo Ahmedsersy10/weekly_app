@@ -13,7 +13,7 @@ class ActiveDrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: SvgPicture.asset(drawerItemModel.image, color: AppColors.maroon),
+      leading: SvgPicture.asset(drawerItemModel.image, color: AppColors.primary),
       title: FittedBox(
         fit: BoxFit.scaleDown,
         alignment: Alignment.centerLeft,
@@ -21,10 +21,10 @@ class ActiveDrawerItem extends StatelessWidget {
           AppLocalizations.of(context).tr(drawerItemModel.title),
           style: AppStyles.styleBold16(
             context,
-          ).copyWith(color: AppColors.maroon),
+          ).copyWith(color: AppColors.primary),
         ),
       ),
-      trailing: Container(width: 3.27, color: AppColors.maroon),
+      trailing: Container(width: 3.27, color: AppColors.primary),
     );
   }
 }

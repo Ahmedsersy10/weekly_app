@@ -48,10 +48,10 @@ class HomeViewBodyState extends State<HomeViewBody>
       children: [
         Container(
           decoration: BoxDecoration(
-            color: AppColors.maroon,
+            color: AppColors.primary,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: AppColors.textPrimary.withOpacity(0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -59,17 +59,17 @@ class HomeViewBodyState extends State<HomeViewBody>
           ),
           child: TabBar(
             controller: _tabController,
-            labelColor: AppColors.white,
-            dividerColor: AppColors.maroon,
+            labelColor: AppColors.textOnPrimary,
+            dividerColor: AppColors.primary,
             labelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.black,
+              color: AppColors.textPrimary,
             ),
             unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.white,
+              color: AppColors.textOnPrimary,
             ),
-            indicatorColor: AppColors.white,
+            indicatorColor: AppColors.textOnPrimary,
             tabs: [
               Tab(text: AppLocalizations.of(context).tr('app.title')),
               Tab(text: AppLocalizations.of(context).tr('common.Search')),

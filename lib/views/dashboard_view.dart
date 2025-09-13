@@ -9,12 +9,10 @@ import 'package:weekly_dash_board/util/dashboard_controller.dart';
 import 'package:weekly_dash_board/util/drawer_page.dart';
 import 'package:weekly_dash_board/util/size_config.dart';
 import 'package:weekly_dash_board/views/widgets/adaptive_layout.dart';
-import 'package:weekly_dash_board/views/widgets/custom_drawer.dart'
-    show CustomDrawer;
+import 'package:weekly_dash_board/views/widgets/custom_drawer.dart' show CustomDrawer;
 import 'package:weekly_dash_board/views/widgets/dashboard_desktop_layout.dart';
 import 'package:weekly_dash_board/views/widgets/dashbord_layout_mobile.dart';
 import 'package:weekly_dash_board/views/widgets/dashbord_tablet_layout.dart';
-
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -57,16 +55,13 @@ class _DashboardViewState extends State<DashboardView> {
                     );
                   },
                 ),
-                backgroundColor: AppColors.maroon,
-                foregroundColor: AppColors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.textOnPrimary,
                 actions: [
                   ListenableBuilder(
                     listenable: _controller,
                     builder: (context, _) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: _buildAppBarActions(),
-                      );
+                      return Row(mainAxisSize: MainAxisSize.min, children: _buildAppBarActions());
                     },
                   ),
                 ],
@@ -76,7 +71,7 @@ class _DashboardViewState extends State<DashboardView> {
         drawer: MediaQuery.of(context).size.width < SizeConfig.tablet
             ? CustomDrawer(onItemSelected: _onDrawerItemSelected)
             : null,
-        backgroundColor: const Color(0xffE5E5E5),
+        backgroundColor: AppColors.background,
         body: ListenableBuilder(
           listenable: _controller,
           builder: (context, _) {
@@ -118,10 +113,7 @@ class _DashboardViewState extends State<DashboardView> {
   List<Widget> _buildAppBarActions() {
     if (_controller.currentPage == DrawerPage.weekly) {
       return [
-        IconButton(
-          onPressed: _openCalendar,
-          icon: const Icon(Icons.calendar_month_outlined),
-        ),
+        IconButton(onPressed: _openCalendar, icon: const Icon(Icons.calendar_month_outlined)),
         IconButton(
           onPressed: _showClearAllTasksDialog,
           icon: const Icon(Icons.clear_all),
@@ -129,13 +121,7 @@ class _DashboardViewState extends State<DashboardView> {
         ),
       ];
     } else if (_controller.currentPage == DrawerPage.search) {
-      return [
-        IconButton(
-          onPressed: () {
-          },
-          icon: const Icon(Icons.filter_list),
-        ),
-      ];
+      return [IconButton(onPressed: () {}, icon: const Icon(Icons.filter_list))];
     }
     return [];
   }
@@ -147,7 +133,7 @@ class _DashboardViewState extends State<DashboardView> {
         DateTime focusedDay = DateTime.now();
         DateTime? selectedDay = focusedDay;
         return AlertDialog(
-          backgroundColor: AppColors.white,
+          backgroundColor: AppColors.surface,
           content: StatefulBuilder(
             builder: (context, setState) {
               return SizedBox(
@@ -158,33 +144,29 @@ class _DashboardViewState extends State<DashboardView> {
                   lastDay: DateTime.utc(2100, 12, 31),
                   focusedDay: focusedDay,
                   calendarStyle: const CalendarStyle(
-                    defaultTextStyle: TextStyle(
-                      color: AppColors.black,
-                    ), // لون الأرقام
-                    weekNumberTextStyle: TextStyle(color: AppColors.black),
-                    todayTextStyle: TextStyle(color: AppColors.black),
+                    defaultTextStyle: TextStyle(color: AppColors.textPrimary), // لون الأرقام
+                    weekNumberTextStyle: TextStyle(color: AppColors.textPrimary),
+                    todayTextStyle: TextStyle(color: AppColors.textPrimary),
                     todayDecoration: BoxDecoration(
-                      color: AppColors.maroon,
+                      color: AppColors.primary,
                       shape: BoxShape.circle,
                     ),
                     selectedDecoration: BoxDecoration(
-                      color: AppColors.maroon,
+                      color: AppColors.primary,
                       shape: BoxShape.circle,
                     ),
                   ),
                   headerStyle: const HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
-                    titleTextStyle: TextStyle(
-                      color: AppColors.black,
-                    ), // لون الشهر
+                    titleTextStyle: TextStyle(color: AppColors.textPrimary), // لون الشهر
                     leftChevronIcon: Icon(
                       Icons.chevron_left,
-                      color: AppColors.black, // لون السهم الأيسر
+                      color: AppColors.textPrimary, // لون السهم الأيسر
                     ),
                     rightChevronIcon: Icon(
                       Icons.chevron_right,
-                      color: AppColors.black, // لون السهم الأيمن
+                      color: AppColors.textPrimary, // لون السهم الأيمن
                     ),
                   ),
                   selectedDayPredicate: (day) => isSameDay(day, selectedDay),
@@ -203,7 +185,7 @@ class _DashboardViewState extends State<DashboardView> {
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 AppLocalizations.of(context).tr('settings.cancel'),
-                style: const TextStyle(color: AppColors.maroon),
+                style: const TextStyle(color: AppColors.primary),
               ),
             ),
             ElevatedButton(
@@ -217,8 +199,8 @@ class _DashboardViewState extends State<DashboardView> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.maroon,
-                foregroundColor: AppColors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.textOnPrimary,
               ),
               child: Text(AppLocalizations.of(context).tr('common.go')),
             ),
@@ -233,19 +215,15 @@ class _DashboardViewState extends State<DashboardView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppColors.white,
-          title: Text(
-            AppLocalizations.of(context).tr('settings.clearAllTasksTitle'),
-          ),
-          content: Text(
-            AppLocalizations.of(context).tr('settings.clearAllTasksConfirm'),
-          ),
+          backgroundColor: AppColors.surface,
+          title: Text(AppLocalizations.of(context).tr('settings.clearAllTasksTitle')),
+          content: Text(AppLocalizations.of(context).tr('settings.clearAllTasksConfirm')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 AppLocalizations.of(context).tr('settings.cancel'),
-                style: const TextStyle(color: AppColors.maroon),
+                style: const TextStyle(color: AppColors.primary),
               ),
             ),
             ElevatedButton(
@@ -254,8 +232,8 @@ class _DashboardViewState extends State<DashboardView> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.maroon,
-                foregroundColor: AppColors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.textOnPrimary,
               ),
               child: Text(AppLocalizations.of(context).tr('common.confirm')),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
+import 'package:weekly_dash_board/core/util/app_color.dart';
 
 // ignore: must_be_immutable
 class CustomTextFormField extends StatelessWidget {
@@ -35,10 +36,10 @@ class CustomTextFormField extends StatelessWidget {
             enabledBorder: buildOutlineInputBorder(),
             focusedBorder: buildOutlineInputBorder(),
             focusedErrorBorder: buildOutlineInputBorder().copyWith(
-              borderSide: const BorderSide(color: Colors.red, width: 1),
+              borderSide: const BorderSide(color: AppColors.error, width: 1),
             ),
             errorBorder: buildOutlineInputBorder().copyWith(
-              borderSide: const BorderSide(color: Colors.red, width: 1),
+              borderSide: const BorderSide(color: AppColors.error, width: 1),
             ),
             hintText: hintText,
             hintStyle: AppStyles.styleSemiBold20(context),

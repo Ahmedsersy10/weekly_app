@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weekly_dash_board/core/util/app_color.dart';
 
 class SettingsSection extends StatelessWidget {
   final String title;
@@ -33,7 +34,7 @@ class SettingsSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: AppColors.textPrimary.withOpacity(0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),

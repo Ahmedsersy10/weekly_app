@@ -31,7 +31,7 @@ class _SplashViewBodyState extends State<SplashViewBody>
   Widget build(BuildContext context) {
     return Scaffold(
       body: GifImageSplashView(controller: _controller),
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.surface,
     );
   }
 

@@ -26,7 +26,7 @@ class CustomContainerWeeklyOf extends StatelessWidget {
 
   BoxDecoration _buildContainerDecoration() {
     return const BoxDecoration(
-      color: AppColors.white,
+      color: AppColors.surface,
       boxShadow: [
         BoxShadow(
           color: Colors.black12,
@@ -117,7 +117,7 @@ class CustomContainerWeeklyOf extends StatelessWidget {
 
   BoxDecoration _buildCardDecoration() {
     return BoxDecoration(
-      color: AppColors.maroon,
+      color: AppColors.primary,
       borderRadius: BorderRadius.circular(12),
       boxShadow: const [
         BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),

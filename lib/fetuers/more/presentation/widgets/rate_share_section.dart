@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'dart:io' show Platform;
+import 'package:weekly_dash_board/core/util/app_color.dart';
 
 class RateShareSection extends StatelessWidget {
   const RateShareSection({super.key});
@@ -34,22 +35,22 @@ class RateShareSection extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: Colors.amber.withOpacity(0.1),
+              color: AppColors.warning.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.amber.withOpacity(0.3)),
+              border: Border.all(color: AppColors.warning.withOpacity(0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.star, color: Colors.amber[600], size: 20),
+                    const Icon(Icons.star, color: AppColors.warning, size: 20),
                     const SizedBox(width: 8),
                     Text(
                       AppLocalizations.of(context).tr('more.rateApp'),
                       style: AppStyles.styleSemiBold16(
                         context,
-                      ).copyWith(color: Colors.amber[600]),
+                      ).copyWith(color: AppColors.warning),
                     ),
                   ],
                 ),
@@ -60,14 +61,14 @@ class RateShareSection extends StatelessWidget {
                     ...List.generate(
                       5,
                       (index) =>
-                          Icon(Icons.star, color: Colors.amber[600], size: 20),
+                          const Icon(Icons.star, color: AppColors.warning, size: 20),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       '5.0',
                       style: AppStyles.styleSemiBold16(
                         context,
-                      ).copyWith(color: Colors.amber[600]),
+                      ).copyWith(color: AppColors.warning),
                     ),
                   ],
                 ),
@@ -81,7 +82,7 @@ class RateShareSection extends StatelessWidget {
                       AppLocalizations.of(context).tr('more.rateOnStore'),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber[600],
+                      backgroundColor: AppColors.warning,
                       foregroundColor: colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -152,20 +153,20 @@ class RateShareSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12.0),
             decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.1),
+              color: AppColors.info.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.blue.withOpacity(0.3)),
+              border: Border.all(color: AppColors.info.withOpacity(0.3)),
             ),
             child: Row(
               children: [
-                Icon(Icons.info_outline, color: Colors.blue[600], size: 18),
+                const Icon(Icons.info_outline, color: AppColors.info, size: 18),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     AppLocalizations.of(context).tr('more.sharingBenefits'),
                     style: AppStyles.styleRegular12(
                       context,
-                    ).copyWith(color: Colors.blue[600]),
+                    ).copyWith(color: AppColors.info),
                   ),
                 ),
               ],

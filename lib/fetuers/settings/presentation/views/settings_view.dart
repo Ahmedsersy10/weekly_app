@@ -34,9 +34,7 @@ class _SettingsViewState extends State<SettingsView> {
         title: Center(
           child: Text(
             AppLocalizations.of(context).tr('app.settings'),
-            style: AppStyles.styleSemiBold24(
-              context,
-            ).copyWith(color: colorScheme.onSurface),
+            style: AppStyles.styleSemiBold24(context).copyWith(color: colorScheme.onSurface),
           ),
         ),
         backgroundColor: colorScheme.surface,
@@ -46,20 +44,15 @@ class _SettingsViewState extends State<SettingsView> {
       body: BlocConsumer<SettingsCubit, SettingsState>(
         listener: (context, state) {
           if (state.error != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.error!),
-                backgroundColor: Colors.red,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error!), backgroundColor: AppColors.error));
             context.read<SettingsCubit>().clearError();
           }
         },
         builder: (context, state) {
           if (state.isLoading) {
-            return Center(
-              child: CircularProgressIndicator(color: colorScheme.primary),
-            );
+            return Center(child: CircularProgressIndicator(color: colorScheme.primary));
           }
 
           return SingleChildScrollView(
@@ -76,9 +69,7 @@ class _SettingsViewState extends State<SettingsView> {
                       context.read<WeeklyCubit>().updateWeekStart(weekStart);
                     },
                     onWeekendDaysChanged: (weekendDays) {
-                      context.read<SettingsCubit>().updateWeekendDays(
-                        weekendDays,
-                      );
+                      context.read<SettingsCubit>().updateWeekendDays(weekendDays);
                     },
                   ),
                   const SizedBox(height: 24),
@@ -87,9 +78,7 @@ class _SettingsViewState extends State<SettingsView> {
                     autoSync: state.settings!.autoSync,
                     lastBackup: state.settings!.lastBackup,
                     onSyncProviderChanged: (provider) {
-                      context.read<SettingsCubit>().updateSyncProvider(
-                        provider,
-                      );
+                      context.read<SettingsCubit>().updateSyncProvider(provider);
                     },
                     onAutoSyncChanged: (autoSync) {
                       context.read<SettingsCubit>().updateAutoSync(autoSync);
@@ -105,9 +94,7 @@ class _SettingsViewState extends State<SettingsView> {
                   const SizedBox(height: 24),
                 ],
                 SettingsSection(
-                  title: AppLocalizations.of(
-                    context,
-                  ).tr('settings.dataManagement'),
+                  title: AppLocalizations.of(context).tr('settings.dataManagement'),
                   children: [
                     ListTile(
                       title: Text(
@@ -115,10 +102,8 @@ class _SettingsViewState extends State<SettingsView> {
                         style: TextStyle(color: colorScheme.onSurface),
                       ),
                       subtitle: Text(
-                        AppLocalizations.of(
-                          context,
-                        ).tr('settings.backupSubtitle'),
-                        style: const TextStyle(color: AppColors.black),
+                        AppLocalizations.of(context).tr('settings.backupSubtitle'),
+                        style: const TextStyle(color: AppColors.textPrimary),
                       ),
                       leading: Icon(Icons.backup, color: colorScheme.primary),
                       onTap: () async {
@@ -132,10 +117,8 @@ class _SettingsViewState extends State<SettingsView> {
                         style: TextStyle(color: colorScheme.onSurface),
                       ),
                       subtitle: Text(
-                        AppLocalizations.of(
-                          context,
-                        ).tr('settings.restoreSubtitle'),
-                        style: const TextStyle(color: AppColors.black),
+                        AppLocalizations.of(context).tr('settings.restoreSubtitle'),
+                        style: const TextStyle(color: AppColors.textPrimary),
                       ),
                       leading: Icon(Icons.restore, color: colorScheme.primary),
                       onTap: () async {
@@ -152,10 +135,8 @@ class _SettingsViewState extends State<SettingsView> {
                         style: TextStyle(color: colorScheme.onSurface),
                       ),
                       subtitle: Text(
-                        AppLocalizations.of(
-                          context,
-                        ).tr('settings.resetSubtitle'),
-                        style: const TextStyle(color: AppColors.black),
+                        AppLocalizations.of(context).tr('settings.resetSubtitle'),
+                        style: const TextStyle(color: AppColors.textPrimary),
                       ),
                       leading: Icon(Icons.refresh, color: colorScheme.primary),
                       onTap: () {
@@ -177,14 +158,8 @@ class _SettingsViewState extends State<SettingsView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            AppLocalizations.of(context).tr('settings.resetConfirmationTitle'),
-          ),
-          content: Text(
-            AppLocalizations.of(
-              context,
-            ).tr('settings.resetConfirmationMessage'),
-          ),
+          title: Text(AppLocalizations.of(context).tr('settings.resetConfirmationTitle')),
+          content: Text(AppLocalizations.of(context).tr('settings.resetConfirmationMessage')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -195,7 +170,7 @@ class _SettingsViewState extends State<SettingsView> {
                 Navigator.of(context).pop();
                 context.read<SettingsCubit>().resetToDefaults();
               },
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              style: TextButton.styleFrom(foregroundColor: AppColors.error),
               child: Text(AppLocalizations.of(context).tr('settings.reset')),
             ),
           ],
@@ -211,10 +186,9 @@ class _SettingsViewState extends State<SettingsView> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              AppLocalizations.of(context).trWithParams(
-                'settings.backupSuccess',
-                {'filename': file.path.split('/').last},
-              ),
+              AppLocalizations.of(
+                context,
+              ).trWithParams('settings.backupSuccess', {'filename': file.path.split('/').last}),
             ),
           ),
         );
@@ -239,11 +213,7 @@ class _SettingsViewState extends State<SettingsView> {
       final success = await DataBackupService.restoreLatest();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              success ? 'Data restored successfully' : 'No backups found',
-            ),
-          ),
+          SnackBar(content: Text(success ? 'Data restored successfully' : 'No backups found')),
         );
       }
     } catch (e) {

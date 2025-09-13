@@ -17,28 +17,28 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.7,
-      color: Colors.white,
+      color: AppColors.surface,
       child: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(
-            child: Divider(color: Colors.white, height: 1, thickness: 1),
+            child: Divider(color: AppColors.surface, height: 1, thickness: 1),
           ),
           SliverToBoxAdapter(
             child: Container(
               height: 120,
-              color: AppColors.maroon, // Maroon color
+              color: AppColors.primary, // Primary color
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.dashboard, size: 50, color: Colors.white),
+                    const Icon(Icons.dashboard, size: 50, color: AppColors.textOnPrimary),
                     const SizedBox(height: 10),
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
                         AppLocalizations.of(context).tr('navigation.weekly'),
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.surface,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),

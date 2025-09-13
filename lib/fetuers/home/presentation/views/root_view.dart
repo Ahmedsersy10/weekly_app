@@ -24,9 +24,9 @@ class _RootViewState extends State<RootView> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),
-        backgroundColor: AppColors.maroon,
-        selectedItemColor: AppColors.white,
-        unselectedItemColor: const Color.fromARGB(255, 211, 211, 211),
+        backgroundColor: AppColors.primary,
+        selectedItemColor: AppColors.textOnPrimary,
+        unselectedItemColor: AppColors.textTertiary,
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),
