@@ -119,7 +119,7 @@ class DataBackupService {
       'isCompleted': t.isCompleted,
       'dayOfWeek': t.dayOfWeek,
       'isImportant': t.isImportant,
-      'category': t.category.index,
+      'categoryId': t.categoryId,
       'priority': t.priority.index,
       'dueDate': t.dueDate?.toIso8601String(),
       'createdAt': t.createdAt.toIso8601String(),
@@ -138,9 +138,7 @@ class DataBackupService {
       isCompleted: m['isCompleted'] as bool? ?? false,
       dayOfWeek: m['dayOfWeek'] as int,
       isImportant: m['isImportant'] as bool? ?? false,
-      category: m['category'] != null
-          ? TaskCategory.values[m['category'] as int]
-          : TaskCategory.other,
+      categoryId: m['categoryId'] as String? ?? 'other',
       priority: m['priority'] != null
           ? TaskPriority.values[m['priority'] as int]
           : TaskPriority.medium,

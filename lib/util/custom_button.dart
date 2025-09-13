@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
 
 class CustomButton extends StatelessWidget {
@@ -13,7 +12,7 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: buttonColor ?? AppColors.accent,
+          backgroundColor: buttonColor ?? Theme.of(context).colorScheme.secondary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(8)),
         ),
         onPressed: () {},
@@ -21,7 +20,7 @@ class CustomButton extends StatelessWidget {
           text ?? 'Send Mony',
           style: AppStyles.styleSemiBold18(
             context,
-          ).copyWith(color: textColor ?? AppColors.textOnAccent),
+          ).copyWith(color: textColor ?? Theme.of(context).colorScheme.onSecondary),
         ),
       ),
     );

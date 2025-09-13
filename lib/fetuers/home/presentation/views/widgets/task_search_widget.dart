@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 import 'package:weekly_dash_board/core/services/search_service.dart';
 import 'package:weekly_dash_board/core/services/performance_service.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/task_model.dart';
@@ -26,7 +25,7 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
   List<TaskModel> _allTasks = [];
   bool _isSearching = false;
 
-  TaskCategory? _selectedCategory;
+  String? _selectedCategoryId;
   TaskPriority? _selectedPriority;
   bool? _selectedCompletionStatus;
   bool? _selectedImportanceStatus;
@@ -81,7 +80,7 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
 
   void _performSearch() {
     if (_searchQuery.trim().isEmpty &&
-        _selectedCategory == null &&
+        _selectedCategoryId == null &&
         _selectedPriority == null &&
         _selectedCompletionStatus == null &&
         _selectedImportanceStatus == null &&
@@ -107,7 +106,7 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
 
       final results = _searchService.advancedSearch(
         query: _searchQuery.trim().isEmpty ? null : _searchQuery,
-        category: _selectedCategory,
+        categoryId: _selectedCategoryId,
         priority: _selectedPriority,
         isCompleted: _selectedCompletionStatus,
         isImportant: _selectedImportanceStatus,
@@ -142,10 +141,10 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
         return Container(
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(color: AppColors.textTertiary, blurRadius: 4, offset: Offset(0, 2)),
+            boxShadow: [
+              BoxShadow(color: Theme.of(context).shadowColor.withOpacity(0.2), blurRadius: 4, offset: Offset(0, 2)),
             ],
           ),
           child: Column(
@@ -156,24 +155,24 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                 onChanged: (value) => _onSearchChanged(),
                 decoration: InputDecoration(
                   hintText: 'Search tasks',
-                  prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
+                  prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
-                          icon: const Icon(Icons.clear, color: AppColors.textPrimary),
+                          icon: Icon(Icons.clear, color: Theme.of(context).colorScheme.onSurface),
                           onPressed: _clearSearch,
                         )
                       : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.textPrimary),
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.textPrimary),
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                   ),
                 ),
               ),
@@ -183,7 +182,10 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
 
                 Text(
                   'Search Results (${_filteredTasks.length})',
-                  style: AppStyles.styleSemiBold16(context).copyWith(color: AppColors.textPrimary),
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
+                  ),
                 ),
                 const SizedBox(height: 8),
 
@@ -191,16 +193,16 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.backgroundSecondary,
+                      color: Theme.of(context).colorScheme.surfaceVariant,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.search_off, color: AppColors.textSecondary, size: 24),
+                        Icon(Icons.search_off, color: Theme.of(context).colorScheme.onSurfaceVariant, size: 24),
                         const SizedBox(width: 8),
                         Text(
                           'No tasks found matching "${_searchController.text}"',
-                          style: const TextStyle(color: AppColors.textSecondary),
+                          style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                         ),
                       ],
                     ),
@@ -232,7 +234,7 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
           Container(
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
@@ -244,15 +246,15 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
             ),
             child: TextField(
               controller: _searchController,
-              style: const TextStyle(color: AppColors.textPrimary),
-              cursorColor: AppColors.textPrimary,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              cursorColor: Theme.of(context).colorScheme.primary,
               decoration: InputDecoration(
-                focusColor: AppColors.textPrimary,
+                focusColor: Theme.of(context).colorScheme.primary,
                 hintText: 'Search tasks, categories, tags...',
-                prefixIcon: const Icon(Icons.search, color: AppColors.primary),
+                prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.primary),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: AppColors.primary),
+                        icon: Icon(Icons.clear, color: Theme.of(context).colorScheme.primary),
                         onPressed: () {
                           _searchController.clear();
                           _clearAllFilters();
@@ -261,7 +263,7 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                     : IconButton(
                         icon: Icon(
                           _showAdvancedFilters ? Icons.filter_list : Icons.filter_list_outlined,
-                          color: AppColors.primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         onPressed: () {
                           setState(() {
@@ -301,10 +303,10 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
             '${_searchResults.length} task${_searchResults.length == 1 ? '' : 's'} found',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ),
@@ -327,24 +329,24 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
   }
 
   Widget _buildNoResults() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.search_off, size: 64, color: AppColors.textTertiary),
-          SizedBox(height: 16),
+          Icon(Icons.search_off, size: 64, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
+          const SizedBox(height: 16),
           Text(
             'No tasks found',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.textSecondary,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'Try adjusting your search terms or filters',
-            style: TextStyle(fontSize: 14, color: AppColors.textTertiary),
+            style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -360,14 +362,14 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (suggestions.isNotEmpty) ...[
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
               'Search Suggestions',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -384,14 +386,14 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                      border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3)),
                     ),
                     child: Text(
                       suggestion,
-                      style: const TextStyle(
-                        color: AppColors.primary,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -405,14 +407,14 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
 
         if (trending.isNotEmpty) ...[
           const SizedBox(height: 16),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
               'Trending',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -429,14 +431,14 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.warning.withOpacity(0.1),
+                      color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+                      border: Border.all(color: Theme.of(context).colorScheme.secondary.withOpacity(0.3)),
                     ),
                     child: Text(
                       term,
-                      style: const TextStyle(
-                        color: AppColors.warning,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -453,7 +455,7 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
 
   void _clearAllFilters() {
     setState(() {
-      _selectedCategory = null;
+      _selectedCategoryId = null;
       _selectedPriority = null;
       _selectedCompletionStatus = null;
       _selectedImportanceStatus = null;

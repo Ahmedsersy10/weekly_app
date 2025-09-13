@@ -171,14 +171,17 @@ class StatisticsService {
     return dayStats;
   }
 
-  Map<TaskCategory, CategoryStats> _calculateCategoryStats(
+  Map<String, CategoryStats> _calculateCategoryStats(
     List<TaskModel> tasks,
   ) {
-    final categoryStats = <TaskCategory, CategoryStats>{};
+    final categoryStats = <String, CategoryStats>{};
 
-    for (final category in TaskCategory.values) {
+    // Get unique category IDs from tasks
+    final categoryIds = tasks.map((task) => task.categoryId).toSet();
+    
+    for (final categoryId in categoryIds) {
       final categoryTasks = tasks
-          .where((task) => task.category == category)
+          .where((task) => task.categoryId == categoryId)
           .toList();
       final totalTasks = categoryTasks.length;
       final completedTasks = categoryTasks
@@ -204,8 +207,8 @@ class StatisticsService {
         }
       }
 
-      categoryStats[category] = CategoryStats(
-        category: category,
+      categoryStats[categoryId] = CategoryStats(
+        category: categoryId,
         totalTasks: totalTasks,
         completedTasks: completedTasks,
         completionRate: completionRate,
@@ -460,11 +463,13 @@ class StatisticsService {
     return distribution;
   }
 
-  Map<TaskCategory, int> getCategoryDistribution(List<TaskModel> tasks) {
-    final distribution = <TaskCategory, int>{};
-    for (final category in TaskCategory.values) {
-      distribution[category] = tasks
-          .where((task) => task.category == category)
+  Map<String, int> getCategoryDistribution(List<TaskModel> tasks) {
+    final distribution = <String, int>{};
+    final categoryIds = tasks.map((task) => task.categoryId).toSet();
+    
+    for (final categoryId in categoryIds) {
+      distribution[categoryId] = tasks
+          .where((task) => task.categoryId == categoryId)
           .length;
     }
     return distribution;

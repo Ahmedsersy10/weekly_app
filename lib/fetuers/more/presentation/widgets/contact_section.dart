@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -94,22 +93,22 @@ class ContactSection extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: AppColors.info.withOpacity(0.1),
+              color: colorScheme.secondary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.info.withOpacity(0.3)),
+              border: Border.all(color: colorScheme.secondary.withOpacity(0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.share, color: AppColors.info, size: 20),
+                    Icon(Icons.share, color: colorScheme.secondary, size: 20),
                     const SizedBox(width: 8),
                     Text(
                       AppLocalizations.of(context).tr('contact.followUs'),
                       style: AppStyles.styleSemiBold16(
                         context,
-                      ).copyWith(color: AppColors.info),
+                      ).copyWith(color: colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -121,7 +120,7 @@ class ContactSection extends StatelessWidget {
                       context,
                       Icons.facebook,
                       'Facebook',
-                      AppColors.info,
+                      colorScheme.secondary,
                       () => _openSocialMedia('facebook'),
                     ),
                     _buildSocialButton(
@@ -135,7 +134,7 @@ class ContactSection extends StatelessWidget {
                       context,
                       Icons.camera_alt,
                       'Instagram',
-                      AppColors.accent,
+                      colorScheme.tertiary,
                       () => _openSocialMedia('instagram'),
                     ),
                   ],
@@ -163,7 +162,7 @@ class ContactSection extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-            child: Icon(icon, color: AppColors.textOnPrimary, size: 24),
+            child: Icon(icon, color: Colors.white, size: 24),
           ),
           const SizedBox(height: 8),
           Text(

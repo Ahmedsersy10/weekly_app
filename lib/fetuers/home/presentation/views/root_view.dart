@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/home_view.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/settings_view.dart';
@@ -24,9 +23,9 @@ class _RootViewState extends State<RootView> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),
-        backgroundColor: AppColors.primary,
-        selectedItemColor: AppColors.textOnPrimary,
-        unselectedItemColor: AppColors.textTertiary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        selectedItemColor: Theme.of(context).colorScheme.onPrimary,
+        unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),

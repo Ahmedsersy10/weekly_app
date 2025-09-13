@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/view_model/settings_cubit.dart';
@@ -8,6 +7,7 @@ import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/se
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/week_settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/sync_settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/language_settings_section.dart';
+import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/theme_settings_section.dart';
 import 'package:weekly_dash_board/core/services/data_backup_service.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 
@@ -34,7 +34,9 @@ class _SettingsViewState extends State<SettingsView> {
         title: Center(
           child: Text(
             AppLocalizations.of(context).tr('app.settings'),
-            style: AppStyles.styleSemiBold24(context).copyWith(color: colorScheme.onSurface),
+            style: AppStyles.styleSemiBold24(
+              context,
+            ).copyWith(color: colorScheme.onSurface),
           ),
         ),
         backgroundColor: colorScheme.surface,
@@ -44,15 +46,20 @@ class _SettingsViewState extends State<SettingsView> {
       body: BlocConsumer<SettingsCubit, SettingsState>(
         listener: (context, state) {
           if (state.error != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.error!), backgroundColor: AppColors.error));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error!),
+                backgroundColor: colorScheme.error,
+              ),
+            );
             context.read<SettingsCubit>().clearError();
           }
         },
         builder: (context, state) {
           if (state.isLoading) {
-            return Center(child: CircularProgressIndicator(color: colorScheme.primary));
+            return Center(
+              child: CircularProgressIndicator(color: colorScheme.primary),
+            );
           }
 
           return SingleChildScrollView(
@@ -61,6 +68,13 @@ class _SettingsViewState extends State<SettingsView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (state.settings != null) ...[
+                  ThemeSettingsSection(
+                    themeMode: state.settings!.themeMode,
+                    onThemeModeChanged: (themeMode) {
+                      context.read<SettingsCubit>().updateThemeMode(themeMode);
+                    },
+                  ),
+                  const SizedBox(height: 24),
                   WeekSettingsSection(
                     weekStart: state.settings!.weekStart,
                     weekendDays: state.settings!.weekendDays,
@@ -69,7 +83,9 @@ class _SettingsViewState extends State<SettingsView> {
                       context.read<WeeklyCubit>().updateWeekStart(weekStart);
                     },
                     onWeekendDaysChanged: (weekendDays) {
-                      context.read<SettingsCubit>().updateWeekendDays(weekendDays);
+                      context.read<SettingsCubit>().updateWeekendDays(
+                        weekendDays,
+                      );
                     },
                   ),
                   const SizedBox(height: 24),
@@ -78,7 +94,9 @@ class _SettingsViewState extends State<SettingsView> {
                     autoSync: state.settings!.autoSync,
                     lastBackup: state.settings!.lastBackup,
                     onSyncProviderChanged: (provider) {
-                      context.read<SettingsCubit>().updateSyncProvider(provider);
+                      context.read<SettingsCubit>().updateSyncProvider(
+                        provider,
+                      );
                     },
                     onAutoSyncChanged: (autoSync) {
                       context.read<SettingsCubit>().updateAutoSync(autoSync);
@@ -94,7 +112,9 @@ class _SettingsViewState extends State<SettingsView> {
                   const SizedBox(height: 24),
                 ],
                 SettingsSection(
-                  title: AppLocalizations.of(context).tr('settings.dataManagement'),
+                  title: AppLocalizations.of(
+                    context,
+                  ).tr('settings.dataManagement'),
                   children: [
                     ListTile(
                       title: Text(
@@ -102,8 +122,10 @@ class _SettingsViewState extends State<SettingsView> {
                         style: TextStyle(color: colorScheme.onSurface),
                       ),
                       subtitle: Text(
-                        AppLocalizations.of(context).tr('settings.backupSubtitle'),
-                        style: const TextStyle(color: AppColors.textPrimary),
+                        AppLocalizations.of(
+                          context,
+                        ).tr('settings.backupSubtitle'),
+                        style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
                       ),
                       leading: Icon(Icons.backup, color: colorScheme.primary),
                       onTap: () async {
@@ -117,8 +139,10 @@ class _SettingsViewState extends State<SettingsView> {
                         style: TextStyle(color: colorScheme.onSurface),
                       ),
                       subtitle: Text(
-                        AppLocalizations.of(context).tr('settings.restoreSubtitle'),
-                        style: const TextStyle(color: AppColors.textPrimary),
+                        AppLocalizations.of(
+                          context,
+                        ).tr('settings.restoreSubtitle'),
+                        style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
                       ),
                       leading: Icon(Icons.restore, color: colorScheme.primary),
                       onTap: () async {
@@ -135,8 +159,10 @@ class _SettingsViewState extends State<SettingsView> {
                         style: TextStyle(color: colorScheme.onSurface),
                       ),
                       subtitle: Text(
-                        AppLocalizations.of(context).tr('settings.resetSubtitle'),
-                        style: const TextStyle(color: AppColors.textPrimary),
+                        AppLocalizations.of(
+                          context,
+                        ).tr('settings.resetSubtitle'),
+                        style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
                       ),
                       leading: Icon(Icons.refresh, color: colorScheme.primary),
                       onTap: () {
@@ -154,12 +180,19 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   void _showResetConfirmationDialog(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).tr('settings.resetConfirmationTitle')),
-          content: Text(AppLocalizations.of(context).tr('settings.resetConfirmationMessage')),
+          title: Text(
+            AppLocalizations.of(context).tr('settings.resetConfirmationTitle'),
+          ),
+          content: Text(
+            AppLocalizations.of(
+              context,
+            ).tr('settings.resetConfirmationMessage'),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -170,7 +203,7 @@ class _SettingsViewState extends State<SettingsView> {
                 Navigator.of(context).pop();
                 context.read<SettingsCubit>().resetToDefaults();
               },
-              style: TextButton.styleFrom(foregroundColor: AppColors.error),
+              style: TextButton.styleFrom(foregroundColor: colorScheme.error),
               child: Text(AppLocalizations.of(context).tr('settings.reset')),
             ),
           ],
@@ -186,9 +219,10 @@ class _SettingsViewState extends State<SettingsView> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              AppLocalizations.of(
-                context,
-              ).trWithParams('settings.backupSuccess', {'filename': file.path.split('/').last}),
+              AppLocalizations.of(context).trWithParams(
+                'settings.backupSuccess',
+                {'filename': file.path.split('/').last},
+              ),
             ),
           ),
         );
@@ -213,7 +247,11 @@ class _SettingsViewState extends State<SettingsView> {
       final success = await DataBackupService.restoreLatest();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(success ? 'Data restored successfully' : 'No backups found')),
+          SnackBar(
+            content: Text(
+              success ? 'Data restored successfully' : 'No backups found',
+            ),
+          ),
         );
       }
     } catch (e) {

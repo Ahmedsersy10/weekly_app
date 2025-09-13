@@ -1,12 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'task_model.dart';
 
 class StatisticsModel extends Equatable {
   final double overallCompletionRate;
   final int totalTasksCompleted;
   final int totalTasksCreated;
   final Map<int, DayProductivityStats> dayProductivity;
-  final Map<TaskCategory, CategoryStats> categoryStats;
+  final Map<String, CategoryStats> categoryStats;
   final List<WeeklyTrend> weeklyTrends;
   final DateTime mostProductiveDay;
   final DateTime leastProductiveDay;
@@ -35,7 +34,7 @@ class StatisticsModel extends Equatable {
     int? totalTasksCompleted,
     int? totalTasksCreated,
     Map<int, DayProductivityStats>? dayProductivity,
-    Map<TaskCategory, CategoryStats>? categoryStats,
+    Map<String, CategoryStats>? categoryStats,
     List<WeeklyTrend>? weeklyTrends,
     DateTime? mostProductiveDay,
     DateTime? leastProductiveDay,
@@ -110,7 +109,7 @@ class DayProductivityStats extends Equatable {
 }
 
 class CategoryStats extends Equatable {
-  final TaskCategory category;
+  final String category;
   final int totalTasks;
   final int completedTasks;
   final double completionRate;

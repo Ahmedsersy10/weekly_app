@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 import 'package:weekly_dash_board/fetuers/more/presentation/widgets/achievement_section.dart';
 import 'package:weekly_dash_board/fetuers/more/presentation/widgets/user_guide_section.dart';
 import 'package:weekly_dash_board/fetuers/more/presentation/widgets/contact_section.dart';
@@ -19,9 +19,10 @@ class MoreView extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).tr('app.more'),
-          style: AppStyles.styleSemiBold24(
-            context,
-          ).copyWith(color: colorScheme.onSurface),
+          style: Theme.of(context).textTheme.displaySmall!.copyWith(
+            color: colorScheme.onSurface,
+            fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 24),
+          ),
         ),
         backgroundColor: colorScheme.surface,
         elevation: 0,

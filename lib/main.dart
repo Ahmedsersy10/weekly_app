@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/view_model/settings_cubit.dart';
 import 'package:weekly_dash_board/fetuers/splash/presentation/views/splash_view.dart';
+import 'package:weekly_dash_board/core/models/settings_model.dart' as settings;
 
 void main() {
   runApp(
@@ -32,16 +34,38 @@ class ResponsiveDashboardApp extends StatelessWidget {
           final locale = _mapLocale(s?.language);
           final primaryColor = s?.primaryColor ?? AppColors.primary;
 
-          final lightTheme = ThemeData(
-            fontFamily: 'ReadexPro',
-            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-            useMaterial3: true,
+          final lightTheme = AppTheme.lightTheme.copyWith(
+            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor, brightness: Brightness.light),
           );
+
+          final darkTheme = AppTheme.darkTheme.copyWith(
+            colorScheme: AppTheme.darkTheme.colorScheme.copyWith(
+              primary: primaryColor,
+              primaryContainer: primaryColor.withOpacity(0.8),
+            ),
+          );
+
+          // Convert custom ThemeMode to Flutter's ThemeMode
+          ThemeMode flutterThemeMode;
+          switch (s?.themeMode) {
+            case settings.ThemeMode.light:
+              flutterThemeMode = ThemeMode.light;
+              break;
+            case settings.ThemeMode.dark:
+              flutterThemeMode = ThemeMode.dark;
+              break;
+            case settings.ThemeMode.system:
+            default:
+              flutterThemeMode = ThemeMode.system;
+              break;
+          }
 
           return MaterialApp(
             home: const SplashView(),
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: flutterThemeMode,
             locale: locale,
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,

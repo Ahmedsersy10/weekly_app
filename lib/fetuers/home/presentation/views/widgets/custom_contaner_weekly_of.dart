@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_text_weekly_of.dart';
@@ -14,8 +13,9 @@ class CustomContainerWeeklyOf extends StatelessWidget {
       builder: (context, state) {
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          decoration: _buildContainerDecoration(),
+          padding: const EdgeInsets.all(20.0),
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: _buildContainerDecoration(context),
           child: state is WeeklySuccess
               ? _buildSuccessContent(context, state.weeklyState)
               : _buildZeroStateContent(context),
@@ -24,15 +24,22 @@ class CustomContainerWeeklyOf extends StatelessWidget {
     );
   }
 
-  BoxDecoration _buildContainerDecoration() {
-    return const BoxDecoration(
-      color: AppColors.surface,
+  BoxDecoration _buildContainerDecoration(BuildContext context) {
+    return BoxDecoration(
+      color: Theme.of(context).colorScheme.surface,
+      borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          color: Colors.black12,
-          blurRadius: 8,
-          offset: Offset(0, 4),
-          spreadRadius: 2,
+          color: Theme.of(context).shadowColor.withOpacity(0.08),
+          blurRadius: 12,
+          offset: const Offset(0, 4),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+          blurRadius: 6,
+          offset: const Offset(0, 2),
+          spreadRadius: 0,
         ),
       ],
     );
@@ -43,7 +50,7 @@ class CustomContainerWeeklyOf extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _buildFirstRow(context, weeklyState),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         _buildSecondRow(context, weeklyState),
       ],
     );
@@ -55,12 +62,12 @@ class CustomContainerWeeklyOf extends StatelessWidget {
         Expanded(
           child: _buildInfoCard(
             context,
-            AppLocalizations.of(context).trWithParams('settings.weekOf', {
-              'weekNumber': weeklyState.weekNumber.toString(),
-            }),
+            AppLocalizations.of(
+              context,
+            ).trWithParams('settings.weekOf', {'weekNumber': weeklyState.weekNumber.toString()}),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 16),
         Expanded(
           child: _buildInfoCard(
             context,
@@ -80,47 +87,42 @@ class CustomContainerWeeklyOf extends StatelessWidget {
         Expanded(
           child: _buildInfoCard(
             context,
-            AppLocalizations.of(context).trWithParams(
-              'settings.completionPercentage',
-              {'percentage': percentage.toStringAsFixed(0)},
-            ),
+            AppLocalizations.of(context).trWithParams('settings.completionPercentage', {
+              'percentage': percentage.toStringAsFixed(0),
+            }),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 16),
         Expanded(
           child: _buildInfoCard(
             context,
             percentageLabel,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-              vertical: 18.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 18.0),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildInfoCard(
-    BuildContext context,
-    String title, {
-    EdgeInsets? padding,
-  }) {
+  Widget _buildInfoCard(BuildContext context, String title, {EdgeInsets? padding}) {
     return Container(
-      padding:
-          padding ??
-          const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
-      decoration: _buildCardDecoration(),
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+      decoration: _buildCardDecoration(context),
       child: Center(child: CustomTextWeeklyOf(title: title)),
     );
   }
 
-  BoxDecoration _buildCardDecoration() {
+  BoxDecoration _buildCardDecoration(BuildContext context) {
     return BoxDecoration(
-      color: AppColors.primary,
-      borderRadius: BorderRadius.circular(12),
-      boxShadow: const [
-        BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+      color: Theme.of(context).colorScheme.primary,
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+          spreadRadius: 0,
+        ),
       ],
     );
   }
@@ -130,23 +132,14 @@ class CustomContainerWeeklyOf extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomTextWeeklyOf(
-          title: AppLocalizations.of(context).trWithParams(
-            'settings.weeklyOf',
-            {
-              'weekNumber': AppLocalizations.of(
-                context,
-              ).tr('settings.zeroWeek'),
-            },
-          ),
+          title: AppLocalizations.of(context).trWithParams('settings.weeklyOf', {
+            'weekNumber': AppLocalizations.of(context).tr('settings.zeroWeek'),
+          }),
         ),
-        const SizedBox(height: 12),
-        CustomTextWeeklyOf(
-          title: AppLocalizations.of(context).tr('settings.zeroProgress'),
-        ),
-        const SizedBox(height: 12),
-        CustomTextWeeklyOf(
-          title: AppLocalizations.of(context).tr('settings.zeroPercentage'),
-        ),
+        const SizedBox(height: 16),
+        CustomTextWeeklyOf(title: AppLocalizations.of(context).tr('settings.zeroProgress')),
+        const SizedBox(height: 16),
+        CustomTextWeeklyOf(title: AppLocalizations.of(context).tr('settings.zeroPercentage')),
       ],
     );
   }

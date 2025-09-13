@@ -115,6 +115,16 @@
     "light": "فاتح",
     "dark": "داكن"
   },
+  "settings.appearance": "المظهر",
+  "settings.systemTheme": "النظام",
+  "settings.lightTheme": "فاتح",
+  "settings.darkTheme": "داكن",
+  "settings.currentTheme": "المظهر الحالي",
+  "settings.darkModeActive": "الوضع الداكن نشط حاليًا",
+  "settings.lightModeActive": "الوضع الفاتح نشط حاليًا",
+  "settings.lightThemeDesc": "استخدم المظهر الفاتح دائمًا",
+  "settings.darkThemeDesc": "استخدم المظهر الداكن دائمًا",
+  "settings.systemThemeDesc": "اتبع إعداد مظهر النظام",
   "settings.primaryColor": "اللون الأساسي",
   "settings.selectPrimaryColor": "اختر اللون الأساسي",
   "settings.syncProviders": {

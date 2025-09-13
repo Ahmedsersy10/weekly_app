@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
 
@@ -16,7 +15,7 @@ class UserGuideSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textPrimary.withOpacity(0.1),
+            color: colorScheme.shadow.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -125,10 +124,10 @@ class UserGuideSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: AppColors.primary, size: 20),
+          child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -139,14 +138,14 @@ class UserGuideSection extends StatelessWidget {
                 title,
                 style: AppStyles.styleSemiBold16(
                   context,
-                ).copyWith(color: AppColors.textPrimary),
+                ).copyWith(color: Theme.of(context).colorScheme.onSurface),
               ),
               const SizedBox(height: 4),
               Text(
                 description,
                 style: AppStyles.styleRegular14(
                   context,
-                ).copyWith(color: AppColors.textPrimary.withOpacity(0.7)),
+                ).copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
               ),
             ],
           ),

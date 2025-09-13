@@ -22,10 +22,7 @@ class SearchService {
         continue;
       }
 
-      if (task.category.name.toLowerCase().contains(lowercaseQuery)) {
-        results.add(task);
-        continue;
-      }
+      // Category search removed - will be handled by categoryId filtering
 
       bool tagMatch = false;
       for (final tag in task.tags) {
@@ -47,14 +44,14 @@ class SearchService {
     return results;
   }
 
-  List<TaskModel> searchTasksByCategory(
-    String category,
+  List<TaskModel> searchTasksByCategoryId(
+    String categoryId,
     List<TaskModel> tasks,
   ) {
-    if (category.trim().isEmpty) return tasks;
+    if (categoryId.trim().isEmpty) return tasks;
 
     return tasks.where((task) {
-      return task.category.name.toLowerCase().contains(category.toLowerCase());
+      return task.categoryId == categoryId;
     }).toList();
   }
 
@@ -132,7 +129,7 @@ class SearchService {
 
   List<TaskModel> advancedSearch({
     String? query,
-    TaskCategory? category,
+    String? categoryId,
     TaskPriority? priority,
     bool? isCompleted,
     bool? isImportant,
@@ -152,8 +149,8 @@ class SearchService {
       results = searchTasks(query, results);
     }
 
-    if (category != null) {
-      results = results.where((task) => task.category == category).toList();
+    if (categoryId != null) {
+      results = results.where((task) => task.categoryId == categoryId).toList();
     }
 
     if (priority != null) {
@@ -206,11 +203,7 @@ class SearchService {
         suggestions.add(task.title);
       }
 
-      if (task.category.name.toLowerCase().contains(
-        partialQuery.toLowerCase(),
-      )) {
-        suggestions.add(task.category.name);
-      }
+      // Category suggestions removed - will be handled separately
 
       for (final tag in task.tags) {
         if (tag.toLowerCase().contains(partialQuery.toLowerCase())) {
@@ -227,8 +220,10 @@ class SearchService {
     final tagCount = <String, int>{};
 
     for (final task in tasks) {
-      categoryCount[task.category.name] =
-          (categoryCount[task.category.name] ?? 0) + 1;
+      if (task.categoryId != null) {
+        categoryCount[task.categoryId] =
+            (categoryCount[task.categoryId] ?? 0) + 1;
+      }
 
       for (final tag in task.tags) {
         tagCount[tag] = (tagCount[tag] ?? 0) + 1;
@@ -263,7 +258,7 @@ class SearchService {
     for (final task in tasks) {
       double score = 0.0;
       final taskText =
-          '${task.title} ${task.description ?? ''} ${task.category.name} ${task.tags.join(' ')} ${task.notes ?? ''}'
+          '${task.title} ${task.description ?? ''} ${task.categoryId} ${task.tags.join(' ')} ${task.notes ?? ''}'
               .toLowerCase();
 
       for (final word in queryWords) {
@@ -353,7 +348,7 @@ class SearchService {
       score += 5.0;
     }
 
-    if (task.category.name.toLowerCase().contains(queryLower)) {
+    if (task.categoryId.toLowerCase().contains(queryLower)) {
       score += 3.0;
     }
 

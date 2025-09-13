@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import '../../data/models/task_model.dart';
 import '../../data/models/weekly_state_model.dart';
+import '../../data/models/recurrence_model.dart';
 import '../../data/services/hive_service.dart';
 import '../../../../core/models/settings_model.dart';
 import '../../../../core/services/settings_service.dart';
@@ -54,23 +55,44 @@ class WeeklyCubit extends Cubit<WeeklyState> {
     int dayOfWeek, {
     bool isImportant = false,
     TimeOfDay? reminderTime,
+    TaskPriority priority = TaskPriority.medium,
+    String categoryId = 'other',
+    String? description,
+    List<String> tags = const [],
+    RecurrenceRule? recurrenceRule,
   }) {
     if (state is WeeklySuccess) {
       final currentState = state as WeeklySuccess;
       final newTask = TaskModel(
         id: _uuid.v4(),
         title: title,
+        description: description,
         isCompleted: false,
         dayOfWeek: dayOfWeek,
         isImportant: isImportant,
         reminderTime: reminderTime,
+        priority: priority,
+        categoryId: categoryId,
+        tags: tags,
+        recurrenceRule: recurrenceRule,
       );
 
       final updatedTasks = List<TaskModel>.from(currentState.weeklyState.tasks)
         ..add(newTask);
+      
+      // If this is a recurring task, generate instances for the next few weeks
+      if (recurrenceRule != null && recurrenceRule.isRecurring) {
+        final recurringInstances = _generateRecurringInstances(newTask, recurrenceRule);
+        updatedTasks.addAll(recurringInstances);
+      }
+      
       _updateState(updatedTasks);
 
     }
+  }
+
+  void addQuickTask(String title, int dayOfWeek) {
+    addTask(title, dayOfWeek);
   }
 
   void toggleTaskCompletion(String taskId) {
@@ -507,6 +529,133 @@ class WeeklyCubit extends Cubit<WeeklyState> {
 
       _updateState([]);
     }
+  }
+
+  /// Generate recurring task instances for the next few weeks/months
+  List<TaskModel> _generateRecurringInstances(TaskModel parentTask, RecurrenceRule recurrenceRule) {
+    final instances = <TaskModel>[];
+    final now = DateTime.now();
+    final endDate = now.add(const Duration(days: 90)); // Generate for next 3 months
+    
+    final occurrences = recurrenceRule.generateOccurrences(now, endDate);
+    
+    for (final occurrence in occurrences) {
+      // Skip the original task date
+      if (occurrence.isAtSameMomentAs(now)) continue;
+      
+      final dayIndex = _mapDateTimeToAppDayIndex(occurrence);
+      if (dayIndex == null) continue; // Skip Friday (day off)
+      
+      final instance = parentTask.copyWith(
+        id: _uuid.v4(),
+        parentRecurrenceId: parentTask.id,
+        dayOfWeek: dayIndex,
+        createdAt: occurrence,
+        isCompleted: false,
+        completedAt: null,
+      );
+      
+      instances.add(instance);
+    }
+    
+    return instances;
+  }
+
+  /// Delete a recurring task series or single instance
+  void deleteRecurringTask(String taskId, {bool deleteEntireSeries = false}) {
+    if (state is WeeklySuccess) {
+      final currentState = state as WeeklySuccess;
+      final task = currentState.weeklyState.tasks.firstWhere((t) => t.id == taskId);
+      
+      List<TaskModel> updatedTasks;
+      
+      if (deleteEntireSeries || task.isRecurrenceParent) {
+        // Delete the entire series
+        final seriesId = task.isRecurrenceParent ? task.id : task.parentRecurrenceId;
+        updatedTasks = currentState.weeklyState.tasks
+            .where((t) => t.id != seriesId && t.parentRecurrenceId != seriesId)
+            .toList();
+      } else {
+        // Delete only this instance
+        updatedTasks = currentState.weeklyState.tasks
+            .where((t) => t.id != taskId)
+            .toList();
+      }
+      
+      _updateState(updatedTasks);
+    }
+  }
+
+  /// Edit a recurring task series or single instance
+  void editRecurringTask(
+    String taskId,
+    String newTitle, {
+    bool? isImportant,
+    TimeOfDay? reminderTime,
+    TaskPriority? priority,
+    String? categoryId,
+    bool editEntireSeries = false,
+  }) {
+    if (state is WeeklySuccess) {
+      final currentState = state as WeeklySuccess;
+      final task = currentState.weeklyState.tasks.firstWhere((t) => t.id == taskId);
+      
+      List<TaskModel> updatedTasks;
+      
+      if (editEntireSeries || task.isRecurrenceParent) {
+        // Edit the entire series
+        final seriesId = task.isRecurrenceParent ? task.id : task.parentRecurrenceId;
+        updatedTasks = currentState.weeklyState.tasks.map((t) {
+          if (t.id == seriesId || t.parentRecurrenceId == seriesId) {
+            return t.copyWith(
+              title: newTitle,
+              isImportant: isImportant ?? t.isImportant,
+              reminderTime: reminderTime,
+              priority: priority ?? t.priority,
+              categoryId: categoryId ?? t.categoryId,
+            );
+          }
+          return t;
+        }).toList();
+      } else {
+        // Edit only this instance - break it from the series
+        updatedTasks = currentState.weeklyState.tasks.map((t) {
+          if (t.id == taskId) {
+            return t.copyWith(
+              title: newTitle,
+              isImportant: isImportant ?? t.isImportant,
+              reminderTime: reminderTime,
+              priority: priority ?? t.priority,
+              categoryId: categoryId ?? t.categoryId,
+              parentRecurrenceId: null, // Break from series
+              recurrenceRule: null,
+            );
+          }
+          return t;
+        }).toList();
+      }
+      
+      _updateState(updatedTasks);
+    }
+  }
+
+  /// Get all tasks in a recurring series
+  List<TaskModel> getRecurringSeries(String taskId) {
+    if (state is WeeklySuccess) {
+      final currentState = state as WeeklySuccess;
+      final task = currentState.weeklyState.tasks.firstWhere((t) => t.id == taskId);
+      
+      if (task.isRecurrenceParent) {
+        return currentState.weeklyState.tasks
+            .where((t) => t.id == taskId || t.parentRecurrenceId == taskId)
+            .toList();
+      } else if (task.isRecurrenceInstance) {
+        return currentState.weeklyState.tasks
+            .where((t) => t.parentRecurrenceId == task.parentRecurrenceId || t.id == task.parentRecurrenceId)
+            .toList();
+      }
+    }
+    return [];
   }
 
   @override

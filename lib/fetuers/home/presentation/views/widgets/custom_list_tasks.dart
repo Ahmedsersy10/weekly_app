@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/task_model.dart';
+import 'package:weekly_dash_board/fetuers/home/data/models/category_model.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/enhanced_task_item.dart';
 
@@ -29,8 +29,8 @@ class _CustomListTasksState extends State<CustomListTasks> {
             return Center(
               child: Text(
                 AppLocalizations.of(context).tr('more.no_tasks_for_this_day'),
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
                 ),
@@ -38,12 +38,12 @@ class _CustomListTasksState extends State<CustomListTasks> {
             );
           }
 
-          final tasksByCategory = <TaskCategory, List<TaskModel>>{};
+          final tasksByCategory = <String, List<TaskModel>>{};
           for (final task in tasks) {
-            if (!tasksByCategory.containsKey(task.category)) {
-              tasksByCategory[task.category] = [];
+            if (!tasksByCategory.containsKey(task.categoryId)) {
+              tasksByCategory[task.categoryId] = [];
             }
-            tasksByCategory[task.category]!.add(task);
+            tasksByCategory[task.categoryId]!.add(task);
           }
 
           final sortedCategories = tasksByCategory.keys.toList()
@@ -55,8 +55,11 @@ class _CustomListTasksState extends State<CustomListTasks> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...sortedCategories.map((category) {
-                final categoryTasks = tasksByCategory[category]!;
+              ...sortedCategories.map((categoryId) {
+                final categoryTasks = tasksByCategory[categoryId]!;
+                final category = TaskCategoryModel.getDefaultCategories()
+                    .firstWhere((cat) => cat.id == categoryId, 
+                        orElse: () => TaskCategoryModel.getDefaultCategories().last);
                 final importantTasks = categoryTasks
                     .where((t) => t.isImportant)
                     .toList();
@@ -67,6 +70,60 @@ class _CustomListTasksState extends State<CustomListTasks> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Category header
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: category.color.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: category.color.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Icon(
+                              category.icon,
+                              color: category.color,
+                              size: 16,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            category.nameAr,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: category.color.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              '${categoryTasks.length}',
+                              style: TextStyle(
+                                color: category.color,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     if (importantTasks.isNotEmpty) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -75,9 +132,9 @@ class _CustomListTasksState extends State<CustomListTasks> {
                         ),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.star,
-                              color: AppColors.warning,
+                              color: Theme.of(context).colorScheme.secondary,
                               size: 16,
                             ),
                             const SizedBox(width: 6),
@@ -87,7 +144,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                               ).tr('settings.Important'),
 
                               style: TextStyle(
-                                color: AppColors.textPrimary.withOpacity(0.7),
+                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
                               ),
@@ -113,9 +170,9 @@ class _CustomListTasksState extends State<CustomListTasks> {
                         ),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.list,
-                              color: AppColors.primary,
+                              color: Theme.of(context).colorScheme.primary,
                               size: 16,
                             ),
                             const SizedBox(width: 6),
@@ -124,7 +181,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                                 context,
                               ).tr('settings.AsRegular'),
                               style: TextStyle(
-                                color: AppColors.textPrimary.withOpacity(0.7),
+                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
                               ),
@@ -153,22 +210,24 @@ class _CustomListTasksState extends State<CustomListTasks> {
     );
   }
 
-  int _getCategoryPriority(TaskCategory category) {
-    switch (category) {
-      case TaskCategory.work:
+  int _getCategoryPriority(String categoryId) {
+    switch (categoryId) {
+      case 'work':
         return 1;
-      case TaskCategory.study:
+      case 'study':
         return 2;
-      case TaskCategory.health:
+      case 'health':
         return 3;
-      case TaskCategory.finance:
+      case 'finance':
         return 4;
-      case TaskCategory.personal:
+      case 'personal':
         return 5;
-      case TaskCategory.home:
+      case 'home':
         return 6;
-      case TaskCategory.other:
+      case 'other':
         return 7;
+      default:
+        return 8;
     }
   }
 
@@ -185,11 +244,11 @@ class _CustomListTasksState extends State<CustomListTasks> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: AppColors.surface,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               title: Text(
                 AppLocalizations.of(context).tr('settings.editTask'),
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -201,13 +260,13 @@ class _CustomListTasksState extends State<CustomListTasks> {
                       children: [
                         TextField(
                           controller: titleController,
-                          style: const TextStyle(color: AppColors.textPrimary),
-                          cursorColor: AppColors.textPrimary,
+                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                          cursorColor: Theme.of(context).colorScheme.primary,
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(
                               context,
                             ).tr('settings.enterTaskTitle'),
-                            hintStyle: const TextStyle(color: AppColors.textTertiary),
+                            hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
                             border: customOutlineInputBorder(),
                             enabledBorder: customOutlineInputBorder(),
                             focusedBorder: customOutlineInputBorder(),
@@ -217,22 +276,25 @@ class _CustomListTasksState extends State<CustomListTasks> {
                         const SizedBox(height: 12),
                         Container(
                           decoration: BoxDecoration(
-                            color: AppColors.primary,
+                            color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: CheckboxListTile(
                             value: isImportant,
-                            onChanged: (value) =>
-                                setState(() => isImportant = value ?? false),
+                            onChanged: (value) {
+                              setState(() {
+                                isImportant = value ?? false;
+                              });
+                            },
                             title: Text(
                               AppLocalizations.of(
                                 context,
                               ).tr('settings.markAsImportant'),
                               style: AppStyles.styleSemiBold20(context),
                             ),
-                            activeColor: AppColors.white,
-                            checkColor: AppColors.primary,
-                            side: const BorderSide(color: AppColors.white),
+                            activeColor: Theme.of(context).colorScheme.onPrimary,
+                            checkColor: Theme.of(context).colorScheme.primary,
+                            side: BorderSide(color: Theme.of(context).colorScheme.onPrimary),
                             checkboxShape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
                             ),
@@ -245,10 +307,10 @@ class _CustomListTasksState extends State<CustomListTasks> {
                         const SizedBox(height: 12),
                         Container(
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: AppColors.primary.withOpacity(0.3),
+                              color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
                             ),
                           ),
                           child: Padding(
@@ -262,24 +324,24 @@ class _CustomListTasksState extends State<CustomListTasks> {
                                 Row(
                                   spacing: 10,
                                   children: [
-                                    const Icon(
+                                    Icon(
                                       Icons.notifications,
-                                      color: AppColors.primary,
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                     Text(
                                       AppLocalizations.of(
                                         context,
                                       ).tr('settings.reminderTime'),
-                                      style: const TextStyle(
-                                        color: Colors.black,
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onSurface,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
                                     ),
                                     IconButton(
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.access_time,
-                                        color: AppColors.primary,
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
                                       onPressed: () async {
                                         final selectedTime =
@@ -313,7 +375,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                                             context,
                                           ).tr('settings.noReminder'),
                                     style: TextStyle(
-                                      color: Colors.black.withOpacity(0.7),
+                                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                                       fontSize: 14,
                                     ),
                                   ),
@@ -332,7 +394,7 @@ class _CustomListTasksState extends State<CustomListTasks> {
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(
                     AppLocalizations.of(context).tr('settings.cancel'),
-                    style: const TextStyle(color: AppColors.primary),
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 ElevatedButton(
@@ -349,8 +411,8 @@ class _CustomListTasksState extends State<CustomListTasks> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                   child: Text(AppLocalizations.of(context).tr('settings.save')),
                 ),

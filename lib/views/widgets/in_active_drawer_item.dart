@@ -3,11 +3,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 
 import 'package:weekly_dash_board/models/drawer_item_model.dart';
-import 'package:weekly_dash_board/util/app_style.dart';
 
 class inActiveDrawerItem extends StatelessWidget {
   const inActiveDrawerItem({super.key, required this.drawerItemModel});
@@ -15,15 +14,16 @@ class inActiveDrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: SvgPicture.asset(drawerItemModel.image, color: AppColors.primary),
+      leading: SvgPicture.asset(drawerItemModel.image, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
       title: FittedBox(
         fit: BoxFit.scaleDown,
         alignment: Alignment.centerLeft,
         child: Text(
           AppLocalizations.of(context).tr(drawerItemModel.title),
-          style: AppStyles.styleRegular16(
-            context,
-          ).copyWith(color: const Color.fromARGB(255, 71, 67, 67)),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
+          ),
         ),
       ),
     );

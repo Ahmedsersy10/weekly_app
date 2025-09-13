@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-
-enum TaskCategory { work, study, health, personal, finance, home, other }
+import 'recurrence_model.dart';
 
 enum TaskPriority { low, medium, high, urgent }
 
@@ -12,7 +11,7 @@ class TaskModel extends Equatable {
   final bool isCompleted;
   final int dayOfWeek; // 0 = Saturday, 1 = Sunday, ..., 5 = Thursday
   final bool isImportant;
-  final TaskCategory category;
+  final String categoryId; // Reference to TaskCategoryModel.id
   final TaskPriority priority;
   final DateTime? dueDate;
   final DateTime createdAt;
@@ -21,6 +20,8 @@ class TaskModel extends Equatable {
   final List<String> tags;
   final String? notes;
   final TimeOfDay? reminderTime;
+  final RecurrenceRule? recurrenceRule;
+  final String? parentRecurrenceId; // For linking recurring task instances
 
   TaskModel({
     required this.id,
@@ -29,7 +30,7 @@ class TaskModel extends Equatable {
     required this.isCompleted,
     required this.dayOfWeek,
     this.isImportant = false,
-    this.category = TaskCategory.other,
+    this.categoryId = 'other',
     this.priority = TaskPriority.medium,
     this.dueDate,
     DateTime? createdAt,
@@ -38,6 +39,8 @@ class TaskModel extends Equatable {
     this.tags = const [],
     this.notes,
     this.reminderTime,
+    this.recurrenceRule,
+    this.parentRecurrenceId,
   }) : createdAt = createdAt ?? DateTime.now();
 
   TaskModel copyWith({
@@ -47,7 +50,7 @@ class TaskModel extends Equatable {
     bool? isCompleted,
     int? dayOfWeek,
     bool? isImportant,
-    TaskCategory? category,
+    String? categoryId,
     TaskPriority? priority,
     DateTime? dueDate,
     DateTime? createdAt,
@@ -56,6 +59,8 @@ class TaskModel extends Equatable {
     List<String>? tags,
     String? notes,
     TimeOfDay? reminderTime,
+    RecurrenceRule? recurrenceRule,
+    String? parentRecurrenceId,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -64,7 +69,7 @@ class TaskModel extends Equatable {
       isCompleted: isCompleted ?? this.isCompleted,
       dayOfWeek: dayOfWeek ?? this.dayOfWeek,
       isImportant: isImportant ?? this.isImportant,
-      category: category ?? this.category,
+      categoryId: categoryId ?? this.categoryId,
       priority: priority ?? this.priority,
       dueDate: dueDate ?? this.dueDate,
       createdAt: createdAt ?? this.createdAt,
@@ -73,6 +78,8 @@ class TaskModel extends Equatable {
       tags: tags ?? this.tags,
       notes: notes ?? this.notes,
       reminderTime: reminderTime ?? this.reminderTime,
+      recurrenceRule: recurrenceRule ?? this.recurrenceRule,
+      parentRecurrenceId: parentRecurrenceId ?? this.parentRecurrenceId,
     );
   }
 
@@ -104,7 +111,7 @@ class TaskModel extends Equatable {
     isCompleted,
     dayOfWeek,
     isImportant,
-    category,
+    categoryId,
     priority,
     dueDate,
     createdAt,
@@ -113,5 +120,13 @@ class TaskModel extends Equatable {
     tags,
     notes,
     reminderTime,
+    recurrenceRule,
+    parentRecurrenceId,
   ];
+
+  bool get isRecurring => recurrenceRule != null && recurrenceRule!.isRecurring;
+
+  bool get isRecurrenceParent => isRecurring && parentRecurrenceId == null;
+
+  bool get isRecurrenceInstance => parentRecurrenceId != null;
 }

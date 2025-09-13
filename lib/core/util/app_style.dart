@@ -1,85 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
+import 'package:weekly_dash_board/core/util/app_text_styles.dart';
 
 abstract class AppStyles {
-  static TextStyle styleRegular16(context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 16),
-      fontWeight: FontWeight.w400,
-    );
+  static TextStyle styleRegular16(BuildContext context) {
+    return AppTextStyles.styleRegular16(context);
   }
 
   static TextStyle styleBold16(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 16),
-      fontWeight: FontWeight.w700,
-    );
+    return AppTextStyles.styleBold16(context);
   }
 
   static TextStyle styleMedium16(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 16),
-      fontWeight: FontWeight.w500,
-    );
+    return AppTextStyles.styleMedium16(context);
   }
 
   static TextStyle styleMedium20(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 20),
-      fontWeight: FontWeight.w500,
-    );
+    return AppTextStyles.styleMedium20(context);
   }
 
   static TextStyle styleSemiBold16(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 16),
-      fontWeight: FontWeight.w600,
-    );
+    return AppTextStyles.styleSemiBold16(context);
   }
 
   static TextStyle styleSemiBold20(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 20),
-      fontWeight: FontWeight.w600,
-    );
+    return AppTextStyles.styleSemiBold20(context);
   }
 
   static TextStyle styleRegular12(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 12),
-      fontWeight: FontWeight.w400,
-    );
+    return AppTextStyles.styleRegular12(context);
   }
 
   static TextStyle styleSemiBold24(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 24),
-      fontWeight: FontWeight.w600,
-    );
+    return AppTextStyles.styleSemiBold24(context);
   }
 
   static TextStyle styleRegular14(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 14),
-      fontWeight: FontWeight.w400,
-    );
+    return AppTextStyles.styleRegular14(context);
   }
 
   static TextStyle styleSemiBold18(BuildContext context) {
-    return TextStyle(
-      color: AppColors.white,
-      fontSize: getResponsiveFontSize(context, fontSize: 18),
-      fontWeight: FontWeight.w600,
-    );
+    return AppTextStyles.styleSemiBold18(context);
   }
 }
 
@@ -94,8 +54,6 @@ double getResponsiveFontSize(context, {required double fontSize}) {
 }
 
 double getScaleFactor(context) {
-
-
   double width = MediaQuery.sizeOf(context).width;
   if (width < 700) {
     return width / 650;

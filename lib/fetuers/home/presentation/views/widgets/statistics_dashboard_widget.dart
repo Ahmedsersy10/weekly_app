@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 import 'package:weekly_dash_board/core/services/statistics_service.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/task_model.dart';
@@ -60,10 +60,11 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
         children: [
           Text(
             AppLocalizations.of(context).tr('more.productivity_dashboard'),
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 20),
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
             ),
           ),
           const SizedBox(height: 20),
@@ -75,7 +76,6 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
 
           _buildDayProductivityChart(),
           const SizedBox(height: 24),
-
         ],
       ),
     );
@@ -83,15 +83,22 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
 
   Widget _buildCompletionRateChart() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textPrimary.withOpacity(0.1),
-            blurRadius: 8,
+            color: Theme.of(context).shadowColor.withOpacity(0.08),
+            blurRadius: 12,
             offset: const Offset(0, 4),
+            spreadRadius: 0,
+          ),
+          BoxShadow(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+            spreadRadius: 0,
           ),
         ],
       ),
@@ -100,10 +107,10 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
         children: [
           Text(
             AppLocalizations.of(context).tr('more.completion_rate_trend'),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 20),
@@ -157,7 +164,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                       );
                     }).toList(),
                     isCurved: true,
-                    color: AppColors.primary,
+                    color: Theme.of(context).colorScheme.primary,
                     barWidth: 3,
                     dotData: const FlDotData(show: true),
                   ),
@@ -176,11 +183,11 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textPrimary.withOpacity(0.1),
+            color: Theme.of(context).shadowColor.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -191,10 +198,10 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
         children: [
           Text(
             AppLocalizations.of(context).tr('more.daily_productivity'),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 20),
@@ -250,7 +257,7 @@ class _StatisticsDashboardWidgetState extends State<StatisticsDashboardWidget> {
                     barRods: [
                       BarChartRodData(
                         toY: entry.value.completionRate,
-                        color: AppColors.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         width: 20,
                         borderRadius: const BorderRadius.vertical(
                           top: Radius.circular(4),

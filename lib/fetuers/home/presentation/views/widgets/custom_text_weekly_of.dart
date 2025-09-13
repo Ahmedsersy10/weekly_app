@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 
 class CustomTextWeeklyOf extends StatelessWidget {
   const CustomTextWeeklyOf({super.key, required this.title});
@@ -8,7 +7,7 @@ class CustomTextWeeklyOf extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.surface),
+      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary),
     );
   }
 }

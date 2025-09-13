@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 
 class AboutSection extends StatefulWidget {
   const AboutSection({super.key});
@@ -43,7 +42,7 @@ class _AboutSectionState extends State<AboutSection> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.textPrimary.withOpacity(0.1),
+            color: colorScheme.shadow.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -81,7 +80,7 @@ class _AboutSectionState extends State<AboutSection> {
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.calendar_today, color: AppColors.textOnPrimary, size: 40),
+                  child: Icon(Icons.calendar_today, color: colorScheme.onPrimary, size: 40),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -160,16 +159,16 @@ class _AboutSectionState extends State<AboutSection> {
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: AppColors.success.withOpacity(0.1),
+              color: colorScheme.tertiary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.success.withOpacity(0.3)),
+              border: Border.all(color: colorScheme.tertiary.withOpacity(0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   AppLocalizations.of(context).tr('more.key_features'),
-                  style: AppStyles.styleSemiBold16(context).copyWith(color: AppColors.success),
+                  style: AppStyles.styleSemiBold16(context).copyWith(color: colorScheme.tertiary),
                 ),
                 const SizedBox(height: 12),
                 _buildFeatureItem(AppLocalizations.of(context).tr('more.feature_weekly_planning')),

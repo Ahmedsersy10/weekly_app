@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_tasks.dart';
+import '../../../data/models/task_model.dart';
+import '../../../data/models/recurrence_model.dart';
+import '../../../data/models/category_model.dart';
+import 'package:weekly_dash_board/util/app_icons.dart';
 
 class CustomCardHomeView extends StatelessWidget {
   final int dayIndex;
@@ -25,31 +28,39 @@ class CustomCardHomeView extends StatelessWidget {
         if (state is WeeklySuccess) {
           final dayStats = state.weeklyState.dayStats[dayIndex];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Container(
               constraints: const BoxConstraints(
-                minHeight: 100,
+                minHeight: 120,
                 minWidth: double.infinity,
               ),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: const [
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 5,
-                    offset: Offset(1, 2),
-                    spreadRadius: 3,
+                    color: Theme.of(context).shadowColor.withOpacity(0.08),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withOpacity(0.1),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                    spreadRadius: 0,
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -57,9 +68,18 @@ class CustomCardHomeView extends StatelessWidget {
                           children: [
                             Text(
                               AppLocalizations.of(context).tr(dayStats.dayName),
-                              style: AppStyles.styleSemiBold24(
-                                context,
-                              ).copyWith(color: AppColors.textPrimary),
+                              style: Theme.of(context).textTheme.displaySmall!
+                                  .copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                    fontSize: AppTheme.getResponsiveFontSize(
+                                      context,
+                                      fontSize: 26,
+                                    ),
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.5,
+                                  ),
                             ),
                             const SizedBox(width: 8),
                             Container(
@@ -69,21 +89,31 @@ class CustomCardHomeView extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 color: _isCurrentDay(dayStats.date)
-                                    ? AppColors.primary
-                                    : AppColors.surface,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: Colors.black38,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.outline.withOpacity(0.5),
                                   width: 1,
                                 ),
                               ),
                               child: Text(
                                 dayStats.date,
-                                style: AppStyles.styleSemiBold16(context)
+                                style: Theme.of(context).textTheme.titleLarge!
                                     .copyWith(
                                       color: _isCurrentDay(dayStats.date)
-                                          ? AppColors.surface
-                                          : AppColors.textPrimary,
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                      fontSize: AppTheme.getResponsiveFontSize(
+                                        context,
+                                        fontSize: 16,
+                                      ),
                                     ),
                               ),
                             ),
@@ -91,42 +121,72 @@ class CustomCardHomeView extends StatelessWidget {
                         ),
                         Text(
                           '${AppLocalizations.of(context).tr('common.done')} : ${dayStats.completedTasks} / ${dayStats.totalTasks}',
-                          style: AppStyles.styleSemiBold20(
-                            context,
-                          ).copyWith(color: AppColors.textPrimary),
+                          style: Theme.of(context).textTheme.headlineMedium!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontSize: AppTheme.getResponsiveFontSize(
+                                  context,
+                                  fontSize: 20,
+                                ),
+                              ),
                         ),
                       ],
                     ),
                   ),
-                  const Divider(
-                    height: 20,
-                    thickness: 2,
-                    color: AppColors.textPrimary,
+                  const SizedBox(height: 16),
+                  Container(
+                    height: 1,
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.3),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 16),
                   _DayContent(dayIndex: dayIndex),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomButtonAddTasks(dayIndex: dayIndex),
-                      const SizedBox(width: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                        child: IconButton(
-                          onPressed: () => _confirmClearDay(context, dayIndex),
-                          icon: const Icon(
-                            Icons.delete,
-                            color: AppColors.surface,
-                            size: 20,
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButtonAddTasks(dayIndex: dayIndex),
+                        const SizedBox(width: 16),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withOpacity(0.3),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            onPressed: () =>
+                                _confirmClearDay(context, dayIndex),
+                            icon: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              size: 20,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -143,21 +203,24 @@ void _confirmClearDay(BuildContext context, int dayIndex) {
     context: context,
     builder: (ctx) {
       return AlertDialog(
-        backgroundColor: AppColors.surface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text(
           AppLocalizations.of(ctx).tr('settings.clearDayTasksTitle'),
-          style: AppStyles.styleSemiBold24(ctx).copyWith(color: Colors.black),
+          style: Theme.of(ctx).textTheme.displaySmall!.copyWith(
+            color: Theme.of(ctx).colorScheme.onSurface,
+            fontSize: AppTheme.getResponsiveFontSize(ctx, fontSize: 24),
+          ),
         ),
         content: Text(
           AppLocalizations.of(ctx).tr('settings.clearDayTasksMessage'),
-          style: const TextStyle(color: Colors.black),
+          style: TextStyle(color: Theme.of(ctx).colorScheme.onSurface),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: Text(
               AppLocalizations.of(ctx).tr('settings.cancel'),
-              style: const TextStyle(color: AppColors.primary),
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
           ElevatedButton(
@@ -166,8 +229,8 @@ void _confirmClearDay(BuildContext context, int dayIndex) {
               Navigator.of(ctx).pop();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.surface,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
             child: Text(AppLocalizations.of(ctx).tr('settings.clear')),
           ),
@@ -186,20 +249,39 @@ class CustomButtonAddTasks extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(32),
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: IconButton(
         onPressed: () => _showAddTaskDialog(context),
-        icon: const Icon(Icons.add, color: AppColors.surface, size: 28),
+        icon: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.onPrimary,
+          size: 24,
+        ),
       ),
     );
   }
 
   void _showAddTaskDialog(BuildContext context) {
     final TextEditingController taskController = TextEditingController();
-    bool isImportant = false;
+    TaskPriority selectedPriority = TaskPriority.medium;
+    String selectedCategoryId = 'other';
     TimeOfDay? reminderTime;
+    bool showAdvancedOptions = false;
+    RecurrenceType selectedRecurrenceType = RecurrenceType.none;
+    int recurrenceInterval = 1;
+    List<int> selectedWeekdays = [];
+    RecurrenceEndType recurrenceEndType = RecurrenceEndType.never;
+    int? maxOccurrences;
+    DateTime? recurrenceEndDate;
 
     showDialog(
       context: context,
@@ -207,136 +289,498 @@ class CustomButtonAddTasks extends StatelessWidget {
         return AlertDialog(
           title: Text(
             AppLocalizations.of(context).tr('settings.addNewTask'),
-            style: AppStyles.styleSemiBold24(
-              context,
-            ).copyWith(color: Colors.black),
+            style: Theme.of(context).textTheme.displaySmall!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 24),
+            ),
           ),
-          backgroundColor: AppColors.surface,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           content: StatefulBuilder(
             builder: (context, setState) {
               return SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Title field - first with auto-focus
                     TextField(
                       controller: taskController,
-                      style: const TextStyle(color: Colors.black),
-                      cursorColor: Colors.black,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      cursorColor: Theme.of(context).colorScheme.primary,
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(
                           context,
                         ).tr('settings.enterTaskTitle'),
-                        hintStyle: const TextStyle(color: Colors.black54),
-                        border: customOutlineInputBorder(),
-                        enabledBorder: customOutlineInputBorder(),
-                        focusedBorder: customOutlineInputBorder(),
+                        hintStyle: TextStyle(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.6),
+                        ),
+                        border: customOutlineInputBorder(context),
+                        enabledBorder: customOutlineInputBorder(context),
+                        focusedBorder: customOutlineInputBorder(context),
                       ),
                       autofocus: true,
                     ),
-                    const SizedBox(height: 12),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: CheckboxListTile(
-                        value: isImportant,
-                        onChanged: (value) =>
-                            setState(() => isImportant = value ?? false),
-                        title: Text(
-                          AppLocalizations.of(
-                            context,
-                          ).tr('settings.markAsImportant'),
-                          style: AppStyles.styleSemiBold20(context),
-                        ),
-                        activeColor: AppColors.surface,
-                        checkColor: AppColors.primary,
-                        side: const BorderSide(color: AppColors.surface),
-                        checkboxShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 4,
-                        ),
+                    const SizedBox(height: 16),
+
+                    // Priority selection with clickable icons
+                    Text(
+                      'الأولوية',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: AppColors.primary.withOpacity(0.3),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              spacing: 10,
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: TaskPriority.values.map((priority) {
+                        final isSelected = selectedPriority == priority;
+                        return GestureDetector(
+                          onTap: () =>
+                              setState(() => selectedPriority = priority),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.outline.withOpacity(0.5),
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(
-                                  Icons.notifications,
-                                  color: AppColors.primary,
+                                AppIcons.createPriorityIcon(
+                                  priority.name,
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.surface
+                                      : Theme.of(context).colorScheme.primary,
+                                  size: AppIcons.large,
                                 ),
+                                const SizedBox(height: 4),
                                 Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  ).tr('settings.reminderTime'),
-                                  style: const TextStyle(
-                                    color: Colors.black,
+                                  _getPriorityLabel(priority),
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Theme.of(context).colorScheme.surface
+                                        : Colors.black,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 14,
                                   ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.access_time,
-                                    color: AppColors.primary,
-                                  ),
-                                  onPressed: () async {
-                                    final selectedTime = await showTimePicker(
-                                      context: context,
-                                      initialTime:
-                                          reminderTime ??
-                                          const TimeOfDay(hour: 9, minute: 0),
-                                    );
-                                    if (selectedTime != null) {
-                                      setState(
-                                        () => reminderTime = selectedTime,
-                                      );
-                                    }
-                                  },
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 32,
-                                bottom: 8,
-                              ),
-                              child: Text(
-                                reminderTime != null
-                                    ? '${reminderTime!.hour.toString().padLeft(2, '0')}:${reminderTime!.minute.toString().padLeft(2, '0')}'
-                                    : AppLocalizations.of(
-                                        context,
-                                      ).tr('settings.noReminder'),
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.7),
-                                  fontSize: 14,
-                                ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Collapsible advanced options
+                    GestureDetector(
+                      onTap: () => setState(
+                        () => showAdvancedOptions = !showAdvancedOptions,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              showAdvancedOptions
+                                  ? AppIcons.collapse
+                                  : AppIcons.expand,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'خيارات متقدمة',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
+
+                    if (showAdvancedOptions) ...[
+                      const SizedBox(height: 16),
+
+                      // Category selection
+                      Text(
+                        AppLocalizations.of(context).tr('settings.category'),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: TaskCategoryModel.getDefaultCategories().map((
+                          category,
+                        ) {
+                          final isSelected = selectedCategoryId == category.id;
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedCategoryId = category.id;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(
+                                          context,
+                                        ).colorScheme.outline.withOpacity(0.5),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  AppIcons.createCategoryIcon(
+                                    category.name,
+                                    color: isSelected
+                                        ? Theme.of(
+                                            context,
+                                          ).colorScheme.onPrimary
+                                        : Theme.of(context).colorScheme.primary,
+                                    size: AppIcons.small,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    _getCategoryLabel(category),
+                                    style: TextStyle(
+                                      color: isSelected
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Recurrence selection
+                      Text(
+                        'التكرار',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: RecurrenceType.values.map((type) {
+                          final isSelected = selectedRecurrenceType == type;
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () =>
+                                  setState(() => selectedRecurrenceType = type),
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 4),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.outline
+                                              .withOpacity(0.5),
+                                  ),
+                                ),
+                                child: Text(
+                                  _getRecurrenceTypeLabel(type),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Theme.of(context).colorScheme.surface
+                                        : Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+
+                      // Weekly recurrence options
+                      if (selectedRecurrenceType == RecurrenceType.weekly) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          'أيام الأسبوع',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          children: [
+                            for (int i = 0; i < 6; i++)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if (selectedWeekdays.contains(i)) {
+                                      selectedWeekdays.remove(i);
+                                    } else {
+                                      selectedWeekdays.add(i);
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: selectedWeekdays.contains(i)
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: selectedWeekdays.contains(i)
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : Theme.of(context)
+                                                .colorScheme
+                                                .outline
+                                                .withOpacity(0.5),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    _getDayLabel(i),
+                                    style: TextStyle(
+                                      color: selectedWeekdays.contains(i)
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+
+                      // Recurrence interval
+                      if (selectedRecurrenceType != RecurrenceType.none) ...[
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Text(
+                              selectedRecurrenceType == RecurrenceType.daily
+                                  ? 'كل'
+                                  : 'كل',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SizedBox(
+                              width: 60,
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: '1',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                    borderSide: BorderSide(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.outline,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  final parsed = int.tryParse(value);
+                                  if (parsed != null && parsed > 0) {
+                                    setState(() => recurrenceInterval = parsed);
+                                  }
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              selectedRecurrenceType == RecurrenceType.daily
+                                  ? 'يوم'
+                                  : 'أسبوع',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      const SizedBox(height: 16),
+
+                      // Reminder time
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.notifications,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    ).tr('settings.reminderTime'),
+                                    style: TextStyle(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.access_time,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                    ),
+                                    onPressed: () async {
+                                      final selectedTime = await showTimePicker(
+                                        context: context,
+                                        initialTime:
+                                            reminderTime ??
+                                            const TimeOfDay(hour: 9, minute: 0),
+                                      );
+                                      if (selectedTime != null) {
+                                        setState(
+                                          () => reminderTime = selectedTime,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 32,
+                                  bottom: 8,
+                                ),
+                                child: Text(
+                                  reminderTime != null
+                                      ? '${reminderTime!.hour.toString().padLeft(2, '0')}:${reminderTime!.minute.toString().padLeft(2, '0')}'
+                                      : AppLocalizations.of(
+                                          context,
+                                        ).tr('settings.noReminder'),
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withOpacity(0.7),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               );
@@ -347,24 +791,71 @@ class CustomButtonAddTasks extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 AppLocalizations.of(context).tr('settings.cancel'),
-                style: const TextStyle(color: AppColors.primary),
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+            ),
+            // Quick Add button
+            TextButton(
+              onPressed: () {
+                if (taskController.text.trim().isNotEmpty) {
+                  context.read<WeeklyCubit>().addQuickTask(
+                    taskController.text.trim(),
+                    dayIndex,
+                  );
+                  Navigator.of(context).pop();
+                  // Show snackbar for quick add confirmation
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text(
+                        'تم إضافة المهمة بسرعة! يمكنك تعديلها لاحقاً',
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
+              child: Text(
+                'إضافة سريعة',
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
             ),
             ElevatedButton(
               onPressed: () {
                 if (taskController.text.trim().isNotEmpty) {
+                  RecurrenceRule? recurrenceRule;
+
+                  if (selectedRecurrenceType != RecurrenceType.none) {
+                    recurrenceRule = RecurrenceRule(
+                      type: selectedRecurrenceType,
+                      interval: recurrenceInterval,
+                      weekdays: selectedRecurrenceType == RecurrenceType.weekly
+                          ? selectedWeekdays
+                          : [dayIndex],
+                      endType: recurrenceEndType,
+                      maxOccurrences: maxOccurrences,
+                      endDate: recurrenceEndDate,
+                      startDate: DateTime.now(),
+                    );
+                  }
+
                   context.read<WeeklyCubit>().addTask(
                     taskController.text.trim(),
                     dayIndex,
-                    isImportant: isImportant,
+                    priority: selectedPriority,
+                    categoryId: selectedCategoryId,
                     reminderTime: reminderTime,
+                    isImportant:
+                        selectedPriority == TaskPriority.high ||
+                        selectedPriority == TaskPriority.urgent,
+                    recurrenceRule: recurrenceRule,
                   );
                   Navigator.of(context).pop();
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.surface,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
               ),
               child: Text(AppLocalizations.of(context).tr('settings.add')),
             ),
@@ -374,10 +865,59 @@ class CustomButtonAddTasks extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder customOutlineInputBorder() {
-    return const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black),
-      borderRadius: BorderRadius.all(Radius.circular(8)),
+  String _getPriorityLabel(TaskPriority priority) {
+    switch (priority) {
+      case TaskPriority.low:
+        return 'منخفضة';
+      case TaskPriority.medium:
+        return 'متوسطة';
+      case TaskPriority.high:
+        return 'عالية';
+      case TaskPriority.urgent:
+        return 'عاجلة';
+    }
+  }
+
+  String _getCategoryLabel(TaskCategoryModel category) {
+    return category.nameAr;
+  }
+
+  String _getRecurrenceTypeLabel(RecurrenceType type) {
+    switch (type) {
+      case RecurrenceType.none:
+        return 'بدون';
+      case RecurrenceType.daily:
+        return 'يومي';
+      case RecurrenceType.weekly:
+        return 'أسبوعي';
+      case RecurrenceType.custom:
+        return 'مخصص';
+    }
+  }
+
+  String _getDayLabel(int dayIndex) {
+    switch (dayIndex) {
+      case 0:
+        return 'سبت';
+      case 1:
+        return 'أحد';
+      case 2:
+        return 'اثنين';
+      case 3:
+        return 'ثلاثاء';
+      case 4:
+        return 'أربعاء';
+      case 5:
+        return 'خميس';
+      default:
+        return '';
+    }
+  }
+
+  OutlineInputBorder customOutlineInputBorder(BuildContext context) {
+    return OutlineInputBorder(
+      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
     );
   }
 }
@@ -398,11 +938,16 @@ class _DayContent extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.check_circle, color: AppColors.primary),
+                Icon(
+                  Icons.check_circle,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   AppLocalizations.of(context).tr('settings.allTasksDone'),
-                  style: const TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ],
             ),

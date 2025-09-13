@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/core/util/app_style.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
@@ -29,7 +28,7 @@ class AchievementSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.textPrimary.withOpacity(0.1),
+                  color: colorScheme.shadow.withOpacity(0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -68,7 +67,7 @@ class AchievementSection extends StatelessWidget {
                         AppLocalizations.of(context).tr('more.completionRate'),
                         '${stats.overallCompletionRate.toInt()}%',
                         Icons.trending_up,
-                        AppColors.primary,
+                        colorScheme.primary,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -78,7 +77,7 @@ class AchievementSection extends StatelessWidget {
                         AppLocalizations.of(context).tr('more.currentStreak'),
                         '${cubit.getCurrentStreak()} days',
                         Icons.local_fire_department,
-                        AppColors.warning,
+                        colorScheme.error,
                       ),
                     ),
                   ],
@@ -94,7 +93,7 @@ class AchievementSection extends StatelessWidget {
                         AppLocalizations.of(context).tr('more.totalTasks'),
                         '${stats.totalTasksCreated}',
                         Icons.list,
-                        AppColors.info,
+                        colorScheme.secondary,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -106,7 +105,7 @@ class AchievementSection extends StatelessWidget {
                         ).tr('statistics.tasksCompleted'),
                         '${stats.totalTasksCompleted}',
                         Icons.check_circle,
-                        AppColors.success,
+                        colorScheme.tertiary,
                       ),
                     ),
                   ],

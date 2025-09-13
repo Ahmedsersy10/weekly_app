@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 
 class CustomTextOnTap extends StatelessWidget {
   const CustomTextOnTap({super.key, this.title, this.onTap});
@@ -11,7 +11,9 @@ class CustomTextOnTap extends StatelessWidget {
       onTap: onTap,
       child: Text(
         title ?? 'Forget Password',
-        style: AppStyles.styleMedium16(context),
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+          fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
+        ),
       ),
     );
   }

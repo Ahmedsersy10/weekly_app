@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
 import 'package:weekly_dash_board/core/util/app_color.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 
 // ignore: must_be_immutable
 class CustomTextFormField extends StatelessWidget {
@@ -20,7 +20,12 @@ class CustomTextFormField extends StatelessWidget {
       spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: AppStyles.styleMedium20(context)),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+            fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 20),
+          ),
+        ),
         TextFormField(
           obscureText: obscureText!,
           validator: (value) {
@@ -42,7 +47,10 @@ class CustomTextFormField extends StatelessWidget {
               borderSide: const BorderSide(color: AppColors.error, width: 1),
             ),
             hintText: hintText,
-            hintStyle: AppStyles.styleSemiBold20(context),
+            hintStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
+              fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 20),
+              color: Theme.of(context).hintColor,
+            ),
           ),
         ),
       ],

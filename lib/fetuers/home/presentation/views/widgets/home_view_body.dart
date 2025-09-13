@@ -1,8 +1,8 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
 import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/util/app_theme.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_contaner_weekly_of.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_view_days.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/statistics_dashboard_widget.dart';
@@ -15,12 +15,9 @@ class HomeViewBody extends StatefulWidget {
   State<HomeViewBody> createState() => HomeViewBodyState();
 }
 
-class HomeViewBodyState extends State<HomeViewBody>
-    with TickerProviderStateMixin {
+class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  final Map<int, GlobalKey> _dayKeys = {
-    for (int i = 0; i < 6; i++) i: GlobalKey(),
-  };
+  final Map<int, GlobalKey> _dayKeys = {for (int i = 0; i < 6; i++) i: GlobalKey()};
 
   late TabController _tabController;
   int _currentTabIndex = 0;
@@ -48,10 +45,10 @@ class HomeViewBodyState extends State<HomeViewBody>
       children: [
         Container(
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: Theme.of(context).colorScheme.primary,
             boxShadow: [
               BoxShadow(
-                color: AppColors.textPrimary.withOpacity(0.1),
+                color: Theme.of(context).shadowColor.withOpacity(0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -59,17 +56,19 @@ class HomeViewBodyState extends State<HomeViewBody>
           ),
           child: TabBar(
             controller: _tabController,
-            labelColor: AppColors.textOnPrimary,
-            dividerColor: AppColors.primary,
-            labelStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+            labelColor: Theme.of(context).colorScheme.onPrimary,
+            dividerColor: Theme.of(context).colorScheme.primary,
+            labelStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+              fontWeight: FontWeight.w700,
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
             ),
-            unselectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.textOnPrimary,
+            unselectedLabelStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
+              fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
             ),
-            indicatorColor: AppColors.textOnPrimary,
+            indicatorColor: Theme.of(context).colorScheme.onPrimary,
             tabs: [
               Tab(text: AppLocalizations.of(context).tr('app.title')),
               Tab(text: AppLocalizations.of(context).tr('common.Search')),
@@ -108,13 +107,13 @@ class HomeViewBodyState extends State<HomeViewBody>
   Widget _buildWeeklyView() {
     return Column(
       children: [
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         const CustomContainerWeeklyOf(),
         Expanded(
           child: CustomScrollView(
             controller: _scrollController,
             slivers: [
-              const SliverToBoxAdapter(child: SizedBox(height: 20)),
+              const SliverToBoxAdapter(child: SizedBox(height: 24)),
               CustomListViewDays(dayKeys: _dayKeys),
             ],
           ),
