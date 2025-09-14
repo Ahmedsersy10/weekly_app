@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/core/models/settings_model.dart' as settings;
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
-import 'package:weekly_dash_board/util/app_icons.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
+import 'package:weekly_dash_board/core/constants/app_icons.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/settings_section.dart';
 
 class ThemeSettingsSection extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/home_view.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/settings_view.dart';
 import 'package:weekly_dash_board/fetuers/more/presentation/views/more_view.dart';

@@ -10,6 +10,7 @@ import '../../data/models/recurrence_model.dart';
 import '../../data/services/hive_service.dart';
 import '../../../../core/models/settings_model.dart';
 import '../../../../core/services/settings_service.dart';
+import '../../../../core/services/notification_service.dart';
 
 part 'weekly_state.dart';
 
@@ -60,7 +61,7 @@ class WeeklyCubit extends Cubit<WeeklyState> {
     String? description,
     List<String> tags = const [],
     RecurrenceRule? recurrenceRule,
-  }) {
+  }) async {
     if (state is WeeklySuccess) {
       final currentState = state as WeeklySuccess;
       final newTask = TaskModel(
@@ -80,14 +81,25 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       final updatedTasks = List<TaskModel>.from(currentState.weeklyState.tasks)
         ..add(newTask);
       
+      // Schedule notification if reminder time is set
+      if (reminderTime != null) {
+        await _scheduleTaskNotification(newTask);
+      }
+      
       // If this is a recurring task, generate instances for the next few weeks
       if (recurrenceRule != null && recurrenceRule.isRecurring) {
         final recurringInstances = _generateRecurringInstances(newTask, recurrenceRule);
         updatedTasks.addAll(recurringInstances);
+        
+        // Schedule notifications for recurring instances
+        for (final instance in recurringInstances) {
+          if (instance.reminderTime != null) {
+            await _scheduleTaskNotification(instance);
+          }
+        }
       }
       
       _updateState(updatedTasks);
-
     }
   }
 
@@ -472,37 +484,46 @@ class WeeklyCubit extends Cubit<WeeklyState> {
     String newTitle, {
     bool? isImportant,
     TimeOfDay? reminderTime,
-  }) {
+  }) async {
     if (state is WeeklySuccess) {
       final currentState = state as WeeklySuccess;
       TaskModel? originalTask;
+      TaskModel? updatedTask;
 
       final updatedTasks = currentState.weeklyState.tasks.map((task) {
         if (task.id == taskId) {
           originalTask = task;
-          return task.copyWith(
+          updatedTask = task.copyWith(
             title: newTitle,
             isImportant: isImportant ?? task.isImportant,
             reminderTime: reminderTime,
           );
+          return updatedTask!;
         }
         return task;
       }).toList();
 
-      _updateState(updatedTasks);
+      // Handle notification updates
+      if (originalTask != null && updatedTask != null) {
+        await _updateTaskNotification(originalTask!, updatedTask!);
+      }
 
+      _updateState(updatedTasks);
     }
   }
 
-  void deleteTask(String taskId) {
+  void deleteTask(String taskId) async {
     if (state is WeeklySuccess) {
       final currentState = state as WeeklySuccess;
+      
+      // Cancel notification for the deleted task
+      await _cancelTaskNotification(taskId);
+      
       final updatedTasks = currentState.weeklyState.tasks
           .where((task) => task.id != taskId)
           .toList();
 
       _updateState(updatedTasks);
-
     }
   }
 
@@ -656,6 +677,116 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       }
     }
     return [];
+  }
+
+  /// Schedule a notification for a task
+  Future<void> _scheduleTaskNotification(TaskModel task) async {
+    if (task.reminderTime == null) return;
+    
+    try {
+      final notificationService = NotificationService();
+      final scheduledDateTime = _getTaskNotificationDateTime(task);
+      
+      if (scheduledDateTime == null || scheduledDateTime.isBefore(DateTime.now())) {
+        return; // Don't schedule notifications in the past
+      }
+      
+      final notificationId = task.id.hashCode; // Use task ID hash as notification ID
+      final title = 'Task Reminder';
+      final body = task.title;
+      final payload = task.id;
+      
+      await notificationService.scheduleNotification(
+        id: notificationId,
+        title: title,
+        body: body,
+        scheduledTime: scheduledDateTime,
+        payload: payload,
+      );
+    } catch (e) {
+      // Log error but don't throw - notification scheduling shouldn't break task creation
+      print('Failed to schedule notification for task ${task.id}: $e');
+    }
+  }
+  
+  /// Update notification when task is edited
+  Future<void> _updateTaskNotification(TaskModel originalTask, TaskModel updatedTask) async {
+    try {
+      final notificationService = NotificationService();
+      final notificationId = originalTask.id.hashCode;
+      
+      // If reminder time was removed, cancel the notification
+      if (updatedTask.reminderTime == null) {
+        await notificationService.cancelNotification(notificationId);
+        return;
+      }
+      
+      // If reminder time was added or changed, update the notification
+      final newScheduledDateTime = _getTaskNotificationDateTime(updatedTask);
+      if (newScheduledDateTime == null || newScheduledDateTime.isBefore(DateTime.now())) {
+        await notificationService.cancelNotification(notificationId);
+        return;
+      }
+      
+      final title = 'Task Reminder';
+      final body = updatedTask.title;
+      final payload = updatedTask.id;
+      
+      await notificationService.updateNotification(
+        id: notificationId,
+        title: title,
+        body: body,
+        newTime: newScheduledDateTime,
+        payload: payload,
+      );
+    } catch (e) {
+      print('Failed to update notification for task ${updatedTask.id}: $e');
+    }
+  }
+  
+  /// Cancel notification when task is deleted
+  Future<void> _cancelTaskNotification(String taskId) async {
+    try {
+      final notificationService = NotificationService();
+      final notificationId = taskId.hashCode;
+      await notificationService.cancelNotification(notificationId);
+    } catch (e) {
+      print('Failed to cancel notification for task $taskId: $e');
+    }
+  }
+  
+  /// Get the DateTime when the notification should be scheduled
+  DateTime? _getTaskNotificationDateTime(TaskModel task) {
+    if (task.reminderTime == null) return null;
+    
+    final now = DateTime.now();
+    final reminderTime = task.reminderTime!;
+    
+    // Calculate the target date based on the task's day of week
+    final targetDate = _getDateForTaskDay(task.dayOfWeek);
+    
+    // Combine date and time
+    final scheduledDateTime = DateTime(
+      targetDate.year,
+      targetDate.month,
+      targetDate.day,
+      reminderTime.hour,
+      reminderTime.minute,
+    );
+    
+    // If the scheduled time is in the past, schedule for next week
+    if (scheduledDateTime.isBefore(now)) {
+      return scheduledDateTime.add(const Duration(days: 7));
+    }
+    
+    return scheduledDateTime;
+  }
+  
+  /// Get the actual date for a task's day of week
+  DateTime _getDateForTaskDay(int dayOfWeek) {
+    final now = DateTime.now();
+    final startOfWeek = _getStartOfWeek(now, _currentWeekStart);
+    return startOfWeek.add(Duration(days: dayOfWeek));
   }
 
   @override

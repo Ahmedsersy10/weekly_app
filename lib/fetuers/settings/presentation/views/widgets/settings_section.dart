@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
+import 'package:weekly_dash_board/core/constants/app_color.dart';
 
 class SettingsSection extends StatelessWidget {
   final String title;

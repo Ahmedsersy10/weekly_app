@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/app_style.dart';
 
 class AboutSection extends StatefulWidget {
   const AboutSection({super.key});

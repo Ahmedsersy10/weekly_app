@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/home_view_body.dart';
-import 'package:weekly_dash_board/util/dashboard_controller.dart';
-import 'package:weekly_dash_board/util/drawer_page.dart';
-import 'package:weekly_dash_board/util/size_config.dart';
+import 'package:weekly_dash_board/core/widgets/dashboard_controller.dart';
+import 'package:weekly_dash_board/core/widgets/drawer_page.dart';
+import 'package:weekly_dash_board/core/utils/size_config.dart';
 import 'package:weekly_dash_board/views/widgets/adaptive_layout.dart';
 import 'package:weekly_dash_board/views/widgets/custom_drawer.dart'
     show CustomDrawer;

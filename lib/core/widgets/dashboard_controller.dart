@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/util/drawer_page.dart';
+import 'package:weekly_dash_board/core/widgets/drawer_page.dart';
 
 class DashboardController extends ChangeNotifier {
   DrawerPage _currentPage = DrawerPage.weekly;

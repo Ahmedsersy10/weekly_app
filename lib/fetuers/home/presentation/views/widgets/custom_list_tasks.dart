@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/app_style.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/task_model.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/category_model.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';

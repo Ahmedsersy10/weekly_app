@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
+import 'package:weekly_dash_board/core/utils/app_style.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/sign_up_view_body.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
+import 'package:weekly_dash_board/core/constants/app_color.dart';
 
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});

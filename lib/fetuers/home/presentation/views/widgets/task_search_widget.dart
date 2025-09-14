@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weekly_dash_board/core/util/app_theme.dart';
+import 'package:weekly_dash_board/core/theme/app_theme.dart';
 import 'package:weekly_dash_board/core/services/search_service.dart';
 import 'package:weekly_dash_board/core/services/performance_service.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/task_model.dart';
@@ -144,7 +144,11 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
-              BoxShadow(color: Theme.of(context).shadowColor.withOpacity(0.2), blurRadius: 4, offset: Offset(0, 2)),
+              BoxShadow(
+                color: Theme.of(context).shadowColor.withOpacity(0.2),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
             ],
           ),
           child: Column(
@@ -155,24 +159,37 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                 onChanged: (value) => _onSearchChanged(),
                 decoration: InputDecoration(
                   hintText: 'Search tasks',
-                  prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
-                          icon: Icon(Icons.clear, color: Theme.of(context).colorScheme.onSurface),
+                          icon: Icon(
+                            Icons.clear,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                           onPressed: _clearSearch,
                         )
                       : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2,
+                    ),
                   ),
                 ),
               ),
@@ -184,7 +201,10 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                   'Search Results (${_filteredTasks.length})',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
+                    fontSize: AppTheme.getResponsiveFontSize(
+                      context,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -198,11 +218,19 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.search_off, color: Theme.of(context).colorScheme.onSurfaceVariant, size: 24),
+                        Icon(
+                          Icons.search_off,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          size: 24,
+                        ),
                         const SizedBox(width: 8),
                         Text(
                           'No tasks found matching "${_searchController.text}"',
-                          style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
                         ),
                       ],
                     ),
@@ -251,10 +279,16 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
               decoration: InputDecoration(
                 focusColor: Theme.of(context).colorScheme.primary,
                 hintText: 'Search tasks, categories, tags...',
-                prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.primary),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: Icon(Icons.clear, color: Theme.of(context).colorScheme.primary),
+                        icon: Icon(
+                          Icons.clear,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         onPressed: () {
                           _searchController.clear();
                           _clearAllFilters();
@@ -262,7 +296,9 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                       )
                     : IconButton(
                         icon: Icon(
-                          _showAdvancedFilters ? Icons.filter_list : Icons.filter_list_outlined,
+                          _showAdvancedFilters
+                              ? Icons.filter_list
+                              : Icons.filter_list_outlined,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                         onPressed: () {
@@ -272,7 +308,10 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                         },
                       ),
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 15,
+                ),
               ),
             ),
           ),
@@ -333,7 +372,11 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.search_off, size: 64, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
+          Icon(
+            Icons.search_off,
+            size: 64,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+          ),
           const SizedBox(height: 16),
           Text(
             'No tasks found',
@@ -346,7 +389,10 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
           const SizedBox(height: 8),
           Text(
             'Try adjusting your search terms or filters',
-            style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -355,7 +401,10 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
   }
 
   Widget _buildSearchSuggestions() {
-    final suggestions = _searchService.getSearchSuggestions(_allTasks, _searchQuery);
+    final suggestions = _searchService.getSearchSuggestions(
+      _allTasks,
+      _searchQuery,
+    );
     final trending = _searchService.getTrendingSearchTerms(_allTasks);
 
     return Column(
@@ -384,11 +433,20 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                     _searchController.text = suggestion;
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3)),
+                      border: Border.all(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withOpacity(0.3),
+                      ),
                     ),
                     child: Text(
                       suggestion,
@@ -429,11 +487,20 @@ class _TaskSearchWidgetState extends State<TaskSearchWidget> {
                     _searchController.text = term;
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.secondary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Theme.of(context).colorScheme.secondary.withOpacity(0.3)),
+                      border: Border.all(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.secondary.withOpacity(0.3),
+                      ),
                     ),
                     child: Text(
                       term,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:weekly_dash_board/util/size_config.dart';
+import 'package:weekly_dash_board/core/utils/size_config.dart';
 
 class AdaptiveLayout extends StatelessWidget {
   const AdaptiveLayout({

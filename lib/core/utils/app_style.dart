@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_text_styles.dart';
+import 'package:weekly_dash_board/core/utils/app_text_styles.dart';
 
 abstract class AppStyles {
   static TextStyle styleRegular16(BuildContext context) {

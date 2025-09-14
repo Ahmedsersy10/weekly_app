@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:weekly_dash_board/core/util/app_theme.dart';
+import 'package:weekly_dash_board/core/theme/app_theme.dart';
 import 'package:weekly_dash_board/core/services/statistics_service.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/task_model.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/statistics_model.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';

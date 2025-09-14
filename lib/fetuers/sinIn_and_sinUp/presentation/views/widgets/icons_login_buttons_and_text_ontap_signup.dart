@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
-import 'package:weekly_dash_board/core/util/app_images.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
+import 'package:weekly_dash_board/core/constants/app_color.dart';
+import 'package:weekly_dash_board/core/constants/app_images.dart';
+import 'package:weekly_dash_board/core/utils/app_style.dart';
 import 'package:weekly_dash_board/core/widgets/custom_button.dart';
 import 'package:weekly_dash_board/core/widgets/custom_button_model.dart';
 import 'package:weekly_dash_board/core/widgets/custom_text_on_tap.dart';

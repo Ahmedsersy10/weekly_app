@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/app_style.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});

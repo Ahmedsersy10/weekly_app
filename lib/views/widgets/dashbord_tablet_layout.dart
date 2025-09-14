@@ -5,8 +5,8 @@ import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/statis
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/task_search_widget.dart';
 import 'package:weekly_dash_board/fetuers/more/presentation/views/more_view.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/settings_view.dart';
-import 'package:weekly_dash_board/util/drawer_page.dart';
-import 'package:weekly_dash_board/util/size_config.dart';
+import 'package:weekly_dash_board/core/widgets/drawer_page.dart';
+import 'package:weekly_dash_board/core/utils/size_config.dart';
 
 import 'package:weekly_dash_board/views/widgets/custom_drawer.dart';
 

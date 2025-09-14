@@ -1,8 +1,8 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
-import 'package:weekly_dash_board/core/util/app_theme.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
+import 'package:weekly_dash_board/core/theme/app_theme.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_contaner_weekly_of.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_view_days.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/statistics_dashboard_widget.dart';

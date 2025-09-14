@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weekly_dash_board/core/widgets/custom_button_model.dart';
-import 'package:weekly_dash_board/core/util/app_theme.dart';
+import 'package:weekly_dash_board/core/theme/app_theme.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({

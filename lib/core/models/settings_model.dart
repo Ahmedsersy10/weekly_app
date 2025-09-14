@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
+import 'package:weekly_dash_board/core/constants/app_color.dart';
 
 enum ThemeMode { light, dark, system }
 

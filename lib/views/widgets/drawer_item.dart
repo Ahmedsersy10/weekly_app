@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/models/drawer_item_model.dart';
+import 'package:weekly_dash_board/core/models/drawer_item_model.dart';
 import 'package:weekly_dash_board/views/widgets/active_drawer_item.dart';
 import 'package:weekly_dash_board/views/widgets/in_active_drawer_item.dart';
 

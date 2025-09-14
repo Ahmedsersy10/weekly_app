@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weekly_dash_board/core/util/app_style.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/view_model/settings_cubit.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/week_settings_section.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
-
-import 'package:weekly_dash_board/models/drawer_item_model.dart';
-import 'package:weekly_dash_board/util/app_images.dart';
-import 'package:weekly_dash_board/util/drawer_page.dart';
+import 'package:weekly_dash_board/core/constants/app_color.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
+import 'package:weekly_dash_board/core/models/drawer_item_model.dart';
+import 'package:weekly_dash_board/core/theme/app_images.dart';
+import 'package:weekly_dash_board/core/widgets/drawer_page.dart';
 import 'package:weekly_dash_board/views/widgets/in_active_drawer_item.dart';
 import 'package:weekly_dash_board/views/widgets/list_view_drawer_item.dart';
 
@@ -16,32 +16,32 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.7,
-      color: Theme.of(context).colorScheme.surface,
+      color: AppColors.surface,
       child: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: Divider(color: Theme.of(context).colorScheme.surface, height: 1, thickness: 1),
+          const SliverToBoxAdapter(
+            child: Divider(color: AppColors.surface, height: 1, thickness: 1),
           ),
           SliverToBoxAdapter(
             child: Container(
               height: 120,
-              color: Theme.of(context).colorScheme.primary, // Primary color
+              color: AppColors.primary, // Primary color
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.dashboard,
                       size: 50,
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: AppColors.textOnPrimary,
                     ),
                     const SizedBox(height: 10),
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
                         AppLocalizations.of(context).tr('navigation.weekly'),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
+                        style: const TextStyle(
+                          color: AppColors.surface,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),

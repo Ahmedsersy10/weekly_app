@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gif/gif.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
+import 'package:weekly_dash_board/core/constants/app_color.dart';
 import 'package:weekly_dash_board/fetuers/splash/presentation/views/widgets/gif_image_splash_view.dart';
 import 'package:weekly_dash_board/views/dashboard_view.dart';
 

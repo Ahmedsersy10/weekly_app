@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
-import 'package:weekly_dash_board/core/util/app_theme.dart';
 import 'package:weekly_dash_board/fetuers/more/presentation/views/widgets/achievement_section.dart';
 import 'package:weekly_dash_board/fetuers/more/presentation/views/widgets/user_guide_section.dart';
 import 'package:weekly_dash_board/fetuers/more/presentation/views/widgets/contact_section.dart';

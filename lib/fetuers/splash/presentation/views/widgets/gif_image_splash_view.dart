@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gif/gif.dart';
-import 'package:weekly_dash_board/core/util/app_images.dart';
+import 'package:weekly_dash_board/core/constants/app_images.dart';
 
 class GifImageSplashView extends StatelessWidget {
   const GifImageSplashView({super.key, required GifController controller})

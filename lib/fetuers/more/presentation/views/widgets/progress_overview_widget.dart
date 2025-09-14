@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weekly_dash_board/core/services/motivational_service.dart';
-import 'package:weekly_dash_board/core/util/app_theme.dart';
+import 'package:weekly_dash_board/core/theme/app_theme.dart';
 import 'package:weekly_dash_board/core/widgets/enhanced_progress_indicator.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 
 class ProgressOverviewWidget extends StatelessWidget {
   const ProgressOverviewWidget({super.key});

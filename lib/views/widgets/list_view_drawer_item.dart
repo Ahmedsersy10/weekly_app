@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:weekly_dash_board/models/drawer_item_model.dart';
-import 'package:weekly_dash_board/util/app_images.dart';
-import 'package:weekly_dash_board/util/drawer_page.dart';
-import 'package:weekly_dash_board/util/size_config.dart';
+import 'package:weekly_dash_board/core/models/drawer_item_model.dart';
+import 'package:weekly_dash_board/core/theme/app_images.dart';
+import 'package:weekly_dash_board/core/widgets/drawer_page.dart';
+import 'package:weekly_dash_board/core/utils/size_config.dart';
 import 'package:weekly_dash_board/views/widgets/drawer_item.dart';
 
 class ListViewDrawerItem extends StatefulWidget {

@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:weekly_dash_board/core/util/app_localizations.dart';
-import 'package:weekly_dash_board/core/util/app_theme.dart';
+import 'package:weekly_dash_board/core/utils/app_localizations.dart';
+import 'package:weekly_dash_board/core/theme/app_theme.dart';
 
-import 'package:weekly_dash_board/models/drawer_item_model.dart';
+import 'package:weekly_dash_board/core/models/drawer_item_model.dart';
 
 class inActiveDrawerItem extends StatelessWidget {
   const inActiveDrawerItem({super.key, required this.drawerItemModel});

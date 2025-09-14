@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/core/util/app_color.dart';
-import 'package:weekly_dash_board/core/util/app_theme.dart';
+import 'package:weekly_dash_board/core/constants/app_color.dart';
+import 'package:weekly_dash_board/core/theme/app_theme.dart';
 
 // ignore: must_be_immutable
 class CustomTextFormField extends StatelessWidget {
