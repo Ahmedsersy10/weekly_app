@@ -7,7 +7,6 @@ import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cu
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_tasks.dart';
 import '../../../data/models/task_model.dart';
 import '../../../data/models/recurrence_model.dart';
-import '../../../data/models/category_model.dart';
 
 class CustomCardHomeView extends StatelessWidget {
   final int dayIndex;
@@ -485,35 +484,7 @@ class CustomButtonAddTasks extends StatelessWidget {
     );
   }
 
-  String _getPriorityLabel(TaskPriority priority) {
-    switch (priority) {
-      case TaskPriority.low:
-        return 'منخفضة';
-      case TaskPriority.medium:
-        return 'متوسطة';
-      case TaskPriority.high:
-        return 'عالية';
-      case TaskPriority.urgent:
-        return 'عاجلة';
-    }
-  }
 
-  String _getCategoryLabel(TaskCategoryModel category) {
-    return category.nameAr;
-  }
-
-  String _getRecurrenceTypeLabel(RecurrenceType type) {
-    switch (type) {
-      case RecurrenceType.none:
-        return 'بدون';
-      case RecurrenceType.daily:
-        return 'يومي';
-      case RecurrenceType.weekly:
-        return 'أسبوعي';
-      case RecurrenceType.custom:
-        return 'مخصص';
-    }
-  }
 
   String _getDayLabel(int dayIndex) {
     switch (dayIndex) {

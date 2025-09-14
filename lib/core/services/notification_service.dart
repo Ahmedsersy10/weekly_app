@@ -1,6 +1,7 @@
 import 'dart:developer';
-import 'dart:io';
+import 'dart:io' show Platform;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -19,6 +20,12 @@ class NotificationService {
   /// Must be called before using any notification features
   static Future<void> initialize() async {
     try {
+      // Skip initialization on web platform
+      if (kIsWeb) {
+        log('NotificationService: Skipping initialization on web platform');
+        return;
+      }
+
       // Initialize timezone data
       tz.initializeTimeZones();
 
@@ -213,6 +220,11 @@ class NotificationService {
     String? payload,
   }) async {
     try {
+      // Skip on web platform
+      if (kIsWeb) {
+        log('NotificationService: Notifications not supported on web platform');
+        return false;
+      }
       // Validate input parameters
       if (title.trim().isEmpty) {
         throw ArgumentError('Notification title cannot be empty');
@@ -288,6 +300,11 @@ class NotificationService {
   /// [id] - The ID of the notification to cancel
   Future<bool> cancelNotification(int id) async {
     try {
+      // Skip on web platform
+      if (kIsWeb) {
+        log('NotificationService: Notifications not supported on web platform');
+        return false;
+      }
       await _flutterLocalNotificationsPlugin.cancel(id);
       log('NotificationService: Cancelled notification - ID: $id');
       return true;
@@ -312,6 +329,11 @@ class NotificationService {
     String? payload,
   }) async {
     try {
+      // Skip on web platform
+      if (kIsWeb) {
+        log('NotificationService: Notifications not supported on web platform');
+        return false;
+      }
       // Cancel the existing notification
       final bool cancelled = await cancelNotification(id);
       if (!cancelled) {
@@ -346,6 +368,11 @@ class NotificationService {
   /// Cancel all scheduled notifications
   Future<bool> cancelAllNotifications() async {
     try {
+      // Skip on web platform
+      if (kIsWeb) {
+        log('NotificationService: Notifications not supported on web platform');
+        return false;
+      }
       await _flutterLocalNotificationsPlugin.cancelAll();
       log('NotificationService: Cancelled all notifications');
       return true;
@@ -358,6 +385,11 @@ class NotificationService {
   /// Get list of all pending notifications
   Future<List<PendingNotificationRequest>> getPendingNotifications() async {
     try {
+      // Skip on web platform
+      if (kIsWeb) {
+        log('NotificationService: Notifications not supported on web platform');
+        return [];
+      }
       final List<PendingNotificationRequest> pendingNotifications =
           await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
 
@@ -399,6 +431,11 @@ class NotificationService {
     String? payload,
   }) async {
     try {
+      // Skip on web platform
+      if (kIsWeb) {
+        log('NotificationService: Notifications not supported on web platform');
+        return false;
+      }
       // Android notification details
       const AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
