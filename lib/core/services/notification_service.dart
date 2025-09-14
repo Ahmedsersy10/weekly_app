@@ -28,7 +28,7 @@ class NotificationService {
 
       // Android initialization settings
       const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('@drawable/app_icon');
+          AndroidInitializationSettings('@mipmap/ic_launcher');
 
       // iOS initialization settings
       const DarwinInitializationSettings initializationSettingsIOS =
@@ -149,9 +149,20 @@ class NotificationService {
               >();
 
       if (androidImplementation != null) {
+        // Request basic notification permission
         final bool? granted = await androidImplementation
             .requestNotificationsPermission();
-        log('NotificationService: Android permissions granted: $granted');
+        log('NotificationService: Android notifications permission granted: $granted');
+        
+        // Request exact alarm permission for Android 12+ (API 31+)
+        final bool? exactAlarmGranted = await androidImplementation
+            .requestExactAlarmsPermission();
+        log('NotificationService: Android exact alarms permission granted: $exactAlarmGranted');
+        
+        // Check if we can schedule exact alarms
+        final bool? canScheduleExactAlarms = await androidImplementation
+            .canScheduleExactNotifications();
+        log('NotificationService: Can schedule exact notifications: $canScheduleExactAlarms');
       }
     } catch (e) {
       log('NotificationService: Android permission request failed - $e');
@@ -229,8 +240,8 @@ class NotificationService {
             showWhen: true,
             enableVibration: true,
             playSound: true,
-            icon: '@drawable/app_icon',
-            largeIcon: DrawableResourceAndroidBitmap('@drawable/app_icon'),
+            icon: '@mipmap/ic_launcher',
+            largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
           );
 
       // iOS notification details
@@ -248,7 +259,7 @@ class NotificationService {
         iOS: iOSPlatformChannelSpecifics,
       );
 
-      // Schedule the notification
+      // Schedule the notification with enhanced settings for release mode
       await _flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
@@ -259,6 +270,7 @@ class NotificationService {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: payload,
+        matchDateTimeComponents: DateTimeComponents.time,
       );
 
       log(
@@ -395,7 +407,7 @@ class NotificationService {
             channelDescription: 'Immediate notifications for testing',
             importance: Importance.high,
             priority: Priority.high,
-            icon: '@drawable/app_icon',
+            icon: '@mipmap/ic_launcher',
           );
 
       // iOS notification details

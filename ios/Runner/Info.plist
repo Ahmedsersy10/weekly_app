@@ -50,6 +50,17 @@
 	<array>
 		<string>background-processing</string>
 		<string>background-fetch</string>
+		<string>remote-notification</string>
 	</array>
+	<!-- Enable local notifications -->
+	<key>UIUserNotificationSettings</key>
+	<dict>
+		<key>UIUserNotificationTypesAlert</key>
+		<true/>
+		<key>UIUserNotificationTypesBadge</key>
+		<true/>
+		<key>UIUserNotificationTypesSound</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

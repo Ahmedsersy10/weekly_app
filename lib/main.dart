@@ -10,22 +10,29 @@ import 'package:weekly_dash_board/fetuers/settings/presentation/view_model/setti
 import 'package:weekly_dash_board/fetuers/splash/presentation/views/splash_view.dart';
 import 'package:weekly_dash_board/core/models/settings_model.dart' as settings;
 import 'package:weekly_dash_board/core/services/notification_service.dart';
+import 'package:weekly_dash_board/core/services/notification_production_helper.dart';
+import 'package:weekly_dash_board/fetuers/home/data/services/hive_service.dart';
 
 void main() async {
   // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
-  print(DateTime.now().timeZoneName);
-  print(DateTime.now());
-  print(DateTime.now().toUtc());
-  print(DateTime.now().timeZoneName);
-  print(DateTime.now().timeZoneOffset);
 
-  // Initialize notification service
+  // Initialize Hive for local data storage
+  await HiveService.init();
+
+  // Initialize notification service with production mode
   await NotificationService.initialize();
+
+  // Initialize production-ready notification features
+  try {
+    await NotificationProductionHelper.initializeProductionMode();
+  } catch (e) {
+    print('Production notification helper initialization failed: $e');
+  }
 
   runApp(
     DevicePreview(
-      enabled: false, // Set to false to disable Device Preview
+      enabled: true, // Set to false to disable Device Preview
       builder: (context) => const ResponsiveDashboardApp(), // Wrap your app
     ),
   );
