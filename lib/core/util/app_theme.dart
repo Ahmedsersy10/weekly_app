@@ -6,7 +6,10 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary, brightness: Brightness.light),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.primary,
+        brightness: Brightness.light,
+      ),
       textTheme: _buildTextTheme(),
       fontFamily: GoogleFonts.poppins().fontFamily,
     );
@@ -16,7 +19,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         primaryContainer: AppColors.primaryDark,
         secondary: AppColors.accent,
@@ -180,7 +183,10 @@ class AppTheme {
   }
 
   // Helper methods for responsive font sizing
-  static double getResponsiveFontSize(BuildContext context, {required double fontSize}) {
+  static double getResponsiveFontSize(
+    BuildContext context, {
+    required double fontSize,
+  }) {
     double scaleFactor = getScaleFactor(context);
     double responsiveFontSize = fontSize * scaleFactor;
 

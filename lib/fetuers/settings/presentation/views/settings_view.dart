@@ -30,19 +30,7 @@ class _SettingsViewState extends State<SettingsView> {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            AppLocalizations.of(context).tr('app.settings'),
-            style: AppStyles.styleSemiBold24(
-              context,
-            ).copyWith(color: colorScheme.onSurface),
-          ),
-        ),
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        iconTheme: IconThemeData(color: colorScheme.onSurface),
-      ),
+
       body: BlocConsumer<SettingsCubit, SettingsState>(
         listener: (context, state) {
           if (state.error != null) {
@@ -125,7 +113,9 @@ class _SettingsViewState extends State<SettingsView> {
                         AppLocalizations.of(
                           context,
                         ).tr('settings.backupSubtitle'),
-                        style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                        style: TextStyle(
+                          color: colorScheme.onSurface.withOpacity(0.7),
+                        ),
                       ),
                       leading: Icon(Icons.backup, color: colorScheme.primary),
                       onTap: () async {
@@ -142,7 +132,9 @@ class _SettingsViewState extends State<SettingsView> {
                         AppLocalizations.of(
                           context,
                         ).tr('settings.restoreSubtitle'),
-                        style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                        style: TextStyle(
+                          color: colorScheme.onSurface.withOpacity(0.7),
+                        ),
                       ),
                       leading: Icon(Icons.restore, color: colorScheme.primary),
                       onTap: () async {
@@ -162,7 +154,9 @@ class _SettingsViewState extends State<SettingsView> {
                         AppLocalizations.of(
                           context,
                         ).tr('settings.resetSubtitle'),
-                        style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                        style: TextStyle(
+                          color: colorScheme.onSurface.withOpacity(0.7),
+                        ),
                       ),
                       leading: Icon(Icons.refresh, color: colorScheme.primary),
                       onTap: () {

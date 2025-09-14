@@ -9,7 +9,7 @@ import 'package:weekly_dash_board/core/util/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/task_model.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/statistics_model.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
-import 'package:weekly_dash_board/fetuers/more/presentation/widgets/progress_overview_widget.dart';
+import 'package:weekly_dash_board/fetuers/more/presentation/views/widgets/progress_overview_widget.dart';
 
 class StatisticsDashboardWidget extends StatefulWidget {
   const StatisticsDashboardWidget({super.key});
