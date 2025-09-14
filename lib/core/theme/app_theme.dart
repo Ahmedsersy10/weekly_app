@@ -12,6 +12,12 @@ class AppTheme {
       ),
       textTheme: _buildTextTheme(),
       fontFamily: GoogleFonts.poppins().fontFamily,
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
+      ),
     );
   }
 
@@ -41,8 +47,8 @@ class AppTheme {
       textTheme: _buildTextTheme(Brightness.dark),
       fontFamily: GoogleFonts.poppins().fontFamily,
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.darkSurface,
-        foregroundColor: AppColors.darkTextPrimary,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
         elevation: 0,
         centerTitle: true,
       ),

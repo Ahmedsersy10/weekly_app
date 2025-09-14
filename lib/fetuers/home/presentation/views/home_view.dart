@@ -22,16 +22,20 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).tr('app.title'),
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.w700,
-            fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 20),
+            fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 24),
             letterSpacing: 0.5,
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         actions: [
-          IconButton(onPressed: _openCalendar, icon: const Icon(Icons.calendar_month_outlined)),
+          IconButton(
+            onPressed: _openCalendar,
+            icon: const Icon(Icons.calendar_month_outlined),
+          ),
           IconButton(
             onPressed: _showClearAllTasksDialog,
             icon: const Icon(Icons.clear_all),
@@ -62,9 +66,15 @@ class _HomeViewState extends State<HomeView> {
                   lastDay: DateTime.utc(2100, 12, 31),
                   focusedDay: focusedDay,
                   calendarStyle: CalendarStyle(
-                    defaultTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface), // لون الأرقام
-                    weekNumberTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                    todayTextStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                    defaultTextStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ), // لون الأرقام
+                    weekNumberTextStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    todayTextStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                     todayDecoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,
@@ -77,14 +87,20 @@ class _HomeViewState extends State<HomeView> {
                   headerStyle: HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
-                    titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface), // لون الشهر
+                    titleTextStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ), // لون الشهر
                     leftChevronIcon: Icon(
                       Icons.chevron_left,
-                      color: Theme.of(context).colorScheme.onSurface, // لون السهم الأيسر
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface, // لون السهم الأيسر
                     ),
                     rightChevronIcon: Icon(
                       Icons.chevron_right,
-                      color: Theme.of(context).colorScheme.onSurface, // لون السهم الأيمن
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface, // لون السهم الأيمن
                     ),
                   ),
                   selectedDayPredicate: (day) => isSameDay(day, selectedDay),
@@ -134,8 +150,12 @@ class _HomeViewState extends State<HomeView> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.surface,
-          title: Text(AppLocalizations.of(context).tr('settings.clearAllTasksTitle')),
-          content: Text(AppLocalizations.of(context).tr('settings.clearAllTasksConfirm')),
+          title: Text(
+            AppLocalizations.of(context).tr('settings.clearAllTasksTitle'),
+          ),
+          content: Text(
+            AppLocalizations.of(context).tr('settings.clearAllTasksConfirm'),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),

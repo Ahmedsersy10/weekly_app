@@ -185,7 +185,6 @@ class NotificationService {
     log(
       'NotificationService: Notification tapped - ID: ${response.id}, Payload: ${response.payload}',
     );
-    // TODO: Handle notification tap - navigate to specific task or screen
   }
 
   /// Schedule a notification for a specific date and time
