@@ -14,14 +14,17 @@ class inActiveDrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: SvgPicture.asset(drawerItemModel.image, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
+      leading: SvgPicture.asset(
+        drawerItemModel.image,
+        color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.6),
+      ),
       title: FittedBox(
         fit: BoxFit.scaleDown,
         alignment: Alignment.centerLeft,
         child: Text(
           AppLocalizations.of(context).tr(drawerItemModel.title),
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.6),
             fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
           ),
         ),

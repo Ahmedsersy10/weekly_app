@@ -526,6 +526,7 @@ class CustomButtonAddTasks extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             if (titleController.text.trim().isNotEmpty) {
+                              // ignore: unused_local_variable
                               final priority = getCategoryPriority(
                                 selectedCategory.id,
                               );

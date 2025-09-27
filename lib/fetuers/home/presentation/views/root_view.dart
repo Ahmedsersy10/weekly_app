@@ -12,9 +12,9 @@ class RootView extends StatefulWidget {
 }
 
 class _RootViewState extends State<RootView> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
-  final List<Widget> _tabs = const [HomeView(), SettingsView(), MoreView()];
+  final List<Widget> _tabs = const [SettingsView(), HomeView(), MoreView()];
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +25,17 @@ class _RootViewState extends State<RootView> {
         onTap: (i) => setState(() => _currentIndex = i),
         backgroundColor: Theme.of(context).colorScheme.primary,
         selectedItemColor: Theme.of(context).colorScheme.onPrimary,
-        unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+        unselectedItemColor: Theme.of(
+          context,
+        ).colorScheme.onPrimary.withOpacity(0.5),
         items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            label: AppLocalizations.of(context).tr('home'),
-          ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.settings),
             label: AppLocalizations.of(context).tr('settings'),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home),
+            label: AppLocalizations.of(context).tr('home'),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.more_horiz),

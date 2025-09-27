@@ -16,7 +16,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.7,
-      color: Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.primary,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -56,7 +56,13 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-
+          SliverToBoxAdapter(
+            child: Divider(
+              color: Theme.of(context).colorScheme.surface,
+              height: 1,
+              thickness: 1,
+            ),
+          ),
           ListViewDrawerItem(onItemSelected: onItemSelected),
 
           SliverFillRemaining(

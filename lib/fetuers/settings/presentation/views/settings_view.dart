@@ -7,6 +7,7 @@ import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/we
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/sync_settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/language_settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/theme_settings_section.dart';
+import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/account_settings_section.dart';
 import 'package:weekly_dash_board/core/services/data_backup_service.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 
@@ -96,6 +97,8 @@ class _SettingsViewState extends State<SettingsView> {
                       context.read<SettingsCubit>().updateLanguage(language);
                     },
                   ),
+                  const SizedBox(height: 24),
+                  const AccountSettingsSection(),
                   const SizedBox(height: 24),
                 ],
                 SettingsSection(

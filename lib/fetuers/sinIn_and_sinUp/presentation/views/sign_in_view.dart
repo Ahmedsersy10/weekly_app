@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/modern_sign_up_view_body.dart';
+import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/modern_sign_in_view_body.dart';
 
-class SignUpView extends StatelessWidget {
-  const SignUpView({super.key});
+class SignInView extends StatelessWidget {
+  const SignInView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class SignUpView extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Sign Up',
+          'Sign In',
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -20,7 +20,7 @@ class SignUpView extends StatelessWidget {
         elevation: 0,
         surfaceTintColor: Colors.transparent,
       ),
-      body: const ModernSignUpViewBody(),
+      body: const ModernSignInViewBody(),
     );
   }
 }

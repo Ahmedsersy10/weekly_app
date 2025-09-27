@@ -12,10 +12,22 @@ import 'package:weekly_dash_board/core/models/settings_model.dart' as settings;
 import 'package:weekly_dash_board/core/services/notification_service.dart';
 import 'package:weekly_dash_board/core/services/notification_production_helper.dart';
 import 'package:weekly_dash_board/fetuers/home/data/services/hive_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:weekly_dash_board/core/services/supabase_auth_service.dart';
 
 void main() async {
   // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Supabase
+  await Supabase.initialize(
+    url: 'https://okddqskxlureguahozhh.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rZGRxc2t4bHVyZWd1YWhvemhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5NDg0NzMsImV4cCI6MjA3NDUyNDQ3M30.iZ1mLgEiwUpPR1M_ryqkBJcb59PLtCYo_HSwFK7Pc8k',
+  );
+
+  // Initialize auth state
+  await SupabaseAuthService.initializeAuthState();
 
   // Initialize Hive for local data storage
   await HiveService.init();

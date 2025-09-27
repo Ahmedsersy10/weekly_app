@@ -43,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
+
       backgroundColor: Theme.of(context).colorScheme.background,
       body: HomeViewBody(key: _bodyKey),
     );

@@ -14,7 +14,7 @@ class ActiveDrawerItem extends StatelessWidget {
     return ListTile(
       leading: SvgPicture.asset(
         drawerItemModel.image,
-        color: Theme.of(context).colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       title: FittedBox(
         fit: BoxFit.scaleDown,
@@ -22,7 +22,7 @@ class ActiveDrawerItem extends StatelessWidget {
         child: Text(
           AppLocalizations.of(context).tr(drawerItemModel.title),
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            color: Theme.of(context).colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.onPrimary,
             fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
             fontWeight: FontWeight.w700,
           ),
@@ -30,7 +30,7 @@ class ActiveDrawerItem extends StatelessWidget {
       ),
       trailing: Container(
         width: 3.27,
-        color: Theme.of(context).colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
     );
   }

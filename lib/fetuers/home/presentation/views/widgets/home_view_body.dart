@@ -15,9 +15,12 @@ class HomeViewBody extends StatefulWidget {
   State<HomeViewBody> createState() => HomeViewBodyState();
 }
 
-class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixin {
+class HomeViewBodyState extends State<HomeViewBody>
+    with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  final Map<int, GlobalKey> _dayKeys = {for (int i = 0; i < 6; i++) i: GlobalKey()};
+  final Map<int, GlobalKey> _dayKeys = {
+    for (int i = 0; i < 6; i++) i: GlobalKey(),
+  };
 
   late TabController _tabController;
   int _currentTabIndex = 0;
@@ -63,11 +66,17 @@ class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixi
               color: Theme.of(context).colorScheme.onPrimary,
               fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
             ),
-            unselectedLabelStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
-              fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
-            ),
+            unselectedLabelStyle: Theme.of(context).textTheme.titleMedium!
+                .copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onPrimary.withOpacity(0.7),
+                  fontSize: AppTheme.getResponsiveFontSize(
+                    context,
+                    fontSize: 16,
+                  ),
+                ),
             indicatorColor: Theme.of(context).colorScheme.onPrimary,
             tabs: [
               Tab(text: AppLocalizations.of(context).tr('app.title')),
@@ -107,13 +116,47 @@ class HomeViewBodyState extends State<HomeViewBody> with TickerProviderStateMixi
   Widget _buildWeeklyView() {
     return Column(
       children: [
-        const SizedBox(height: 8),
-        const CustomContainerWeeklyOf(),
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 50),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(4),
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).shadowColor.withOpacity(0.08),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                  spreadRadius: 0,
+                ),
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                  spreadRadius: 0,
+                ),
+              ],
+            ),
+            child: ExpansionTile(
+              title: Text(
+                AppLocalizations.of(context).tr('navigation.weekly'),
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              children: const [
+                CustomContainerWeeklyOf(), // هتظهر وتختفي عند الفتح
+              ],
+            ),
+          ),
+        ),
+
         Expanded(
           child: CustomScrollView(
             controller: _scrollController,
             slivers: [
-              const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
               CustomListViewDays(dayKeys: _dayKeys),
             ],
           ),
