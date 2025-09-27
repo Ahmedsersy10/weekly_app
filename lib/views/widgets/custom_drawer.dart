@@ -16,16 +16,20 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.7,
-      color: AppColors.surface,
+      color: Theme.of(context).colorScheme.surface,
       child: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(
-            child: Divider(color: AppColors.surface, height: 1, thickness: 1),
+          SliverToBoxAdapter(
+            child: Divider(
+              color: Theme.of(context).colorScheme.surface,
+              height: 1,
+              thickness: 1,
+            ),
           ),
           SliverToBoxAdapter(
             child: Container(
               height: 120,
-              color: AppColors.primary, // Primary color
+              color: Theme.of(context).colorScheme.primary, // Primary color
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -211,3 +211,52 @@ class TaskCategoryModel extends Equatable {
     ];
   }
 }
+enum TaskPriority { one, two, three, four, five, six, seven, eight }
+
+extension TaskPriorityX on TaskPriority {
+  static TaskPriority fromInt(int value) {
+    switch (value) {
+      case 1:
+        return TaskPriority.one;
+      case 2:
+        return TaskPriority.two;
+      case 3:
+        return TaskPriority.three;
+      case 4:
+        return TaskPriority.four;
+      case 5:
+        return TaskPriority.five;
+      case 6:
+        return TaskPriority.six;
+      case 7:
+        return TaskPriority.seven;
+      case 8:
+        return TaskPriority.eight;
+      default:
+        return TaskPriority.one; // fallback
+    }
+  }
+}
+
+TaskPriority getCategoryPriority(String categoryId) {
+  switch (categoryId) {
+    case 'work':
+      return TaskPriorityX.fromInt(1);
+    case 'study':
+      return TaskPriorityX.fromInt(2);
+    case 'health':
+      return TaskPriorityX.fromInt(3);
+    case 'personal':
+      return TaskPriorityX.fromInt(4);
+    case 'finance':
+      return TaskPriorityX.fromInt(5);
+    case 'home':
+      return TaskPriorityX.fromInt(6);
+    case 'shopping':
+      return TaskPriorityX.fromInt(7);
+    case 'entertainment':
+      return TaskPriorityX.fromInt(8);
+    default:
+      return TaskPriority.one; // default priority
+  }
+}

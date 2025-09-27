@@ -94,16 +94,7 @@ class CustomContainerWeeklyOf extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        Expanded(
-          child: _buildInfoCard(
-            context,
-            percentageLabel,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-              vertical: 12.0,
-            ),
-          ),
-        ),
+        Expanded(child: _buildInfoCard(context, percentageLabel)),
       ],
     );
   }
@@ -115,8 +106,7 @@ class CustomContainerWeeklyOf extends StatelessWidget {
   }) {
     return Container(
       padding:
-          padding ??
-          const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
+          padding ?? const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       decoration: _buildCardDecoration(context),
       child: Center(child: CustomTextWeeklyOf(title: title)),
     );
@@ -171,7 +161,7 @@ class CustomContainerWeeklyOf extends StatelessWidget {
     } else if (percentage >= 50) {
       return AppLocalizations.of(context).tr('settings.average');
     } else {
-      return AppLocalizations.of(context).tr('common.needs');
+      return AppLocalizations.of(context).tr('settings.improve');
     }
   }
 }

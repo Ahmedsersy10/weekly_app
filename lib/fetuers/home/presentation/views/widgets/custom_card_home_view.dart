@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 import 'package:weekly_dash_board/core/utils/app_style.dart';
 import 'package:weekly_dash_board/core/theme/app_theme.dart';
+import 'package:weekly_dash_board/fetuers/home/data/models/category_model.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_tasks.dart';
-import '../../../data/models/task_model.dart';
-import '../../../data/models/recurrence_model.dart';
 
 class CustomCardHomeView extends StatelessWidget {
   final int dayIndex;
@@ -259,7 +258,7 @@ class CustomButtonAddTasks extends StatelessWidget {
         ],
       ),
       child: IconButton(
-        onPressed: () => _showAddTaskDialog(context),
+        onPressed: () => _showAddTaskDialog(context, dayIndex),
         icon: Icon(
           Icons.add,
           color: Theme.of(context).colorScheme.onPrimary,
@@ -269,222 +268,301 @@ class CustomButtonAddTasks extends StatelessWidget {
     );
   }
 
-  void _showAddTaskDialog(BuildContext context) {
+  void _showAddTaskDialog(BuildContext context, int dayIndex) {
     final TextEditingController titleController = TextEditingController();
     bool isImportant = false;
     TimeOfDay? reminderTime;
 
-    showDialog(
+    // جلب الكاتيجوريز
+    final categories = TaskCategoryModel.getDefaultCategories();
+    TaskCategoryModel selectedCategory = categories.first;
+
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              title: Text(
-                AppLocalizations.of(context).tr('settings.editTask'),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
               ),
-              content: StatefulBuilder(
-                builder: (context, setState) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          controller: titleController,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                          cursorColor: Theme.of(context).colorScheme.primary,
-                          decoration: InputDecoration(
-                            hintText: AppLocalizations.of(
-                              context,
-                            ).tr('settings.enterTaskTitle'),
-                            hintStyle: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withOpacity(0.6),
-                            ),
-                            border: customOutlineInputBorder(context),
-                            enabledBorder: customOutlineInputBorder(context),
-                            focusedBorder: customOutlineInputBorder(context),
-                          ),
-                          autofocus: true,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // العنوان
+                    Text(
+                      AppLocalizations.of(context).tr('settings.addNewTask'),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // إدخال العنوان
+                    TextField(
+                      controller: titleController,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      cursorColor: Theme.of(context).colorScheme.primary,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(
+                          context,
+                        ).tr('settings.enterTaskTitle'),
+                        hintStyle: TextStyle(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.6),
                         ),
-                        const SizedBox(height: 12),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: CheckboxListTile(
-                            value: isImportant,
-                            onChanged: (value) {
-                              setState(() {
-                                isImportant = value ?? false;
-                              });
-                            },
-                            title: Text(
-                              AppLocalizations.of(
-                                context,
-                              ).tr('settings.markAsImportant'),
-                              style: AppStyles.styleSemiBold20(context),
-                            ),
-                            activeColor: Theme.of(
-                              context,
-                            ).colorScheme.onPrimary,
-                            checkColor: Theme.of(context).colorScheme.primary,
-                            side: BorderSide(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                            checkboxShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            controlAffinity: ListTileControlAffinity.leading,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                            ),
+                        border: customOutlineInputBorder(context),
+                        enabledBorder: customOutlineInputBorder(context),
+                        focusedBorder: customOutlineInputBorder(context),
+                      ),
+                      autofocus: true,
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Checkbox أهمية المهمة
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: CheckboxListTile(
+                        value: isImportant,
+                        onChanged: (value) {
+                          setState(() => isImportant = value ?? false);
+                        },
+                        title: Text(
+                          AppLocalizations.of(
+                            context,
+                          ).tr('settings.markAsImportant'),
+                          style: AppStyles.styleSemiBold20(context).copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primary.withOpacity(0.3),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        activeColor: Theme.of(context).colorScheme.onPrimary,
+                        checkColor: Theme.of(context).colorScheme.primary,
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        checkboxShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Dropdown اختيار الكاتيجوري
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.3),
+                        ),
+                      ),
+                      child: DropdownButton<TaskCategoryModel>(
+                        value: selectedCategory,
+                        isExpanded: true,
+                        underline: const SizedBox(),
+                        items: categories.map((category) {
+                          return DropdownMenuItem<TaskCategoryModel>(
+                            value: category,
+                            child: Row(
                               children: [
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(
-                                      Icons.notifications,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(
-                                        context,
-                                      ).tr('settings.reminderTime'),
-                                      style: TextStyle(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onSurface,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.access_time,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                      ),
-                                      onPressed: () async {
-                                        final selectedTime =
-                                            await showTimePicker(
-                                              context: context,
-                                              initialTime:
-                                                  reminderTime ??
-                                                  const TimeOfDay(
-                                                    hour: 9,
-                                                    minute: 0,
-                                                  ),
-                                            );
-                                        if (selectedTime != null) {
-                                          setState(
-                                            () => reminderTime = selectedTime,
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 32,
-                                    bottom: 8,
-                                  ),
-                                  child: Text(
-                                    reminderTime != null
-                                        ? '${reminderTime!.hour.toString().padLeft(2, '0')}:${reminderTime!.minute.toString().padLeft(2, '0')}'
-                                        : AppLocalizations.of(
+                                Icon(category.icon, color: category.color),
+                                const SizedBox(width: 8),
+                                Text(
+                                  Localizations.localeOf(
                                             context,
-                                          ).tr('settings.noReminder'),
-                                    style: TextStyle(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface.withOpacity(0.7),
-                                      fontSize: 14,
-                                    ),
+                                          ).languageCode ==
+                                          'ar'
+                                      ? category.nameAr
+                                      : category.name,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
                                   ),
                                 ),
                               ],
                             ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              selectedCategory = value;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // التذكير
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.notifications,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  ).tr('settings.reminderTime'),
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.access_time,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                                  onPressed: () async {
+                                    final selectedTime = await showTimePicker(
+                                      context: context,
+                                      initialTime:
+                                          reminderTime ??
+                                          const TimeOfDay(hour: 9, minute: 0),
+                                    );
+                                    if (selectedTime != null) {
+                                      setState(
+                                        () => reminderTime = selectedTime,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 32, top: 4),
+                              child: Text(
+                                reminderTime != null
+                                    ? '${reminderTime!.hour.toString().padLeft(2, '0')}:${reminderTime!.minute.toString().padLeft(2, '0')}'
+                                    : AppLocalizations.of(
+                                        context,
+                                      ).tr('settings.noReminder'),
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface.withOpacity(0.7),
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // الأزرار
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(
+                            AppLocalizations.of(context).tr('settings.cancel'),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (titleController.text.trim().isNotEmpty) {
+                              final priority = getCategoryPriority(
+                                selectedCategory.id,
+                              );
+
+                              context.read<WeeklyCubit>().addTask(
+                                titleController.text.trim(),
+                                dayIndex,
+                                isImportant: isImportant,
+                                reminderTime: reminderTime,
+                                categoryId: selectedCategory.id,
+                              );
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context).tr('settings.add'),
                           ),
                         ),
                       ],
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(
-                    AppLocalizations.of(context).tr('settings.cancel'),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (titleController.text.trim().isNotEmpty) {
-                      context.read<WeeklyCubit>().addTask(
-                        titleController.text.trim(),
-                        dayIndex,
-                        isImportant: isImportant,
-                        reminderTime: reminderTime,
-                      );
-
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  child: Text(AppLocalizations.of(context).tr('settings.add')),
-                ),
-              ],
             );
           },
         );
       },
     );
   }
-
-
 
   String _getDayLabel(int dayIndex) {
     switch (dayIndex) {

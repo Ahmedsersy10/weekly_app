@@ -12,20 +12,26 @@ class ActiveDrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: SvgPicture.asset(drawerItemModel.image, color: Theme.of(context).colorScheme.primary),
+      leading: SvgPicture.asset(
+        drawerItemModel.image,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
       title: FittedBox(
         fit: BoxFit.scaleDown,
         alignment: Alignment.centerLeft,
         child: Text(
           AppLocalizations.of(context).tr(drawerItemModel.title),
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
             fontWeight: FontWeight.w700,
           ),
         ),
       ),
-      trailing: Container(width: 3.27, color: Theme.of(context).colorScheme.primary),
+      trailing: Container(
+        width: 3.27,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
     );
   }
 }

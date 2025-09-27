@@ -32,7 +32,7 @@ void main() async {
 
   runApp(
     DevicePreview(
-      enabled: false, // Set to false to disable Device Preview
+      enabled: true, // Set to false to disable Device Preview
       builder: (context) => const ResponsiveDashboardApp(), // Wrap your app
     ),
   );
