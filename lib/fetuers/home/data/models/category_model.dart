@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class TaskCategoryModel extends Equatable {
   final String id;
+  final String? userId; // Null for default categories, user ID for custom categories
   final String name;
   final String nameAr;
   final IconData icon;
@@ -12,6 +13,7 @@ class TaskCategoryModel extends Equatable {
 
   const TaskCategoryModel({
     required this.id,
+    this.userId,
     required this.name,
     required this.nameAr,
     required this.icon,
@@ -22,6 +24,7 @@ class TaskCategoryModel extends Equatable {
 
   TaskCategoryModel copyWith({
     String? id,
+    String? userId,
     String? name,
     String? nameAr,
     IconData? icon,
@@ -31,6 +34,7 @@ class TaskCategoryModel extends Equatable {
   }) {
     return TaskCategoryModel(
       id: id ?? this.id,
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       nameAr: nameAr ?? this.nameAr,
       icon: icon ?? this.icon,
@@ -41,11 +45,12 @@ class TaskCategoryModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, name, nameAr, icon, color, isDefault, createdAt];
+  List<Object?> get props => [id, userId, name, nameAr, icon, color, isDefault, createdAt];
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'name': name,
       'nameAr': nameAr,
       'iconCodePoint': icon.codePoint,
@@ -59,6 +64,7 @@ class TaskCategoryModel extends Equatable {
   factory TaskCategoryModel.fromJson(Map<String, dynamic> json) {
     return TaskCategoryModel(
       id: json['id'],
+      userId: json['userId'],
       name: json['name'],
       nameAr: json['nameAr'],
       icon: IconData(

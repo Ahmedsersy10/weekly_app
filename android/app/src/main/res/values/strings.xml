@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Google Sign-In Configuration -->
+    <!-- Replace with your actual Google OAuth Web Client ID -->
+    <string name="default_web_client_id">YOUR_GOOGLE_OAUTH_WEB_CLIENT_ID.apps.googleusercontent.com</string>
+    
+    <!-- App Name -->
+    <string name="app_name">Weekly Dashboard</string>
+</resources>

@@ -11,6 +11,7 @@ import '../../data/services/hive_service.dart';
 import '../../../../core/models/settings_model.dart';
 import '../../../../core/services/settings_service.dart';
 import '../../../../core/services/notification_service.dart';
+import '../../../../core/services/supabase_auth_service.dart';
 
 part 'weekly_state.dart';
 
@@ -64,8 +65,12 @@ class WeeklyCubit extends Cubit<WeeklyState> {
   }) async {
     if (state is WeeklySuccess) {
       final currentState = state as WeeklySuccess;
+      // Get current user ID for the task
+      final userId = await SupabaseAuthService.getUserId() ?? '';
+      
       final newTask = TaskModel(
         id: _uuid.v4(),
+        userId: userId,
         title: title,
         description: description,
         isCompleted: false,

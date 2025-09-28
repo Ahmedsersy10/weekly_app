@@ -11,6 +11,7 @@ enum WeekStart { saturday, sunday, monday, thursday, wednesday, tuesday, friday 
 enum SyncProvider { googleDrive, iCloud, none }
 
 class SettingsModel extends Equatable {
+  final String? userId; // Supabase User ID for syncing settings across devices
   final ThemeMode themeMode;
   final Color primaryColor;
   final bool notificationsEnabled;
@@ -23,6 +24,7 @@ class SettingsModel extends Equatable {
   final DateTime lastBackup;
 
   SettingsModel({
+    this.userId,
     this.themeMode = ThemeMode.system,
     this.primaryColor = AppColors.primary, // default primary color
     this.notificationsEnabled = true,
@@ -48,6 +50,7 @@ class SettingsModel extends Equatable {
   };
 
   static SettingsModel get defaultSettings => SettingsModel._(
+    userId: null,
     themeMode: ThemeMode.system,
     primaryColor: AppColors.primary,
     notificationsEnabled: true,
@@ -61,6 +64,7 @@ class SettingsModel extends Equatable {
   );
 
   const SettingsModel._({
+    required this.userId,
     required this.themeMode,
     required this.primaryColor,
     required this.notificationsEnabled,
@@ -74,6 +78,7 @@ class SettingsModel extends Equatable {
   });
 
   SettingsModel copyWith({
+    String? userId,
     ThemeMode? themeMode,
     Color? primaryColor,
     bool? notificationsEnabled,
@@ -86,6 +91,7 @@ class SettingsModel extends Equatable {
     DateTime? lastBackup,
   }) {
     return SettingsModel(
+      userId: userId ?? this.userId,
       themeMode: themeMode ?? this.themeMode,
       primaryColor: primaryColor ?? this.primaryColor,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
@@ -101,6 +107,7 @@ class SettingsModel extends Equatable {
 
   @override
   List<Object?> get props => [
+    userId,
     themeMode,
     primaryColor,
     notificationsEnabled,

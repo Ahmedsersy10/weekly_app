@@ -20,7 +20,7 @@ class ThemeSettingsSection extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SettingsSection(
-      title: AppLocalizations.of(context).tr('settings.appearance'),
+      title: AppLocalizations.of(context).tr('settings.themeMode'),
       children: [
         ListTile(
           title: Text(
@@ -52,7 +52,9 @@ class ThemeSettingsSection extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                     const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context).tr('settings.systemTheme')),
+                    Text(
+                      AppLocalizations.of(context).tr('settings.systemTheme'),
+                    ),
                   ],
                 ),
               ),
@@ -67,7 +69,9 @@ class ThemeSettingsSection extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                     const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context).tr('settings.lightTheme')),
+                    Text(
+                      AppLocalizations.of(context).tr('settings.lightTheme'),
+                    ),
                   ],
                 ),
               ),
@@ -101,9 +105,9 @@ class ThemeSettingsSection extends StatelessWidget {
             style: TextStyle(color: colorScheme.onSurface),
           ),
           subtitle: Text(
-            isDarkMode 
-              ? AppLocalizations.of(context).tr('settings.darkModeActive')
-              : AppLocalizations.of(context).tr('settings.lightModeActive'),
+            isDarkMode
+                ? AppLocalizations.of(context).tr('settings.darkModeActive')
+                : AppLocalizations.of(context).tr('settings.lightModeActive'),
             style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
           ),
           leading: Icon(
@@ -115,10 +119,7 @@ class ThemeSettingsSection extends StatelessWidget {
             height: 24,
             decoration: BoxDecoration(
               color: isDarkMode ? colorScheme.surface : colorScheme.primary,
-              border: Border.all(
-                color: colorScheme.outline,
-                width: 2,
-              ),
+              border: Border.all(color: colorScheme.outline, width: 2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -143,7 +144,10 @@ class ThemeSettingsSection extends StatelessWidget {
     }
   }
 
-  String _getThemeModeDescription(BuildContext context, settings.ThemeMode themeMode) {
+  String _getThemeModeDescription(
+    BuildContext context,
+    settings.ThemeMode themeMode,
+  ) {
     switch (themeMode) {
       case settings.ThemeMode.light:
         return AppLocalizations.of(context).tr('settings.lightThemeDesc');

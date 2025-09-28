@@ -6,6 +6,7 @@ enum TaskPriority { low, medium, high, urgent }
 
 class TaskModel extends Equatable {
   final String id;
+  final String userId; // Supabase User ID for multi-device sync
   final String title;
   final String? description;
   final bool isCompleted;
@@ -25,6 +26,7 @@ class TaskModel extends Equatable {
 
   TaskModel({
     required this.id,
+    required this.userId,
     required this.title,
     this.description,
     required this.isCompleted,
@@ -45,6 +47,7 @@ class TaskModel extends Equatable {
 
   TaskModel copyWith({
     String? id,
+    String? userId,
     String? title,
     String? description,
     bool? isCompleted,
@@ -64,6 +67,7 @@ class TaskModel extends Equatable {
   }) {
     return TaskModel(
       id: id ?? this.id,
+      userId: userId ?? this.userId,
       title: title ?? this.title,
       description: description ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
@@ -106,6 +110,7 @@ class TaskModel extends Equatable {
   @override
   List<Object?> get props => [
     id,
+    userId,
     title,
     description,
     isCompleted,

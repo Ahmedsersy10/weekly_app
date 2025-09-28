@@ -23,6 +23,7 @@ class HiveService {
           .map(
             (task) => {
               'id': task.id,
+              'userId': task.userId,
               'title': task.title,
               'description': task.description,
               'isCompleted': task.isCompleted,
@@ -73,6 +74,7 @@ class HiveService {
 
           return TaskModel(
             id: data['id'] as String,
+            userId: (data['userId'] as String?) ?? '', // Handle legacy data without userId
             title: data['title'] as String,
             description: data['description'] as String?,
             isCompleted: data['isCompleted'] as bool,

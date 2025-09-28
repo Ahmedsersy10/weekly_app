@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation - Weekly Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .success {
+            color: #10b981;
+        }
+        .error {
+            color: #ef4444;
+        }
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .message {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #5a67d8;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loading" style="display: block;">
+            <div class="icon">
+                <div class="loading"></div>
+            </div>
+            <div class="message">Confirming your email...</div>
+        </div>
+        
+        <div id="success" style="display: none;">
+            <div class="icon success">✅</div>
+            <div class="message success">
+                <strong>Email Confirmed Successfully!</strong><br>
+                Your account has been activated. You can now sign in to the Weekly Dashboard app.
+            </div>
+            <a href="#" class="btn" onclick="openApp()">Open App</a>
+        </div>
+        
+        <div id="error" style="display: none;">
+            <div class="icon error">❌</div>
+            <div class="message error">
+                <strong>Confirmation Failed</strong><br>
+                <span id="error-message">The confirmation link is invalid or has expired.</span>
+            </div>
+            <a href="#" class="btn" onclick="openApp()">Try Again</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://okddqskxlureguahozhh.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rZGRxc2t4bHVyZWd1YWhvemhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY1NzU2MzIsImV4cCI6MjA0MjE1MTYzMn0.YjcOLBWOE8sLKZYhLJrTGXMwXGEJfHCHJFKWWvJHSbw';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function handleEmailConfirmation() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const hashParams = new URLSearchParams(window.location.hash.substring(1));
+                
+                // Check for error in URL
+                const error = urlParams.get('error') || hashParams.get('error');
+                const errorDescription = urlParams.get('error_description') || hashParams.get('error_description');
+                
+                if (error) {
+                    throw new Error(errorDescription || 'Email confirmation failed');
+                }
+                
+                // Get tokens from URL
+                const accessToken = urlParams.get('access_token') || hashParams.get('access_token');
+                const refreshToken = urlParams.get('refresh_token') || hashParams.get('refresh_token');
+                const type = urlParams.get('type') || hashParams.get('type');
+                
+                if (type === 'signup' && accessToken && refreshToken) {
+                    // Set the session
+                    const { data, error: sessionError } = await supabase.auth.setSession({
+                        access_token: accessToken,
+                        refresh_token: refreshToken
+                    });
+                    
+                    if (sessionError) {
+                        throw sessionError;
+                    }
+                    
+                    // Success
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('success').style.display = 'block';
+                    
+                    // Store confirmation status
+                    localStorage.setItem('email_confirmed', 'true');
+                    localStorage.setItem('user_email', data.user?.email || '');
+                    
+                } else {
+                    throw new Error('Invalid confirmation link');
+                }
+                
+            } catch (error) {
+                console.error('Email confirmation error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error-message').textContent = error.message;
+            }
+        }
+        
+        function openApp() {
+            // Try to open the Flutter app via custom URL scheme
+            const appUrl = 'com.yourapp.weeklydashboard://email-confirmed';
+            
+            // For mobile browsers
+            if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                window.location.href = appUrl;
+                
+                // Fallback to app store if app is not installed
+                setTimeout(() => {
+                    if (/Android/i.test(navigator.userAgent)) {
+                        window.location.href = 'https://play.google.com/store/apps/details?id=com.yourapp.weeklydashboard';
+                    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                        window.location.href = 'https://apps.apple.com/app/weekly-dashboard/id123456789';
+                    }
+                }, 2000);
+            } else {
+                // For desktop, show instructions
+                alert('Please open the Weekly Dashboard app on your device to continue.');
+            }
+        }
+        
+        // Run confirmation when page loads
+        window.addEventListener('load', handleEmailConfirmation);
+    </script>
+</body>
+</html>

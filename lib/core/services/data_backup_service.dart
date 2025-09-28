@@ -114,6 +114,7 @@ class DataBackupService {
   static Map<String, dynamic> _serializeTask(TaskModel t) {
     return {
       'id': t.id,
+      'userId': t.userId,
       'title': t.title,
       'description': t.description,
       'isCompleted': t.isCompleted,
@@ -133,6 +134,7 @@ class DataBackupService {
   static TaskModel _deserializeTask(Map<String, dynamic> m) {
     return TaskModel(
       id: m['id'] as String,
+      userId: m['userId'] as String? ?? '', // Handle legacy backups without userId
       title: m['title'] as String,
       description: m['description'] as String?,
       isCompleted: m['isCompleted'] as bool? ?? false,

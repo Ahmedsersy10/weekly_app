@@ -1,10 +1,22 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:weekly_dash_board/core/services/data_migration_service.dart';
+import 'dart:async';
 
 class SupabaseAuthService {
   static const String _isLoggedInKey = 'is_logged_in';
   static const String _userIdKey = 'user_id';
   static const String _userEmailKey = 'user_email';
+  static const String _otpResendCooldownKey = 'otp_resend_cooldown';
+
+  // Google Sign-In instance
+  static final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'profile'],
+    // Use the Web Client ID from Google Cloud Console
+    serverClientId:
+        'YOUR_GOOGLE_OAUTH_WEB_CLIENT_ID.apps.googleusercontent.com',
+  );
 
   // Get Supabase client
   static SupabaseClient get _supabase => Supabase.instance.client;
@@ -15,7 +27,7 @@ class SupabaseAuthService {
     final session = _supabase.auth.currentSession;
     final prefs = await SharedPreferences.getInstance();
     final localIsLoggedIn = prefs.getBool(_isLoggedInKey) ?? false;
-    
+
     // If we have a valid session, ensure local storage is updated
     if (session != null && session.user != null) {
       if (!localIsLoggedIn) {
@@ -23,13 +35,13 @@ class SupabaseAuthService {
       }
       return true;
     }
-    
+
     // If no session but local storage says logged in, clear local storage
     if (session == null && localIsLoggedIn) {
       await _clearUserDataLocally();
       return false;
     }
-    
+
     return localIsLoggedIn;
   }
 
@@ -44,7 +56,7 @@ class SupabaseAuthService {
     if (user != null) {
       return user.email;
     }
-    
+
     // Fallback to SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_userEmailKey);
@@ -56,7 +68,7 @@ class SupabaseAuthService {
     if (user != null) {
       return user.id;
     }
-    
+
     // Fallback to SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_userIdKey);
@@ -82,22 +94,34 @@ class SupabaseAuthService {
     return null;
   }
 
-  /// Sign up with email and password
+  /// Validate Gmail address
+  static bool isValidGmailAddress(String email) {
+    return email.toLowerCase().endsWith('@gmail.com');
+  }
+
+  /// Sign up with Gmail only - sends confirmation email
   static Future<AuthResponse> signUp({
     required String email,
     required String password,
     String? fullName,
   }) async {
     try {
+      // Validate Gmail address
+      if (!isValidGmailAddress(email)) {
+        throw const AuthException(
+          'Only Gmail addresses (@gmail.com) are allowed for registration.',
+        );
+      }
+
       final response = await _supabase.auth.signUp(
         email: email,
         password: password,
         data: fullName != null ? {'full_name': fullName} : null,
+        emailRedirectTo: 'io.supabase.weeklydashboard://login-callback/',
       );
 
-      if (response.user != null) {
-        await _saveUserDataLocally(response.user!);
-      }
+      // Note: Don't save user data locally until email is verified
+      // Supabase will send confirmation email with custom redirect
 
       return response;
     } catch (e) {
@@ -118,6 +142,9 @@ class SupabaseAuthService {
 
       if (response.user != null) {
         await _saveUserDataLocally(response.user!);
+
+        // Trigger data migration/sync after successful login
+        _handlePostLoginDataSync();
       }
 
       return response;
@@ -130,9 +157,11 @@ class SupabaseAuthService {
   static Future<void> signOut() async {
     try {
       await _supabase.auth.signOut();
+      await signOutFromGoogle(); // Also sign out from Google
       await _clearUserDataLocally();
     } catch (e) {
       // Even if Supabase signOut fails, clear local data
+      await signOutFromGoogle();
       await _clearUserDataLocally();
       rethrow;
     }
@@ -141,9 +170,123 @@ class SupabaseAuthService {
   /// Reset password
   static Future<void> resetPassword(String email) async {
     try {
-      await _supabase.auth.resetPasswordForEmail(email);
+      await _supabase.auth.resetPasswordForEmail(
+        email,
+        redirectTo: 'io.supabase.weeklydashboard://reset-password/',
+      );
     } catch (e) {
       rethrow;
+    }
+  }
+
+  /// Resend email confirmation
+  static Future<void> resendEmailConfirmation(String email) async {
+    try {
+      await _supabase.auth.resend(
+        type: OtpType.signup,
+        email: email,
+        emailRedirectTo: 'io.supabase.weeklydashboard://login-callback/',
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Verify OTP for email confirmation
+  static Future<AuthResponse> verifyOTP({
+    required String email,
+    required String token,
+  }) async {
+    try {
+      final response = await _supabase.auth.verifyOTP(
+        type: OtpType.signup,
+        token: token,
+        email: email,
+      );
+
+      if (response.user != null) {
+        await _saveUserDataLocally(response.user!);
+      }
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Check if user can resend OTP (cooldown management)
+  static Future<bool> canResendOTP() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastResendTime = prefs.getInt(_otpResendCooldownKey) ?? 0;
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+    const cooldownDuration = 60000; // 60 seconds
+
+    return (currentTime - lastResendTime) >= cooldownDuration;
+  }
+
+  /// Get remaining cooldown time in seconds
+  static Future<int> getRemainingCooldownTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastResendTime = prefs.getInt(_otpResendCooldownKey) ?? 0;
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+    const cooldownDuration = 60000; // 60 seconds
+
+    final remainingTime = cooldownDuration - (currentTime - lastResendTime);
+    return remainingTime > 0 ? (remainingTime / 1000).ceil() : 0;
+  }
+
+  /// Set OTP resend cooldown
+  static Future<void> setOTPResendCooldown() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(
+      _otpResendCooldownKey,
+      DateTime.now().millisecondsSinceEpoch,
+    );
+  }
+
+  /// Sign in with Google using Google Sign-In package
+  static Future<AuthResponse> signInWithGoogle() async {
+    try {
+      // Trigger Google Sign-In flow
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) {
+        throw const AuthException('Google Sign-In was cancelled');
+      }
+
+      // Get Google authentication
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      if (googleAuth.idToken == null) {
+        throw const AuthException('Failed to get Google ID token');
+      }
+
+      // Sign in to Supabase with Google credentials
+      final response = await _supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: googleAuth.idToken!,
+        accessToken: googleAuth.accessToken,
+      );
+
+      if (response.user != null) {
+        await _saveUserDataLocally(response.user!);
+      }
+
+      return response;
+    } catch (e) {
+      // Sign out from Google if there's an error
+      await _googleSignIn.signOut();
+      rethrow;
+    }
+  }
+
+  /// Sign out from Google
+  static Future<void> signOutFromGoogle() async {
+    try {
+      await _googleSignIn.signOut();
+    } catch (e) {
+      // Ignore Google sign out errors
     }
   }
 
@@ -170,14 +313,116 @@ class SupabaseAuthService {
     return _supabase.auth.onAuthStateChange;
   }
 
+  /// Handle deep link for email confirmation
+  static Future<bool> handleEmailConfirmation(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      final accessToken = uri.queryParameters['access_token'];
+      final refreshToken = uri.queryParameters['refresh_token'];
+
+      if (accessToken != null && refreshToken != null) {
+        final response = await _supabase.auth.setSession(accessToken);
+        if (response.user != null) {
+          await _saveUserDataLocally(response.user!);
+
+          // Trigger data migration/sync after OAuth callback
+          _handlePostLoginDataSync();
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Handle OAuth callback
+  static Future<bool> handleOAuthCallback(String url) async {
+    try {
+      final uri = Uri.parse(url);
+
+      // Handle the OAuth callback
+      if (uri.fragment.isNotEmpty) {
+        final fragment = uri.fragment;
+        final params = Uri.splitQueryString(fragment);
+
+        final accessToken = params['access_token'];
+        final refreshToken = params['refresh_token'];
+
+        if (accessToken != null && refreshToken != null) {
+          final response = await _supabase.auth.setSession(accessToken);
+          if (response.user != null) {
+            await _saveUserDataLocally(response.user!);
+
+            // Trigger data migration/sync after email confirmation
+            _handlePostLoginDataSync();
+            return true;
+          }
+        }
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// Initialize auth state on app start
   static Future<void> initializeAuthState() async {
     final session = _supabase.auth.currentSession;
     if (session != null && session.user != null) {
       await _saveUserDataLocally(session.user);
+
+      // Check if data migration/sync is needed for existing session
+      _handlePostLoginDataSync();
     } else {
       await _clearUserDataLocally();
     }
+  }
+
+  /// Handle data migration and sync after successful login
+  static void _handlePostLoginDataSync() {
+    // Run data migration/sync in background to avoid blocking UI
+    Future.microtask(() async {
+      try {
+        // Check if migration is needed
+        final migrationNeeded = await DataMigrationService.isMigrationNeeded();
+
+        if (migrationNeeded) {
+          print('SupabaseAuth: Starting data migration for user');
+          final migrationResult = await DataMigrationService.migrateUserData();
+
+          if (migrationResult.success) {
+            print('SupabaseAuth: Data migration completed successfully');
+            print(
+              'SupabaseAuth: Migrated ${migrationResult.tasksCount} tasks, ${migrationResult.categoriesCount} categories',
+            );
+          } else {
+            print(
+              'SupabaseAuth: Data migration failed: ${migrationResult.error}',
+            );
+          }
+        } else {
+          print(
+            'SupabaseAuth: No data migration needed, loading user data from Supabase',
+          );
+          final userDataResult =
+              await DataMigrationService.loadUserDataFromSupabase();
+
+          if (userDataResult.success) {
+            print('SupabaseAuth: User data loaded successfully from Supabase');
+            print(
+              'SupabaseAuth: Loaded ${userDataResult.tasks.length} tasks, ${userDataResult.categories.length} categories',
+            );
+          } else {
+            print(
+              'SupabaseAuth: Failed to load user data: ${userDataResult.error}',
+            );
+          }
+        }
+      } catch (e) {
+        print('SupabaseAuth: Error in post-login data sync: $e');
+      }
+    });
   }
 
   /// Get error message from AuthException
@@ -187,13 +432,29 @@ class SupabaseAuthService {
         case 'Invalid login credentials':
           return 'Invalid email or password. Please try again.';
         case 'Email not confirmed':
-          return 'Please check your email and click the confirmation link.';
+          return 'Please verify your email address first.';
         case 'User already registered':
           return 'An account with this email already exists.';
         case 'Password should be at least 6 characters':
           return 'Password must be at least 6 characters long.';
         case 'Unable to validate email address: invalid format':
           return 'Please enter a valid email address.';
+        case 'Only Gmail addresses (@gmail.com) are allowed for registration.':
+          return 'Only Gmail addresses (@gmail.com) are allowed for registration.';
+        case 'Google Sign-In was cancelled':
+        case 'Google Sign-In failed or was cancelled':
+        case 'Google Sign-In timeout':
+        case 'Failed to get Google ID token':
+          return 'Google Sign-In was cancelled or failed. Please try again.';
+        case 'Token has expired or is invalid':
+          return 'Verification code has expired. Please request a new one.';
+        case 'Invalid token':
+          return 'Invalid verification code. Please try again.';
+        case 'Email link is invalid or has expired':
+        case 'otp_expired':
+          return 'Email confirmation link has expired. Please request a new one.';
+        case 'access_denied':
+          return 'Access denied. Please check your email and try again.';
         default:
           return error.message;
       }

@@ -4,7 +4,6 @@ import 'package:weekly_dash_board/core/utils/app_localizations.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/view_model/settings_cubit.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/week_settings_section.dart';
-import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/sync_settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/language_settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/theme_settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/account_settings_section.dart';
@@ -30,7 +29,6 @@ class _SettingsViewState extends State<SettingsView> {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.surface,
-
       body: BlocConsumer<SettingsCubit, SettingsState>(
         listener: (context, state) {
           if (state.error != null) {
@@ -56,6 +54,8 @@ class _SettingsViewState extends State<SettingsView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (state.settings != null) ...[
+                  const AccountSettingsSection(),
+                  const SizedBox(height: 24),
                   ThemeSettingsSection(
                     themeMode: state.settings!.themeMode,
                     onThemeModeChanged: (themeMode) {
@@ -77,28 +77,26 @@ class _SettingsViewState extends State<SettingsView> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  SyncSettingsSection(
-                    syncProvider: state.settings!.syncProvider,
-                    autoSync: state.settings!.autoSync,
-                    lastBackup: state.settings!.lastBackup,
-                    onSyncProviderChanged: (provider) {
-                      context.read<SettingsCubit>().updateSyncProvider(
-                        provider,
-                      );
-                    },
-                    onAutoSyncChanged: (autoSync) {
-                      context.read<SettingsCubit>().updateAutoSync(autoSync);
-                    },
-                  ),
-                  const SizedBox(height: 24),
+                  // SyncSettingsSection(
+                  //   syncProvider: state.settings!.syncProvider,
+                  //   autoSync: state.settings!.autoSync,
+                  //   lastBackup: state.settings!.lastBackup,
+                  //   onSyncProviderChanged: (provider) {
+                  //     context.read<SettingsCubit>().updateSyncProvider(
+                  //       provider,
+                  //     );
+                  //   },
+                  //   onAutoSyncChanged: (autoSync) {
+                  //     context.read<SettingsCubit>().updateAutoSync(autoSync);
+                  //   },
+                  // ),
+                  // const SizedBox(height: 24),
                   LanguageSettingsSection(
                     language: state.settings!.language,
                     onLanguageChanged: (language) {
                       context.read<SettingsCubit>().updateLanguage(language);
                     },
                   ),
-                  const SizedBox(height: 24),
-                  const AccountSettingsSection(),
                   const SizedBox(height: 24),
                 ],
                 SettingsSection(

@@ -6,6 +6,7 @@ import 'package:weekly_dash_board/core/theme/app_theme.dart';
 import 'package:weekly_dash_board/fetuers/home/data/models/category_model.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/view_model/weekly_cubit.dart';
 import 'package:weekly_dash_board/fetuers/home/presentation/views/widgets/custom_list_tasks.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 
 class CustomCardHomeView extends StatelessWidget {
   final int dayIndex;
@@ -25,173 +26,131 @@ class CustomCardHomeView extends StatelessWidget {
       builder: (context, state) {
         if (state is WeeklySuccess) {
           final dayStats = state.weeklyState.dayStats[dayIndex];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            child: Container(
-              constraints: const BoxConstraints(
-                minHeight: 120,
-                minWidth: double.infinity,
-              ),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).shadowColor.withOpacity(0.08),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                    spreadRadius: 0,
-                  ),
-                  BoxShadow(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary.withOpacity(0.1),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                    spreadRadius: 0,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              AppLocalizations.of(context).tr(dayStats.dayName),
-                              style: Theme.of(context).textTheme.displaySmall!
-                                  .copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                    fontSize: AppTheme.getResponsiveFontSize(
-                                      context,
-                                      fontSize: 26,
-                                    ),
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.5,
-                                  ),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _isCurrentDay(dayStats.date)
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.surface,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.outline.withOpacity(0.5),
-                                  width: 1,
-                                ),
-                              ),
-                              child: Text(
-                                dayStats.date,
-                                style: Theme.of(context).textTheme.titleLarge!
-                                    .copyWith(
-                                      color: _isCurrentDay(dayStats.date)
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.onPrimary
-                                          : Theme.of(
-                                              context,
-                                            ).colorScheme.onSurface,
-                                      fontSize: AppTheme.getResponsiveFontSize(
-                                        context,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '${AppLocalizations.of(context).tr('common.done')} : ${dayStats.completedTasks} / ${dayStats.totalTasks}',
-                          style: Theme.of(context).textTheme.headlineMedium!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: AppTheme.getResponsiveFontSize(
-                                  context,
-                                  fontSize: 20,
-                                ),
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    height: 1,
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.transparent,
-                          Theme.of(
-                            context,
-                          ).colorScheme.primary.withOpacity(0.3),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _DayContent(dayIndex: dayIndex),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomButtonAddTasks(dayIndex: dayIndex),
-                        const SizedBox(width: 16),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.primary.withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: IconButton(
-                            onPressed: () =>
-                                _confirmClearDay(context, dayIndex),
-                            icon: Icon(
-                              Icons.delete,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-          );
+          return ExpandableDayCard(dayIndex: dayIndex, dayStats: dayStats);
         }
         return const SizedBox.shrink();
       },
+    );
+  }
+}
+
+class ExpandableDayCard extends StatelessWidget {
+  final int dayIndex;
+  final dynamic dayStats;
+
+  const ExpandableDayCard({
+    super.key,
+    required this.dayIndex,
+    required this.dayStats,
+  });
+
+  bool _isCurrentDay(String date) {
+    final today = DateTime.now();
+
+    try {
+      final parts = date.split('/'); // ["27", "9"]
+      if (parts.length == 2) {
+        final day = int.parse(parts[0]);
+        final month = int.parse(parts[1]);
+
+        return today.day == day && today.month == month;
+      }
+    } catch (_) {
+      return false;
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      child: ExpansionTileCard(
+        baseColor: Theme.of(context).colorScheme.surface,
+        expandedColor: Theme.of(context).colorScheme.surface,
+        shadowColor: Theme.of(context).shadowColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        elevation: 2,
+        leading: const Icon(Icons.calendar_today),
+        trailing: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: _isCurrentDay(dayStats.date)
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.5),
+              width: 1,
+            ),
+          ),
+          child: Text(
+            dayStats.date,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: _isCurrentDay(dayStats.date)
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSurface,
+              fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 16),
+            ),
+          ),
+        ),
+        title: Text(
+          AppLocalizations.of(context).tr(dayStats.dayName),
+          style: Theme.of(context).textTheme.displaySmall!.copyWith(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 22),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Text(
+          '${AppLocalizations.of(context).tr('common.done')} : ${dayStats.completedTasks} / ${dayStats.totalTasks}',
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+          ),
+        ),
+        children: <Widget>[
+          const Divider(thickness: 1.0, height: 1.0),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                _DayContent(dayIndex: dayIndex),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButtonAddTasks(dayIndex: dayIndex),
+                    const SizedBox(width: 16),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () => _confirmClearDay(context, dayIndex),
+                        icon: Icon(
+                          Icons.delete,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

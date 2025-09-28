@@ -32,43 +32,47 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
 
   String? _validateFullName(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Full name is required';
+      return AppLocalizations.of(context).tr('auth.fullNameRequired');
     }
     if (value.trim().length < 2) {
-      return 'Full name must be at least 2 characters';
+      return AppLocalizations.of(context).tr('auth.fullNameTooShort');
     }
     return null;
   }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return AppLocalizations.of(context).tr('auth.emailRequired');
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Please enter a valid email address';
+      return AppLocalizations.of(context).tr('auth.invalidEmailFormat');
+    }
+    // Gmail-only validation
+    if (!SupabaseAuthService.isValidGmailAddress(value)) {
+      return AppLocalizations.of(context).tr('auth.gmailOnlyRequired');
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return AppLocalizations.of(context).tr('auth.passwordRequired');
     }
     if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+      return AppLocalizations.of(context).tr('auth.passwordTooShort');
     }
     if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)').hasMatch(value)) {
-      return 'Password must contain letters and numbers';
+      return AppLocalizations.of(context).tr('auth.passwordRequirements');
     }
     return null;
   }
 
   String? _validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
+      return AppLocalizations.of(context).tr('auth.confirmPasswordRequired');
     }
     if (value != _passwordController.text) {
-      return 'Passwords do not match';
+      return AppLocalizations.of(context).tr('auth.passwordsDoNotMatch');
     }
     return null;
   }
@@ -77,7 +81,7 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
     if (!_formKey.currentState!.validate()) return;
     
     if (!_acceptTerms) {
-      _showSnackBar('Please accept the terms and conditions');
+      _showSnackBar(AppLocalizations.of(context).tr('auth.acceptTermsRequired'));
       return;
     }
 
@@ -86,18 +90,25 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
     });
 
     try {
-      final response = await SupabaseAuthService.signUp(
+      await SupabaseAuthService.signUp(
         email: _emailController.text.trim(),
         password: _passwordController.text,
         fullName: _fullNameController.text.trim(),
       );
 
-      if (response.user != null && mounted) {
+      if (mounted) {
+        // Show success message and navigate back to sign in
         _showSnackBar(
-          AppLocalizations.of(context).tr('auth.signUpSuccess'),
+          AppLocalizations.of(context).tr('auth.verificationEmailSent'),
           isSuccess: true,
         );
-        Navigator.of(context).pop();
+        
+        // Navigate back to sign in after a delay
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -163,7 +174,7 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Create Account',
+                    AppLocalizations.of(context).tr('auth.createAccount'),
                     style: textTheme.displayMedium!.copyWith(
                       fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 32),
                       fontWeight: FontWeight.w700,
@@ -189,8 +200,8 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                 child: Column(
                   children: [
                     ModernAuthTextField(
-                      label: 'Full Name',
-                      hint: 'Enter your full name',
+                      label: AppLocalizations.of(context).tr('auth.fullName'),
+                      hint: AppLocalizations.of(context).tr('auth.enterFullName'),
                       prefixIcon: Icons.person_outline,
                       controller: _fullNameController,
                       keyboardType: TextInputType.name,
@@ -201,8 +212,8 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                     const SizedBox(height: 24),
                     
                     ModernAuthTextField(
-                      label: 'Email Address',
-                      hint: 'Enter your email',
+                      label: AppLocalizations.of(context).tr('auth.emailAddress'),
+                      hint: AppLocalizations.of(context).tr('auth.enterGmailAddress'),
                       prefixIcon: Icons.email_outlined,
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -213,8 +224,8 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                     const SizedBox(height: 24),
                     
                     ModernAuthTextField(
-                      label: 'Password',
-                      hint: 'Create a strong password',
+                      label: AppLocalizations.of(context).tr('auth.password'),
+                      hint: AppLocalizations.of(context).tr('auth.createPassword'),
                       prefixIcon: Icons.lock_outline,
                       controller: _passwordController,
                       obscureText: true,
@@ -225,8 +236,8 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                     const SizedBox(height: 24),
                     
                     ModernAuthTextField(
-                      label: 'Confirm Password',
-                      hint: 'Confirm your password',
+                      label: AppLocalizations.of(context).tr('auth.confirmPassword'),
+                      hint: AppLocalizations.of(context).tr('auth.confirmPasswordHint'),
                       prefixIcon: Icons.lock_outline,
                       controller: _confirmPasswordController,
                       obscureText: true,
@@ -257,14 +268,14 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                             padding: const EdgeInsets.only(top: 12),
                             child: RichText(
                               text: TextSpan(
-                                text: 'I agree to the ',
+                                text: AppLocalizations.of(context).tr('auth.agreeToThe'),
                                 style: textTheme.bodyMedium!.copyWith(
                                   color: colorScheme.onSurface.withOpacity(0.7),
                                   fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 14),
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: 'Terms of Service',
+                                    text: AppLocalizations.of(context).tr('auth.termsOfService'),
                                     style: textTheme.bodyMedium!.copyWith(
                                       color: colorScheme.primary,
                                       fontWeight: FontWeight.w600,
@@ -272,14 +283,14 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: ' and ',
+                                    text: AppLocalizations.of(context).tr('auth.and'),
                                     style: textTheme.bodyMedium!.copyWith(
                                       color: colorScheme.onSurface.withOpacity(0.7),
                                       fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 14),
                                     ),
                                   ),
                                   TextSpan(
-                                    text: 'Privacy Policy',
+                                    text: AppLocalizations.of(context).tr('auth.privacyPolicy'),
                                     style: textTheme.bodyMedium!.copyWith(
                                       color: colorScheme.primary,
                                       fontWeight: FontWeight.w600,
@@ -298,7 +309,7 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                     
                     // Sign Up Button
                     ModernAuthButton(
-                      text: 'Create Account',
+                      text: AppLocalizations.of(context).tr('auth.createAccount'),
                       onPressed: _handleSignUp,
                       isLoading: _isLoading,
                       icon: Icons.person_add,
@@ -314,7 +325,7 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    text: 'Already have an account? ',
+                    text: AppLocalizations.of(context).tr('auth.alreadyHaveAccount'),
                     style: textTheme.bodyMedium!.copyWith(
                       color: colorScheme.onSurface.withOpacity(0.7),
                       fontSize: AppTheme.getResponsiveFontSize(context, fontSize: 14),
@@ -326,7 +337,7 @@ class _ModernSignUpViewBodyState extends State<ModernSignUpViewBody> {
                             Navigator.of(context).pop();
                           },
                           child: Text(
-                            'Sign In',
+                            AppLocalizations.of(context).tr('auth.signIn'),
                             style: textTheme.bodyMedium!.copyWith(
                               color: colorScheme.primary,
                               fontWeight: FontWeight.w600,

@@ -4,6 +4,7 @@ import 'package:weekly_dash_board/core/theme/app_theme.dart';
 import 'package:weekly_dash_board/core/services/supabase_auth_service.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/modern_auth_text_field.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/modern_auth_button.dart';
+import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/google_sign_in_button.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/sign_up_view.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/forgot_password_view.dart';
 
@@ -19,6 +20,7 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _isGoogleLoading = false;
 
   @override
   void dispose() {
@@ -105,6 +107,35 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (context) => const SignUpView()));
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    setState(() {
+      _isGoogleLoading = true;
+    });
+
+    try {
+      final response = await SupabaseAuthService.signInWithGoogle();
+
+      if (response.user != null && mounted) {
+        _showSnackBar(
+          AppLocalizations.of(context).tr('auth.signInSuccess'),
+          isSuccess: true,
+        );
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      if (mounted) {
+        final errorMessage = SupabaseAuthService.getErrorMessage(e);
+        _showSnackBar(errorMessage);
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isGoogleLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -223,8 +254,8 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
 
                     // Sign In Button
                     ModernAuthButton(
-                      text: 'Sign In',
-                      onPressed: _handleSignIn,
+                      text: AppLocalizations.of(context).tr('auth.signIn'),
+                      onPressed: (_isLoading || _isGoogleLoading) ? null : _handleSignIn,
                       isLoading: _isLoading,
                       icon: Icons.login,
                     ),
@@ -233,6 +264,14 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
               ),
 
               const SizedBox(height: 32),
+
+              // Google Sign-In Button
+              GoogleSignInButton(
+                onPressed: (_isLoading || _isGoogleLoading) ? null : _handleGoogleSignIn,
+                isLoading: _isGoogleLoading,
+              ),
+
+              const SizedBox(height: 24),
 
               // Divider
               Row(
@@ -246,7 +285,7 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      'or',
+                      AppLocalizations.of(context).tr('auth.or'),
                       style: textTheme.bodyMedium!.copyWith(
                         color: colorScheme.onSurface.withOpacity(0.6),
                         fontSize: AppTheme.getResponsiveFontSize(
@@ -265,12 +304,12 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
                 ],
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
 
               // Sign Up Link
               ModernAuthButton(
-                text: 'Create New Account',
-                onPressed: _isLoading ? null : _navigateToSignUp,
+                text: AppLocalizations.of(context).tr('auth.createNewAccount'),
+                onPressed: (_isLoading || _isGoogleLoading) ? null : _navigateToSignUp,
                 isSecondary: true,
                 icon: Icons.person_add_outlined,
               ),
