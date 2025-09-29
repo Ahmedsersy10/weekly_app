@@ -545,6 +545,11 @@ class WeeklyCubit extends Cubit<WeeklyState> {
         (task) => task.dayOfWeek == dayOfWeek,
       );
 
+      // Cancel notifications for all tasks being cleared
+      for (final task in tasksToClear) {
+        _cancelTaskNotification(task.id);
+      }
+
       final updatedTasks = currentState.weeklyState.tasks
           .where((task) => task.dayOfWeek != dayOfWeek)
           .toList();
@@ -557,6 +562,10 @@ class WeeklyCubit extends Cubit<WeeklyState> {
     if (state is WeeklySuccess) {
       final currentState = state as WeeklySuccess;
 
+      // Cancel all notifications for existing tasks
+      for (final task in currentState.weeklyState.tasks) {
+        _cancelTaskNotification(task.id);
+      }
 
       _updateState([]);
     }
@@ -603,11 +612,23 @@ class WeeklyCubit extends Cubit<WeeklyState> {
       if (deleteEntireSeries || task.isRecurrenceParent) {
         // Delete the entire series
         final seriesId = task.isRecurrenceParent ? task.id : task.parentRecurrenceId;
-        updatedTasks = currentState.weeklyState.tasks
+        final tasksToDelete = currentState.weeklyState.tasks
             .where((t) => t.id != seriesId && t.parentRecurrenceId != seriesId)
             .toList();
+
+        // Cancel notifications for parent and all instances in the series
+        for (final t in currentState.weeklyState.tasks) {
+          if (t.id == seriesId || t.parentRecurrenceId == seriesId) {
+            _cancelTaskNotification(t.id);
+          }
+        }
+
+        updatedTasks = tasksToDelete;
       } else {
         // Delete only this instance
+        // Cancel notification for this instance
+        _cancelTaskNotification(taskId);
+
         updatedTasks = currentState.weeklyState.tasks
             .where((t) => t.id != taskId)
             .toList();
@@ -648,6 +669,15 @@ class WeeklyCubit extends Cubit<WeeklyState> {
           }
           return t;
         }).toList();
+
+        // Update notifications for all affected tasks in the series
+        for (final t in updatedTasks) {
+          if (t.id == seriesId || t.parentRecurrenceId == seriesId) {
+            // Find original version of this task before update
+            final original = currentState.weeklyState.tasks.firstWhere((o) => o.id == t.id, orElse: () => t);
+            _updateTaskNotification(original, t);
+          }
+        }
       } else {
         // Edit only this instance - break it from the series
         updatedTasks = currentState.weeklyState.tasks.map((t) {
@@ -664,6 +694,11 @@ class WeeklyCubit extends Cubit<WeeklyState> {
           }
           return t;
         }).toList();
+
+        // Update notification for the single edited instance
+        final originalTask = currentState.weeklyState.tasks.firstWhere((o) => o.id == taskId);
+        final updatedTask = updatedTasks.firstWhere((u) => u.id == taskId);
+        _updateTaskNotification(originalTask, updatedTask);
       }
       
       _updateState(updatedTasks);

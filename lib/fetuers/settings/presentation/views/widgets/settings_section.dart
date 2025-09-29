@@ -4,11 +4,14 @@ import 'package:weekly_dash_board/core/constants/app_color.dart';
 class SettingsSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
+  final Color? color,textColor;
 
   const SettingsSection({
     super.key,
     required this.title,
     required this.children,
+    this.color,
+    this.textColor,
   });
 
   @override
@@ -24,13 +27,13 @@ class SettingsSection extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: colorScheme.onSurface,
+              color: textColor ?? colorScheme.onSurface,
             ),
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            color: colorScheme.surface,
+            color: color ?? colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(

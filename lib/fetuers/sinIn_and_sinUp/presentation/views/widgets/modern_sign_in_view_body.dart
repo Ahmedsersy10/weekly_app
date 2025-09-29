@@ -4,7 +4,6 @@ import 'package:weekly_dash_board/core/theme/app_theme.dart';
 import 'package:weekly_dash_board/core/services/supabase_auth_service.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/modern_auth_text_field.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/modern_auth_button.dart';
-import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/widgets/google_sign_in_button.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/sign_up_view.dart';
 import 'package:weekly_dash_board/fetuers/sinIn_and_sinUp/presentation/views/forgot_password_view.dart';
 
@@ -232,12 +231,15 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
                             : () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => const ForgotPasswordView(),
+                                    builder: (context) =>
+                                        const ForgotPasswordView(),
                                   ),
                                 );
                               },
                         child: Text(
-                          AppLocalizations.of(context).tr('auth.forgotPassword'),
+                          AppLocalizations.of(
+                            context,
+                          ).tr('auth.forgotPassword'),
                           style: textTheme.bodyMedium!.copyWith(
                             fontSize: AppTheme.getResponsiveFontSize(
                               context,
@@ -255,7 +257,9 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
                     // Sign In Button
                     ModernAuthButton(
                       text: AppLocalizations.of(context).tr('auth.signIn'),
-                      onPressed: (_isLoading || _isGoogleLoading) ? null : _handleSignIn,
+                      onPressed: (_isLoading || _isGoogleLoading)
+                          ? null
+                          : _handleSignIn,
                       isLoading: _isLoading,
                       icon: Icons.login,
                     ),
@@ -263,14 +267,13 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
                 ),
               ),
 
-              const SizedBox(height: 32),
+              // const SizedBox(height: 32),
 
-              // Google Sign-In Button
-              GoogleSignInButton(
-                onPressed: (_isLoading || _isGoogleLoading) ? null : _handleGoogleSignIn,
-                isLoading: _isGoogleLoading,
-              ),
-
+              // // Google Sign-In Button
+              // GoogleSignInButton(
+              //   onPressed: (_isLoading || _isGoogleLoading) ? null : _handleGoogleSignIn,
+              //   isLoading: _isGoogleLoading,
+              // ),
               const SizedBox(height: 24),
 
               // Divider
@@ -309,7 +312,9 @@ class _ModernSignInViewBodyState extends State<ModernSignInViewBody> {
               // Sign Up Link
               ModernAuthButton(
                 text: AppLocalizations.of(context).tr('auth.createNewAccount'),
-                onPressed: (_isLoading || _isGoogleLoading) ? null : _navigateToSignUp,
+                onPressed: (_isLoading || _isGoogleLoading)
+                    ? null
+                    : _navigateToSignUp,
                 isSecondary: true,
                 icon: Icons.person_add_outlined,
               ),

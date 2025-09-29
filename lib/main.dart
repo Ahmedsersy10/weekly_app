@@ -14,40 +14,46 @@ import 'package:weekly_dash_board/core/services/notification_production_helper.d
 import 'package:weekly_dash_board/fetuers/home/data/services/hive_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:weekly_dash_board/core/services/supabase_auth_service.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
-void main() async {
-  // Ensure Flutter binding is initialized
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Supabase
-  await Supabase.initialize(
-    url: 'https://okddqskxlureguahozhh.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rZGRxc2t4bHVyZWd1YWhvemhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5NDg0NzMsImV4cCI6MjA3NDUyNDQ3M30.iZ1mLgEiwUpPR1M_ryqkBJcb59PLtCYo_HSwFK7Pc8k',
-  );
+  await SentryFlutter.init((options) {
+    options.dsn = const String.fromEnvironment('SENTRY_DSN', defaultValue: '');
+    options.tracesSampleRate = 0.2;
+    options.enableAutoPerformanceTracing = true;
+    options.sendDefaultPii = false;
+  }, appRunner: () async {
+    try {
+      await Supabase.initialize(
+        url: 'https://okddqskxlureguahozhh.supabase.co',
+        anonKey:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rZGRxc2t4bHVyZWd1YWhvemhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5NDg0NzMsImV4cCI6MjA3NDUyNDQ3M30.iZ1mLgEiwUpPR1M_ryqkBJcb59PLtCYo_HSwFK7Pc8k',
+      );
 
-  // Initialize auth state
-  await SupabaseAuthService.initializeAuthState();
+      await SupabaseAuthService.initializeAuthState();
+      await HiveService.init();
+      await NotificationService.initialize();
+      try {
+        await NotificationProductionHelper.initializeProductionMode();
+      } catch (e, st) {
+        // Log but do not crash
+        // ignore: avoid_print
+        print('Production notification helper initialization failed: $e');
+        await Sentry.captureException(e, stackTrace: st);
+      }
+    } catch (e, st) {
+      await Sentry.captureException(e, stackTrace: st);
+    }
 
-  // Initialize Hive for local data storage
-  await HiveService.init();
-
-  // Initialize notification service with production mode
-  await NotificationService.initialize();
-
-  // Initialize production-ready notification features
-  try {
-    await NotificationProductionHelper.initializeProductionMode();
-  } catch (e) {
-    print('Production notification helper initialization failed: $e');
-  }
-
-  runApp(
-    DevicePreview(
-      enabled: false, // Set to false to disable Device Preview
-      builder: (context) => const ResponsiveDashboardApp(), // Wrap your app
-    ),
-  );
+    runApp(
+      DevicePreview(
+        enabled: false,
+        builder: (context) => const ResponsiveDashboardApp(),
+      ),
+    );
+  });
 }
 
 class ResponsiveDashboardApp extends StatelessWidget {

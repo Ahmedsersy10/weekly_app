@@ -4,7 +4,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest.dart' as tzdata;
 
 /// Service class for managing local notifications
 /// Handles scheduling, updating, and canceling notifications for tasks
@@ -15,6 +15,19 @@ class NotificationService {
 
   static final FlutterLocalNotificationsPlugin
   _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  // Background tap handler must be a top-level or static function and kept by tree-shaker
+  @pragma('vm:entry-point')
+  static void notificationTapBackground(NotificationResponse response) {
+    try {
+      log(
+        'NotificationService(BG): Notification tapped - ID: ${response.id}, Payload: ${response.payload}',
+      );
+    } catch (e) {
+      // Swallow any exception to avoid release crashes
+      log('NotificationService(BG): Error handling background tap - $e');
+    }
+  }
 
   /// Initialize the notification service
   /// Must be called before using any notification features
@@ -27,7 +40,7 @@ class NotificationService {
       }
 
       // Initialize timezone data
-      tz.initializeTimeZones();
+      tzdata.initializeTimeZones();
 
       // Set local timezone
       final String timeZoneName = await _getTimeZoneName();
@@ -56,7 +69,33 @@ class NotificationService {
       await _flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
         onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
+        onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
       );
+
+      // Explicitly create Android notification channels (important for release)
+      if (Platform.isAndroid) {
+        final androidPlugin = _flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+        if (androidPlugin != null) {
+          // Task reminders channel
+          const taskChannel = AndroidNotificationChannel(
+            'task_reminders',
+            'Task Reminders',
+            description: 'Notifications for scheduled tasks',
+            importance: Importance.high,
+          );
+          await androidPlugin.createNotificationChannel(taskChannel);
+
+          // Immediate notifications channel for testing
+          const immediateChannel = AndroidNotificationChannel(
+            'immediate_notifications',
+            'Immediate Notifications',
+            description: 'Immediate notifications for testing',
+            importance: Importance.high,
+          );
+          await androidPlugin.createNotificationChannel(immediateChannel);
+        }
+      }
 
       // Request permissions for Android 13+
       if (Platform.isAndroid) {
@@ -200,9 +239,13 @@ class NotificationService {
 
   /// Handle notification tap/interaction
   static void _onDidReceiveNotificationResponse(NotificationResponse response) {
-    log(
-      'NotificationService: Notification tapped - ID: ${response.id}, Payload: ${response.payload}',
-    );
+    try {
+      log(
+        'NotificationService: Notification tapped - ID: ${response.id}, Payload: ${response.payload}',
+      );
+    } catch (e) {
+      log('NotificationService: Error handling notification tap - $e');
+    }
   }
 
   /// Schedule a notification for a specific date and time
@@ -220,6 +263,7 @@ class NotificationService {
     String? payload,
   }) async {
     try {
+      log('NotificationService: scheduleNotification request -> id=$id title="$title" time=$scheduledTime payload=${payload ?? 'null'}');
       // Skip on web platform
       if (kIsWeb) {
         log('NotificationService: Notifications not supported on web platform');
@@ -252,8 +296,8 @@ class NotificationService {
             showWhen: true,
             enableVibration: true,
             playSound: true,
-            icon: '@mipmap/ic_launcher',
-            largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+            // Use a proper monochrome drawable icon to avoid release crashes on some OEMs
+            icon: '@drawable/ic_notification',
           );
 
       // iOS notification details
@@ -282,7 +326,6 @@ class NotificationService {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: payload,
-        matchDateTimeComponents: DateTimeComponents.time,
       );
 
       log(
@@ -444,7 +487,7 @@ class NotificationService {
             channelDescription: 'Immediate notifications for testing',
             importance: Importance.high,
             priority: Priority.high,
-            icon: '@mipmap/ic_launcher',
+            icon: '@drawable/ic_notification',
           );
 
       // iOS notification details

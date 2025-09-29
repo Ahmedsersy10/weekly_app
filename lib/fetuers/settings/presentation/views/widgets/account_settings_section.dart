@@ -27,7 +27,7 @@ class _AccountSettingsSectionState extends State<AccountSettingsSection> {
     final isLoggedIn = await SupabaseAuthService.isLoggedIn();
     final userEmail = await SupabaseAuthService.getUserEmail();
     final userName = await SupabaseAuthService.getUserName();
-    
+
     setState(() {
       _isLoggedIn = isLoggedIn;
       _userEmail = userEmail;
@@ -37,18 +37,14 @@ class _AccountSettingsSectionState extends State<AccountSettingsSection> {
 
   Future<void> _handleSignOut() async {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     // Show confirmation dialog
     final shouldSignOut = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            AppLocalizations.of(context).tr('auth.signOutTitle'),
-          ),
-          content: Text(
-            AppLocalizations.of(context).tr('auth.signOutMessage'),
-          ),
+          title: Text(AppLocalizations.of(context).tr('auth.signOutTitle')),
+          content: Text(AppLocalizations.of(context).tr('auth.signOutMessage')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -67,7 +63,7 @@ class _AccountSettingsSectionState extends State<AccountSettingsSection> {
     if (shouldSignOut == true) {
       await SupabaseAuthService.signOut();
       await _loadUserState();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -81,29 +77,25 @@ class _AccountSettingsSectionState extends State<AccountSettingsSection> {
   }
 
   void _navigateToSignIn() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SignInView(),
-      ),
-    ).then((_) {
-      _loadUserState(); // Refresh state when returning
-    });
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const SignInView()))
+        .then((_) {
+          _loadUserState(); // Refresh state when returning
+        });
   }
 
   void _navigateToSignUp() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SignUpView(),
-      ),
-    ).then((_) {
-      _loadUserState(); // Refresh state when returning
-    });
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const SignUpView()))
+        .then((_) {
+          _loadUserState(); // Refresh state when returning
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return SettingsSection(
       title: AppLocalizations.of(context).tr('settings.account'),
       children: [
@@ -133,9 +125,7 @@ class _AccountSettingsSectionState extends State<AccountSettingsSection> {
             ),
             subtitle: Text(
               AppLocalizations.of(context).tr('auth.signOutSubtitle'),
-              style: TextStyle(
-                color: colorScheme.onSurface.withOpacity(0.7),
-              ),
+              style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
             ),
             onTap: _handleSignOut,
           ),
@@ -149,9 +139,7 @@ class _AccountSettingsSectionState extends State<AccountSettingsSection> {
             ),
             subtitle: Text(
               AppLocalizations.of(context).tr('auth.signInSubtitle'),
-              style: TextStyle(
-                color: colorScheme.onSurface.withOpacity(0.7),
-              ),
+              style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
             ),
             onTap: _navigateToSignIn,
           ),
@@ -163,9 +151,7 @@ class _AccountSettingsSectionState extends State<AccountSettingsSection> {
             ),
             subtitle: Text(
               AppLocalizations.of(context).tr('auth.signUpSubtitle'),
-              style: TextStyle(
-                color: colorScheme.onSurface.withOpacity(0.7),
-              ),
+              style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
             ),
             onTap: _navigateToSignUp,
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weekly_dash_board/core/utils/app_localizations.dart';
+import 'package:weekly_dash_board/core/utils/size_config.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/view_model/settings_cubit.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/settings_section.dart';
 import 'package:weekly_dash_board/fetuers/settings/presentation/views/widgets/week_settings_section.dart';
@@ -54,7 +55,10 @@ class _SettingsViewState extends State<SettingsView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (state.settings != null) ...[
-                  const AccountSettingsSection(),
+                  MediaQuery.of(context).size.width < SizeConfig.desktop &&
+                          MediaQuery.of(context).size.width < SizeConfig.tablet
+                      ? const AccountSettingsSection()
+                      : const SizedBox(),
                   const SizedBox(height: 24),
                   ThemeSettingsSection(
                     themeMode: state.settings!.themeMode,
